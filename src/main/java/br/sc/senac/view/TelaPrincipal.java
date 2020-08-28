@@ -1,4 +1,4 @@
-package view;
+package br.sc.senac.view;
 
 import java.awt.EventQueue;
 
