@@ -5,6 +5,10 @@ import java.util.List;
 
 public class Vacina {
 
+	public static final int ESTAGIO_INICIAL = 1;
+	public static final int ESTAGIO_TESTES = 2;
+	public static final int ESTAGIO_APLICACAO_EM_MASSA = 3;
+	
 	private String paisOrigem;
 	private int estagioPesquisa;
 	private LocalDate dataInicioPesquisa;
