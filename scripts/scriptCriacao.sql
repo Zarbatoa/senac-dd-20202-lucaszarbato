@@ -61,7 +61,7 @@ BEGIN
 		TIPO T ON P.IDTIPO = T.IDTIPO 
     WHERE IDPESSOA = NEW.IDPESQUISADOR;
     
-    IF (TIPO != 'PESQUISADOR') THEN
+    IF (TIPO_DESCRICAO != 'PESQUISADOR') THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'A pessoa definida como pesquisador responsável, não é um pesquisador!';
     END IF;
 END $$
