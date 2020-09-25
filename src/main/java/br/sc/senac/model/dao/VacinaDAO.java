@@ -1,10 +1,12 @@
 package br.sc.senac.model.dao;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 import br.sc.senac.model.vo.Vacina;
 
-public class VacinaDAO {
+public class VacinaDAO implements BaseDAO<Vacina>{
 
 	public Vacina inserir(Vacina novaVacina) {
 		//TODO
@@ -25,10 +27,14 @@ public class VacinaDAO {
 		//TODO
 		return null;
 	}
-	
-	
-	private Vacina construirVacinaDoResultSet(ResultSet conjuntoResultante) {
-		//TODO
+
+	public List<Vacina> pesquisarTodos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Vacina construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	

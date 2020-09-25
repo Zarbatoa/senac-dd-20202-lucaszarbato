@@ -1,10 +1,12 @@
 package br.sc.senac.model.dao;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 import br.sc.senac.model.vo.Pessoa;
 
-public class PessoaDAO {
+public class PessoaDAO implements BaseDAO<Pessoa>{
 
 	public Pessoa inserir(Pessoa novaPessoa) {
 		//TODO
@@ -26,9 +28,13 @@ public class PessoaDAO {
 		return null;
 	}
 	
-	
-	private Pessoa construirVacinaDoResultSet(ResultSet conjuntoResultante) {
-		//TODO
+	public List<Pessoa> pesquisarTodos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Pessoa construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	

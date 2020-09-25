@@ -1,10 +1,12 @@
 package br.sc.senac.model.dao;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 import br.sc.senac.model.vo.Nota;
 
-public class NotaDAO {
+public class NotaDAO implements BaseDAO<Nota>{
 
 	public Nota inserir(Nota novaNota) {
 		//TODO
@@ -26,9 +28,13 @@ public class NotaDAO {
 		return null;
 	}
 	
-	
-	private Nota construirNotaDoResultSet(ResultSet conjuntoResultante) {
-		//TODO
+	public List<Nota> pesquisarTodos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Nota construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	
