@@ -23,6 +23,8 @@ public class Banco {
 	private static final String USER = "root";
 	private static final String PASSWORD = "admin"; // Tem que preencher aqui
 	
+	public static final int CODIGO_RETORNO_SUCESSO = 1;
+	
 	public static Connection getConnection(){
 		try {
 			Connection conn = null;
@@ -30,7 +32,7 @@ public class Banco {
 			conn = DriverManager.getConnection(CONEXAO, USER, PASSWORD);
 			return conn;
 		} catch (ClassNotFoundException e) {
-			System.out.println("Classe do Driver não foi encontrada.");
+			System.out.println("Classe do Driver nï¿½o foi encontrada.");
 			System.out.println("Erro: " + e.getMessage());
 			return null;
 		} catch (SQLException e) {
@@ -46,7 +48,7 @@ public class Banco {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			System.out.println("Problema no fechamento da conexão.");
+			System.out.println("Problema no fechamento da conexï¿½o.");
 			System.out.println("Erro: " + e.getMessage());
 		}	
 	}
@@ -93,6 +95,17 @@ public class Banco {
 			System.out.println("Problema no fechamento do PreparedStatement.");
 			System.out.println("Erro: " + e.getMessage());
 		}	
+	}
+	
+	public static PreparedStatement getPreparedStatementWithGeneratedKeys(Connection conn, String sql){
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			return stmt;
+		} catch (Exception e) {
+			System.out.println("Erro ao obter o PreparedStatement.");
+			System.out.println("Erro: " + e.getMessage());
+			return null;
+		}
 	}
 	
 	public static void closeResultSet(ResultSet result){

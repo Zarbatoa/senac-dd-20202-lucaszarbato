@@ -9,8 +9,8 @@ public class Pesquisador extends Pessoa {
 	public Pesquisador() {
 	}
 
-	public Pesquisador(String nome, LocalDate dataNascimento, char sexo, String cpf, Instituicao instituicao) {
-		super(nome, dataNascimento, sexo, cpf);
+	public Pesquisador(int id, String nome, LocalDate dataNascimento, char sexo, String cpf, Instituicao instituicao) {
+		super(id, nome, dataNascimento, sexo, cpf);
 		this.instituicao = instituicao;
 	}
 

@@ -2,6 +2,7 @@ package br.sc.senac.model.vo;
 
 public class Nota {
 
+	private int id;
 	private Pessoa pessoa;
 	private Vacina vacina;
 	private double valor;
@@ -9,11 +10,20 @@ public class Nota {
 	public Nota() {
 	}
 	
-	public Nota(Pessoa pessoa, Vacina vacina, double valor) {
+	public Nota(int id, Pessoa pessoa, Vacina vacina, double valor) {
 		super();
+		this.id = id;
 		this.pessoa = pessoa;
 		this.vacina = vacina;
 		this.valor = valor;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Pessoa getPessoa() {

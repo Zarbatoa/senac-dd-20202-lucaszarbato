@@ -9,8 +9,8 @@ public class PublicoGeral extends Pessoa{
 	public PublicoGeral() {
 	}
 
-	public PublicoGeral(String nome, LocalDate dataNascimento, char sexo, String cpf, boolean voluntario) {
-		super(nome, dataNascimento, sexo, cpf);
+	public PublicoGeral(int id, String nome, LocalDate dataNascimento, char sexo, String cpf, boolean voluntario) {
+		super(id, nome, dataNascimento, sexo, cpf);
 		this.voluntario = voluntario;
 	}
 

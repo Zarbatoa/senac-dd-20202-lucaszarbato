@@ -10,6 +10,7 @@ public class Vacina {
 	public static final int ESTAGIO_TESTES = 2;
 	public static final int ESTAGIO_APLICACAO_EM_MASSA = 3;
 	
+	private int id;
 	private String paisOrigem;
 	private int estagioPesquisa;
 	private LocalDate dataInicioPesquisa;
@@ -19,14 +20,23 @@ public class Vacina {
 	public Vacina() {
 	}
 	
-	public Vacina(String paisOrigem, int estagioPesquisa, LocalDate dataInicioPesquisa,
+	public Vacina(int id, String paisOrigem, int estagioPesquisa, LocalDate dataInicioPesquisa,
 			Pesquisador pesquisadorResponsavel) {
 		super();
+		this.id = id;
 		this.paisOrigem = paisOrigem;
 		this.estagioPesquisa = estagioPesquisa;
 		this.dataInicioPesquisa = dataInicioPesquisa;
 		this.pesquisadorResponsavel = pesquisadorResponsavel;
 		this.notas = new ArrayList<Nota>();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getPaisOrigem() {
@@ -64,6 +74,10 @@ public class Vacina {
 	
 	public List<Nota> getNotas() {
 		return notas;
+	}
+	
+	public void setNotas(List<Nota> notas) {
+		this.notas = notas;
 	}
 	
 	public boolean addNotas(List<Nota> notas) {
