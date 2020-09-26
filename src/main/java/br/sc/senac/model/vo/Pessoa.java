@@ -4,6 +4,10 @@ import java.time.LocalDate;
 
 public abstract class Pessoa {
 
+	public static final String TIPO_PESQUISADOR = "PESQUISADOR";
+	public static final String TIPO_PUBLICO_GERAL = "PUBLICO_GERAL";
+	public static final String TIPO_VOLUNTARIO = "VOLUNTARIO";
+	
 	private int id;
 	private String nome;
 	private LocalDate dataNascimento;
