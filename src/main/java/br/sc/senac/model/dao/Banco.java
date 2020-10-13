@@ -17,10 +17,10 @@ public class Banco {
 	 * */
 	
 	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static final String BANCODADOS = "dbsistemacovid";
+	private static final String BANCODADOS = "DBSISTEMACOVID";
 	private static final String BUGFIX_HORABR = "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	private static final String CONEXAO = "jdbc:mysql://localhost:3306/" + BANCODADOS + BUGFIX_HORABR;
-	private static final String USER = "root";
+	private static final String USER = "lucas";
 	private static final String PASSWORD = "admin"; // Tem que preencher aqui
 	
 	public static final int CODIGO_RETORNO_SUCESSO = 1;

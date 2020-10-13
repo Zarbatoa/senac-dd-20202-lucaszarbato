@@ -2,6 +2,7 @@ package br.sc.senac.view;
 
 import java.time.LocalDate;
 
+import br.sc.senac.model.dao.InstituicaoDAO;
 import br.sc.senac.model.vo.*;
 
 public class Principal {
@@ -15,6 +16,9 @@ public class Principal {
 		
 		Vacina v0 = new Vacina(1,"Brasil", Vacina.ESTAGIO_TESTES,LocalDate.of(2020, 4, 22),joao);
 		
+		
+		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
+		instituicaoDAO.inserir(ufsc);
 	}
 	
 }

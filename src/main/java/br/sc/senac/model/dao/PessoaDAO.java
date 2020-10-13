@@ -24,7 +24,8 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		
 		try {
 			query.setInt(1, pegarTipoDePessoa(novaPessoa));
-			//query.setInt(2,)
+			
+			query.setInt(2, pegarInstituicaoDePesquisador(novaPessoa));
 			query.setString(3, novaPessoa.getNome());
 			
 			Date dataConvertidaSQL = java.sql.Date.valueOf(novaPessoa.getDataNascimento());
@@ -116,4 +117,20 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		
 		return idTipo;
 	}
+	
+
+	private Integer pegarInstituicaoDePesquisador(Pessoa novaPessoa) {
+		Integer idInstituicao = null;
+		
+		if (novaPessoa instanceof Pesquisador) {
+			Pesquisador novoPesquisador = (Pesquisador) novaPessoa;
+			if (novoPesquisador.getInstituicao() != null) {
+				idInstituicao = novoPesquisador.getInstituicao().getId();
+			}
+		}
+		
+		return idInstituicao;
+	}
+
+	
 }

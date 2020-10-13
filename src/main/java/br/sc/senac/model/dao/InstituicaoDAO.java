@@ -26,6 +26,9 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 			
 			if(codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO) {
 				ResultSet resultado = query.getGeneratedKeys();
+				if(resultado.next()) { // teste, TODO continuar daqui,  
+					System.out.println("tem um elemento, next() = true!!!");
+				}
 				int chaveGerada = resultado.getInt(1);
 				
 				novaInstituicao.setId(chaveGerada);
