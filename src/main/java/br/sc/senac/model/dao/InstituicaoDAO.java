@@ -26,12 +26,12 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 			
 			if(codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO) {
 				ResultSet resultado = query.getGeneratedKeys();
-				if(resultado.next()) { // teste, TODO continuar daqui,  
-					System.out.println("tem um elemento, next() = true!!!");
+				if(resultado.next()) {
+					int chaveGerada = resultado.getInt(1);
+					
+					novaInstituicao.setId(chaveGerada);
 				}
-				int chaveGerada = resultado.getInt(1);
 				
-				novaInstituicao.setId(chaveGerada);
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro ao inserir instituição.\nCausa: " + e.getMessage());
@@ -48,7 +48,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 		
 		String sql = " UPDATE INSTITUICAO "
 				+ " SET NOME=? "
-				+ " WHERE ID=? ";
+				+ " WHERE IDINSTITUICAO=? ";
 		
 		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
 		
@@ -72,7 +72,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 
 	public boolean excluir(int id) {
 		Connection conn = Banco.getConnection();
-		String sql = " DELETE FROM INSTITUICAO WHERE ID=? ";
+		String sql = " DELETE FROM INSTITUICAO WHERE IDINSTITUICAO=? ";
 		
 		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
 		boolean excluiu = false;
@@ -117,7 +117,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 	public Instituicao pesquisarPorId(int id) {
 		Connection conn = Banco.getConnection();
 		
-		String sql = " SELECT * FROM INSTITUICAO WHERE ID=? ";
+		String sql = " SELECT * FROM INSTITUICAO WHERE IDINSTITUICAO=? ";
 		Instituicao instituicaoBuscada = null;
 		
 		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
@@ -130,7 +130,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 				instituicaoBuscada = construirDoResultSet(conjuntoResultante);
 			}
 		} catch (SQLException e) {
-			System.out.println("Erro ao consultar instituição por Id (id: " + id + ") .\nCausa: " + e.getMessage());
+			System.out.println("Erro ao consultar instituição por IDINSTITUICAO (id: " + id + ") .\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conn);
@@ -141,7 +141,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 
 	public Instituicao construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		Instituicao instituicaoBuscada = new Instituicao();
-		instituicaoBuscada.setId(conjuntoResultante.getInt("ID"));
+		instituicaoBuscada.setId(conjuntoResultante.getInt("IDINSTITUICAO"));
 		instituicaoBuscada.setNome(conjuntoResultante.getString("NOME"));
 		
 		return instituicaoBuscada;
