@@ -29,6 +29,7 @@ public class Principal {
 		
 		// alterar
 		ufsc.setNome("Universidade Estadual de Santa Catarina");
+		instituicaoDAO.alterar(ufsc);
 
 		// selecionar 2
 		System.out.println("+========================+");
