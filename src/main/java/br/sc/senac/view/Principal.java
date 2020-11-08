@@ -17,7 +17,7 @@ public class Principal {
 		PublicoGeral maria = new PublicoGeral(2,-1,"Maria", LocalDate.of(1972, 10, 5),'F', "22222222222",false);
 		PublicoGeral jose = new PublicoGeral(3,-1,"José", LocalDate.of(1988, 1, 10),'M', "33333333333", true);
 		
-		Vacina v0 = new Vacina(1,"Brasil", Vacina.ESTAGIO_TESTES,LocalDate.of(2020, 4, 22),joao);
+		Vacina v0 = new Vacina(1,"Vacina acreana","Brasil", Vacina.ESTAGIO_TESTES,LocalDate.of(2020, 4, 22),joao);
 		
 		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
 		instituicaoDAO.inserir(ufsc);
