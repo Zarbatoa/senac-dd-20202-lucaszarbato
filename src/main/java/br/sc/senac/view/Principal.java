@@ -27,6 +27,14 @@ public class Principal {
 		joao.setIdTipo(pessoaDAO.getIdTipo(Pessoa.TIPO_PESQUISADOR));
 		
 		pessoaDAO.inserir(joao);
+		
+//		joao.setNome("Rosesclaudio");
+//		joao.setDataNascimento(LocalDate.of(1991, 12, 3));
+//		joao.setSexo('F');
+//		joao.setCpf("12345678912");
+		joao.setInstituicao(senac);
+		
+		pessoaDAO.alterar(joao);
 
 	} 
 	

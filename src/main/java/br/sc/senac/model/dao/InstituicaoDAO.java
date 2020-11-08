@@ -61,7 +61,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 			int codigoRetorno = query.executeUpdate();
 			alterou = (codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO);
 		} catch (SQLException e) {
-			System.out.println("Erro ao inserir instituiÃ§Ã£o.\nCausa: " + e.getMessage());
+			System.out.println("Erro ao alterar instituição.\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conn);
@@ -83,7 +83,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 			int codigoRetorno = query.executeUpdate();
 			excluiu = (codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO);
 		} catch (SQLException e) {
-			System.out.println("Erro ao excluir instituiÃ§Ã£o (id: " + id + ") .\nCausa: " + e.getMessage());
+			System.out.println("Erro ao excluir instituiçãoo (id: " + id + ") .\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conn);
@@ -105,7 +105,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 				instituicoesBuscadas.add(instituicaoBuscada);
 			}
 		} catch (SQLException e) {
-			System.out.println("Erro ao consultar todas as instituiÃ§Ãµes.\nCausa: " + e.getMessage());
+			System.out.println("Erro ao consultar todas as instituições.\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closeStatement(query);
 			Banco.closeConnection(conn);
@@ -130,7 +130,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 				instituicaoBuscada = construirDoResultSet(conjuntoResultante);
 			}
 		} catch (SQLException e) {
-			System.out.println("Erro ao consultar instituiÃ§Ã£o por IDINSTITUICAO (id: " + id + ") .\nCausa: " + e.getMessage());
+			System.out.println("Erro ao consultar instituição por IDINSTITUICAO (id: " + id + ") .\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conn);
@@ -155,7 +155,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 				instituicaoBuscada = construirDoResultSet(conjuntoResultante);
 			}
 		} catch (SQLException e) {
-			System.out.println("Erro ao consultar instituiÃ§Ã£o por NOME (NOME: " + nome + ") .\nCausa: " + e.getMessage());
+			System.out.println("Erro ao consultar instituição por NOME (NOME: " + nome + ") .\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conn);

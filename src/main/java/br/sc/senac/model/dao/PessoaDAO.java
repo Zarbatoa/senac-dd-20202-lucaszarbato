@@ -81,8 +81,41 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 	}
 
 	public boolean alterar(Pessoa pessoa) {
-		//TODO
-		return false;
+		Connection conn = Banco.getConnection();
+		
+		String sql = " UPDATE PESSOA "
+				+ " SET IDTIPO=?, IDINSTITUICAO=?, NOME=?, DATA_NASCIMENTO=?, "
+				+ "  SEXO=?, CPF=?"
+				+ " WHERE IDPESSOA=? ";
+		
+		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
+		
+		boolean alterou = false;
+		
+		try {
+			query.setInt(1, pessoa.getIdTipo());
+			if (pessoa.getInstituicao() != null) {
+				query.setInt(2, pessoa.getInstituicao().getId());
+			} else {
+				query.setString(2, null);
+			}
+			query.setString(3, pessoa.getNome());
+			Date dataConvertidaSQL = java.sql.Date.valueOf(pessoa.getDataNascimento());
+			query.setDate(4, dataConvertidaSQL);
+			query.setString(5, pessoa.getSexo() + "");
+			query.setString(6, pessoa.getCpf());
+			query.setInt(7, pessoa.getId());
+			
+			int codigoRetorno = query.executeUpdate();
+			alterou = (codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO);
+		} catch (SQLException e) {
+			System.out.println("Erro ao alterar pessoa.\nCausa: " + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(query);
+			Banco.closeConnection(conn);
+		}
+		
+		return alterou;
 	}
 	
 	public boolean excluir(int id) {
