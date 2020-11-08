@@ -119,8 +119,25 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 	}
 	
 	public boolean excluir(int id) {
-		//TODO
-		return false;
+		Connection conn = Banco.getConnection();
+		String sql = " DELETE FROM PESSOA WHERE IDPESSOA=? ";
+		
+		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
+		boolean excluiu = false;
+		
+		try {
+			query.setInt(1, id);
+			
+			int codigoRetorno = query.executeUpdate();
+			excluiu = (codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO);
+		} catch (SQLException e) {
+			System.out.println("Erro ao excluir pessoa (id: " + id + ") .\nCausa: " + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(query);
+			Banco.closeConnection(conn);
+		}
+		
+		return excluiu;
 	}
 	
 	public Pessoa pesquisarPorId(int id) {

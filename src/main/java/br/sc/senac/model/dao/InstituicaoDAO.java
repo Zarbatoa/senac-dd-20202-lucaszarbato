@@ -83,7 +83,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 			int codigoRetorno = query.executeUpdate();
 			excluiu = (codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO);
 		} catch (SQLException e) {
-			System.out.println("Erro ao excluir instituiçãoo (id: " + id + ") .\nCausa: " + e.getMessage());
+			System.out.println("Erro ao excluir instituição (id: " + id + ") .\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conn);
