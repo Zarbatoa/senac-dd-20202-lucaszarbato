@@ -21,6 +21,7 @@ public class VacinaDAO implements BaseDAO<Vacina>{
 		
 		try {
 			// fazer verificacao de PesquisadorResponsavel no BO
+			//  e a lista de notas não serão adicionadas aqui
 			query.setInt(1, novaVacina.getPesquisadorResponsavel().getId());
 			query.setString(2, novaVacina.getNome());
 			query.setString(3, novaVacina.getPaisOrigem());

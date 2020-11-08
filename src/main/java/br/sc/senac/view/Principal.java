@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import br.sc.senac.model.dao.InstituicaoDAO;
+import br.sc.senac.model.dao.NotaDAO;
 import br.sc.senac.model.dao.PessoaDAO;
 import br.sc.senac.model.dao.VacinaDAO;
 import br.sc.senac.model.vo.*;
@@ -42,6 +43,15 @@ public class Principal {
 		System.out.println(v0);
 		vacinaDAO.inserir(v0);
 		
+		// inserir nota
+		NotaDAO notaDAO = new NotaDAO();
+		Nota n0 = new Nota(-1, maria, v0, 4);
+		notaDAO.inserir(n0);
+		
+		// alterar nota
+		n0.setPessoa(jose);
+		n0.setValor(2);
+		notaDAO.alterar(n0);
 	} 
 	
 }

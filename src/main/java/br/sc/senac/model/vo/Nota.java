@@ -4,17 +4,17 @@ public class Nota {
 
 	private int id;
 	private Pessoa pessoa;
-	private int idVacina;
-	private double valor;
+	private Vacina vacina;
+	private double valor; // de 1 (péssima) a 5 (ótima)
 	
 	public Nota() {
 	}
 	
-	public Nota(int id, Pessoa pessoa, int idVacina, double valor) {
+	public Nota(int id, Pessoa pessoa, Vacina vacina, double valor) {
 		super();
 		this.id = id;
 		this.pessoa = pessoa;
-		this.idVacina = idVacina;
+		this.vacina = vacina;
 		this.valor = valor;
 	}
 
@@ -34,12 +34,12 @@ public class Nota {
 		this.pessoa = pessoa;
 	}
 
-	public int getVacina() {
-		return idVacina;
+	public Vacina getVacina() {
+		return vacina;
 	}
 
-	public void setVacina(int idVacina) {
-		this.idVacina = idVacina;
+	public void setVacina(Vacina vacina) {
+		this.vacina = vacina;
 	}
 
 	public double getValor() {
