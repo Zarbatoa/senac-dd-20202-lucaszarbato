@@ -97,5 +97,16 @@ public class Vacina {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
+	
+	@Override
+	public String toString() {
+		String nomePesquisador = this.pesquisadorResponsavel != null ? this.pesquisadorResponsavel.getNome() : null;
+		
+		return "[id=" + this.getId() + ", nome=" + this.nome
+				 + ", paisOrigem=" + this.paisOrigem + ", estagioPesquisa=" + this.estagioPesquisa
+				 + ", dataInicioPesquisa=" + this.dataInicioPesquisa + ", pesquisadorResponsavel="
+				 + nomePesquisador + "]";
+	}
 	
 }
