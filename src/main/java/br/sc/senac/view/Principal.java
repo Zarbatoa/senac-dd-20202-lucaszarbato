@@ -28,22 +28,41 @@ public class Principal {
 		maria.setIdTipo(pessoaDAO.getIdTipo(Pessoa.TIPO_PUBLICO_GERAL));
 		jose.setIdTipo(pessoaDAO.getIdTipo(Pessoa.TIPO_VOLUNTARIO));
 		
-		
+		// inserir
 		pessoaDAO.inserir(joao);
 		pessoaDAO.inserir(maria);
 		pessoaDAO.inserir(jose);
 		
+		// select 1
+		List<Pessoa> pessoas1 = pessoaDAO.pesquisarTodos();
+		for(Pessoa pes: pessoas1) {
+			System.out.println(pes);
+		}
+		System.out.println("=============================");
 		
-//		joao.setNome("Rosesclaudio");
-//		joao.setDataNascimento(LocalDate.of(1991, 12, 3));
-//		joao.setSexo('F');
-//		joao.setCpf("12345678912");
+		// alterar
+		joao.setNome("Rosesclaudio");
+		joao.setDataNascimento(LocalDate.of(1991, 12, 3));
+		joao.setSexo('F');
+		joao.setCpf("12345678912");
 		joao.setInstituicao(senac);
-		
 		pessoaDAO.alterar(joao);
 		
+		// select 2
+		Pessoa joaoAlterado = pessoaDAO.pesquisarPorId(joao.getId());
+		System.out.println(joaoAlterado);
+		System.out.println("=============================");
+		
+		// excluir
 		pessoaDAO.excluir(joao.getId());
 
+		// select 3
+		List<Pessoa> pessoas2 = pessoaDAO.pesquisarTodos();
+		for(Pessoa pes: pessoas2) {
+			System.out.println(pes);
+		}
+		System.out.println("=============================");
+		
 	} 
 	
 }

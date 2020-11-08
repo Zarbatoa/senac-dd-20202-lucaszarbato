@@ -5,9 +5,11 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 
 public class PessoaDAO implements BaseDAO<Pessoa>{
@@ -141,18 +143,70 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 	}
 	
 	public Pessoa pesquisarPorId(int id) {
-		//TODO
-		return null;
+		Connection conn = Banco.getConnection();
+		
+		String sql = " SELECT * FROM PESSOA WHERE IDPESSOA=? ";
+		Pessoa pessoaBuscada = null;
+		
+		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
+		
+		try {
+			query.setInt(1, id);
+			ResultSet conjuntoResultante = query.executeQuery();
+			
+			if(conjuntoResultante.next()) {
+				pessoaBuscada = construirDoResultSet(conjuntoResultante);
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar pessoa por IDPESSOA (id: " + id + ") .\nCausa: " + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(query);
+			Banco.closeConnection(conn);
+		}
+		
+		return pessoaBuscada;
 	}
 	
 	public List<Pessoa> pesquisarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = Banco.getConnection();
+		String sql = " SELECT * FROM PESSOA ";
+		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
+		List<Pessoa> pessoasBuscadas = new ArrayList<Pessoa>();
+		
+		try {
+			ResultSet conjuntoResultante = query.executeQuery();
+			while(conjuntoResultante.next()) {
+				Pessoa instituicaoBuscada = construirDoResultSet(conjuntoResultante);
+				pessoasBuscadas.add(instituicaoBuscada);
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar todas as instituições.\nCausa: " + e.getMessage());
+		} finally {
+			Banco.closeStatement(query);
+			Banco.closeConnection(conn);
+		}
+		
+		return pessoasBuscadas;
 	}
 
 	public Pessoa construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Pessoa pessoaBuscada = new Pessoa();
+		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
+		Instituicao instituicaoBuscada = null;
+		
+		pessoaBuscada.setId(conjuntoResultante.getInt("IDPESSOA"));
+		pessoaBuscada.setIdTipo(conjuntoResultante.getInt("IDTIPO"));
+		
+		int idInstituicao = conjuntoResultante.getInt("IDINSTITUICAO");
+		instituicaoBuscada = instituicaoDAO.pesquisarPorId(idInstituicao);
+		pessoaBuscada.setInstituicao(instituicaoBuscada);
+		
+		pessoaBuscada.setNome(conjuntoResultante.getString("NOME"));
+		pessoaBuscada.setDataNascimento(conjuntoResultante.getDate("DATA_NASCIMENTO").toLocalDate());
+		pessoaBuscada.setSexo(conjuntoResultante.getString("SEXO").charAt(0));
+		pessoaBuscada.setCpf(conjuntoResultante.getString("CPF"));
+		
+		return pessoaBuscada;
 	}
 	
 }
