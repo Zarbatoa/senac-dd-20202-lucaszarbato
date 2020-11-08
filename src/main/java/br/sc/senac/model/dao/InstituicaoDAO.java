@@ -138,6 +138,31 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 		
 		return instituicaoBuscada;
 	}
+	
+	public Instituicao pesquisarPeloNome(String nome) {
+		Connection conn = Banco.getConnection();
+		
+		String sql = " SELECT * FROM INSTITUICAO WHERE NOME=? ";
+		Instituicao instituicaoBuscada = null;
+		
+		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
+		
+		try {
+			query.setString(1, nome);
+			ResultSet conjuntoResultante = query.executeQuery();
+			
+			if(conjuntoResultante.next()) {
+				instituicaoBuscada = construirDoResultSet(conjuntoResultante);
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar instituição por NOME (NOME: " + nome + ") .\nCausa: " + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(query);
+			Banco.closeConnection(conn);
+		}
+		
+		return instituicaoBuscada;
+	}
 
 	public Instituicao construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		Instituicao instituicaoBuscada = new Instituicao();

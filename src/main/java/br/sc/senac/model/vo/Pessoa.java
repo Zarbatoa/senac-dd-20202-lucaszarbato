@@ -14,6 +14,9 @@ public abstract class Pessoa {
 	private char sexo;
 	private String cpf;
 	
+	private int idTipo;
+	private Instituicao instituicao;
+	
 	public Pessoa() {
 	}
 
@@ -64,6 +67,22 @@ public abstract class Pessoa {
 
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
+	}
+
+	public int getIdTipo() {
+		return idTipo;
+	}
+
+	public void setIdTipo(int idTipo) {
+		this.idTipo = idTipo;
+	}
+
+	public Instituicao getInstituicao() {
+		return instituicao;
+	}
+
+	public void setInstituicao(Instituicao instituicao) {
+		this.instituicao = instituicao;
 	}
 	
 }

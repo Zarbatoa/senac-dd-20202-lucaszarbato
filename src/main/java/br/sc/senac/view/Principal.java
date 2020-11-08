@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import br.sc.senac.model.dao.InstituicaoDAO;
+import br.sc.senac.model.dao.PessoaDAO;
 import br.sc.senac.model.vo.*;
 
 public class Principal {
@@ -18,35 +19,36 @@ public class Principal {
 		
 		Vacina v0 = new Vacina(1,"Brasil", Vacina.ESTAGIO_TESTES,LocalDate.of(2020, 4, 22),joao);
 		
-		
+		PessoaDAO pessoa = new PessoaDAO();
 		// inserir
-		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
-		instituicaoDAO.inserir(ufsc);
-		instituicaoDAO.inserir(senac);
-		
-		// selecionar 1
-		System.out.println(instituicaoDAO.pesquisarPorId(ufsc.getId()));
-		
-		// alterar
-		ufsc.setNome("Universidade Estadual de Santa Catarina");
-		instituicaoDAO.alterar(ufsc);
-
-		// selecionar 2
-		System.out.println("+========================+");
-		List<Instituicao> instituicoes = instituicaoDAO.pesquisarTodos();
-		for (Instituicao instituicao : instituicoes) {
-			System.out.println(instituicao);
-		}
-		
-		// excluir
-		instituicaoDAO.excluir(ufsc.getId());
-		
-		// selecionar 3
-		System.out.println("+========================+");
-		List<Instituicao> instituicoesAlteradas = instituicaoDAO.pesquisarTodos();
-		for (Instituicao instituicao : instituicoesAlteradas) {
-			System.out.println(instituicao);
-		}
+//		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
+//		instituicaoDAO.inserir(ufsc);
+//		instituicaoDAO.inserir(senac);
+//		System.out.println(instituicaoDAO.pesquisarPeloNome(senac.getNome()));
+//		
+//		// selecionar 1
+//		System.out.println(instituicaoDAO.pesquisarPorId(ufsc.getId()));
+//		
+//		// alterar
+//		ufsc.setNome("Universidade Estadual de Santa Catarina");
+//		instituicaoDAO.alterar(ufsc);
+//
+//		// selecionar 2
+//		System.out.println("+========================+");
+//		List<Instituicao> instituicoes = instituicaoDAO.pesquisarTodos();
+//		for (Instituicao instituicao : instituicoes) {
+//			System.out.println(instituicao);
+//		}
+//		
+//		// excluir
+//		instituicaoDAO.excluir(ufsc.getId());
+//		
+//		// selecionar 3
+//		System.out.println("+========================+");
+//		List<Instituicao> instituicoesAlteradas = instituicaoDAO.pesquisarTodos();
+//		for (Instituicao instituicao : instituicoesAlteradas) {
+//			System.out.println(instituicao);
+//		}
 	} 
 	
 }
