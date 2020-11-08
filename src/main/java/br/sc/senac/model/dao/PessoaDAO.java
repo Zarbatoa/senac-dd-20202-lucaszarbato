@@ -44,7 +44,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		String sql = " INSERT INTO PESSOA (IDTIPO, IDINSTITUICAO, NOME, DATA_NASCIMENTO, SEXO, CPF) "
 				+ " VALUES (?,?,?,?,?,?)";
 		
-		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
+		PreparedStatement query = Banco.getPreparedStatementWithGeneratedKeys(conn, sql);
 		
 		try {
 			query.setInt(1, novaPessoa.getIdTipo());
@@ -62,9 +62,12 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 			int codigoRetorno = query.executeUpdate();
 			if(codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO) {
 				ResultSet resultado = query.getGeneratedKeys();
-				int chaveGerada = resultado.getInt(1);
 				
-				novaPessoa.setId(chaveGerada);
+				if(resultado.next()) {
+					int chaveGerada = resultado.getInt(1);
+					
+					novaPessoa.setId(chaveGerada);
+				}
 			}
 		} catch (SQLException e ) {
 			System.out.println("Erro ao inserir pessoa.\nCausa: " + e.getMessage());

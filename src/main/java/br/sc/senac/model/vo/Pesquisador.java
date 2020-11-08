@@ -4,22 +4,11 @@ import java.time.LocalDate;
 
 public class Pesquisador extends Pessoa {
 
-	private Instituicao instituicao;
-	
 	public Pesquisador() {
 	}
 
-	public Pesquisador(int id, String nome, LocalDate dataNascimento, char sexo, String cpf, Instituicao instituicao) {
-		super(id, nome, dataNascimento, sexo, cpf);
-		this.instituicao = instituicao;
-	}
-
-	public Instituicao getInstituicao() {
-		return instituicao;
-	}
-
-	public void setInstituicao(Instituicao instituicao) {
-		this.instituicao = instituicao;
+	public Pesquisador(int id, int idTipo,  Instituicao instituicao, String nome, LocalDate dataNascimento, char sexo, String cpf) {
+		super(id, idTipo, instituicao, nome, dataNascimento, sexo, cpf);
 	}
 
 }

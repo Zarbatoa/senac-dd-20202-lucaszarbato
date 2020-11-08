@@ -34,7 +34,7 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 				
 			}
 		} catch (SQLException e) {
-			System.out.println("Erro ao inserir instituiÃ§Ã£o.\nCausa: " + e.getMessage());
+			System.out.println("Erro ao inserir instituição.\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conn);

@@ -13,42 +13,21 @@ public class Principal {
 		Instituicao ufsc = new Instituicao(1,"Universidade Federal de Santa Catarina");
 		Instituicao senac = new Instituicao(1,"ServiÁo Nacional de Aprendizagem Comercial");
 		
-		Pesquisador joao = new Pesquisador(1,"Jo√£o da Silva", LocalDate.of(1990, 2, 15), 'M', "111.111.111-11",ufsc);
-		PublicoGeral maria = new PublicoGeral(2,"Maria", LocalDate.of(1972, 10, 5),'F', "222.222.222-22",false);
-		PublicoGeral jose = new PublicoGeral(3,"Jos√©", LocalDate.of(1988, 1, 10),'M', "333.333.333-33", true);
+		Pesquisador joao = new Pesquisador(1,-1,ufsc,"Jo„o da Silva", LocalDate.of(1990, 2, 15), 'M', "11111111111");
+		PublicoGeral maria = new PublicoGeral(2,-1,"Maria", LocalDate.of(1972, 10, 5),'F', "22222222222",false);
+		PublicoGeral jose = new PublicoGeral(3,-1,"Jo„o", LocalDate.of(1988, 1, 10),'M', "33333333333", true);
 		
 		Vacina v0 = new Vacina(1,"Brasil", Vacina.ESTAGIO_TESTES,LocalDate.of(2020, 4, 22),joao);
 		
-		PessoaDAO pessoa = new PessoaDAO();
-		// inserir
-//		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
-//		instituicaoDAO.inserir(ufsc);
-//		instituicaoDAO.inserir(senac);
-//		System.out.println(instituicaoDAO.pesquisarPeloNome(senac.getNome()));
-//		
-//		// selecionar 1
-//		System.out.println(instituicaoDAO.pesquisarPorId(ufsc.getId()));
-//		
-//		// alterar
-//		ufsc.setNome("Universidade Estadual de Santa Catarina");
-//		instituicaoDAO.alterar(ufsc);
-//
-//		// selecionar 2
-//		System.out.println("+========================+");
-//		List<Instituicao> instituicoes = instituicaoDAO.pesquisarTodos();
-//		for (Instituicao instituicao : instituicoes) {
-//			System.out.println(instituicao);
-//		}
-//		
-//		// excluir
-//		instituicaoDAO.excluir(ufsc.getId());
-//		
-//		// selecionar 3
-//		System.out.println("+========================+");
-//		List<Instituicao> instituicoesAlteradas = instituicaoDAO.pesquisarTodos();
-//		for (Instituicao instituicao : instituicoesAlteradas) {
-//			System.out.println(instituicao);
-//		}
+		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
+		instituicaoDAO.inserir(ufsc);
+		instituicaoDAO.inserir(senac);
+		
+		PessoaDAO pessoaDAO = new PessoaDAO();
+		joao.setIdTipo(pessoaDAO.getIdTipo(Pessoa.TIPO_PESQUISADOR));
+		
+		pessoaDAO.inserir(joao);
+
 	} 
 	
 }

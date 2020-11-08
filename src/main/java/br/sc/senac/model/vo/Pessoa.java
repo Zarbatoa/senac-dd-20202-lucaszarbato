@@ -9,20 +9,21 @@ public abstract class Pessoa {
 	public static final String TIPO_VOLUNTARIO = "VOLUNTARIO";
 	
 	private int id;
+	private int idTipo;
+	private Instituicao instituicao;
 	private String nome;
 	private LocalDate dataNascimento;
 	private char sexo;
 	private String cpf;
 	
-	private int idTipo;
-	private Instituicao instituicao;
-	
 	public Pessoa() {
 	}
 
-	public Pessoa(int id, String nome, LocalDate dataNascimento, char sexo, String cpf) {
+	public Pessoa(int id, int idTipo, Instituicao instituicao, String nome, LocalDate dataNascimento, char sexo, String cpf) {
 		super();
 		this.id = id;
+		this.idTipo = idTipo;
+		this.instituicao = instituicao;
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.sexo = sexo;
