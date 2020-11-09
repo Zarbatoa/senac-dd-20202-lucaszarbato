@@ -176,11 +176,11 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		try {
 			ResultSet conjuntoResultante = query.executeQuery();
 			while(conjuntoResultante.next()) {
-				Pessoa instituicaoBuscada = construirDoResultSet(conjuntoResultante);
-				pessoasBuscadas.add(instituicaoBuscada);
+				Pessoa pessoaBuscada = construirDoResultSet(conjuntoResultante);
+				pessoasBuscadas.add(pessoaBuscada);
 			}
 		} catch (SQLException e) {
-			System.out.println("Erro ao consultar todas as instituições.\nCausa: " + e.getMessage());
+			System.out.println("Erro ao consultar todas as pessoas.\nCausa: " + e.getMessage());
 		} finally {
 			Banco.closeStatement(query);
 			Banco.closeConnection(conn);

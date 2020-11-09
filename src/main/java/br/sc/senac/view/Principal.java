@@ -38,20 +38,27 @@ public class Principal {
 		
 		// inserir vacina
 		VacinaDAO vacinaDAO = new VacinaDAO();
-		
-		System.out.println(joao);
-		System.out.println(v0);
 		vacinaDAO.inserir(v0);
 		
 		// inserir nota
 		NotaDAO notaDAO = new NotaDAO();
 		Nota n0 = new Nota(-1, maria, v0, 4);
+		Nota n1 = new Nota(-1, maria, v0, 1);
 		notaDAO.inserir(n0);
+		notaDAO.inserir(n1);
+		
+		// select 1
+		System.out.println(n0);
+		System.out.println(n1);
 		
 		// alterar nota
 		n0.setPessoa(jose);
 		n0.setValor(2);
 		notaDAO.alterar(n0);
+		
+		// excluir
+		notaDAO.excluir(n0.getId());
+		
 	} 
 	
 }
