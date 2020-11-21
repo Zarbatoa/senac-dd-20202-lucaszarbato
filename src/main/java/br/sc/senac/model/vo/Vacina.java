@@ -16,7 +16,6 @@ public class Vacina {
 	private int estagioPesquisa;
 	private LocalDate dataInicioPesquisa;
 	private Pesquisador pesquisadorResponsavel;
-	private List<Nota> notas;
 	
 	public Vacina() {
 	}
@@ -30,7 +29,6 @@ public class Vacina {
 		this.estagioPesquisa = estagioPesquisa;
 		this.dataInicioPesquisa = dataInicioPesquisa;
 		this.pesquisadorResponsavel = pesquisadorResponsavel;
-		this.notas = new ArrayList<Nota>();
 	}
 
 	public int getId() {
@@ -71,23 +69,6 @@ public class Vacina {
 
 	public void setPesquisadorResponsavel(Pesquisador pesquisadorResponsavel) {
 		this.pesquisadorResponsavel = pesquisadorResponsavel;
-	}
-
-	
-	public List<Nota> getNotas() {
-		return notas;
-	}
-	
-	public void setNotas(List<Nota> notas) {
-		this.notas = notas;
-	}
-	
-	public boolean addNotas(List<Nota> notas) {
-		return this.notas.addAll(notas);
-	}
-	
-	public void addNota(Nota nota) {
-		this.notas.add(nota);
 	}
 
 	public String getNome() {

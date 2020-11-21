@@ -43,8 +43,8 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 	public Pessoa inserir(Pessoa novaPessoa) {
 		Connection conn = Banco.getConnection();
 		
-		String sql = " INSERT INTO PESSOA (IDTIPO, IDINSTITUICAO, NOME, DATA_NASCIMENTO, SEXO, CPF) "
-				+ " VALUES (?,?,?,?,?,?)";
+		String sql = " INSERT INTO PESSOA (IDTIPO, IDINSTITUICAO, NOME, SOBRENOME, DATA_NASCIMENTO, SEXO, CPF) "
+				+ " VALUES (?,?,?,?,?,?,?)";
 		
 		PreparedStatement query = Banco.getPreparedStatementWithGeneratedKeys(conn, sql);
 		
@@ -56,10 +56,11 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 				query.setString(2, null);
 			}
 			query.setString(3, novaPessoa.getNome());
+			query.setString(4, novaPessoa.getSobrenome());
 			Date dataConvertidaSQL = java.sql.Date.valueOf(novaPessoa.getDataNascimento());
-			query.setDate(4, dataConvertidaSQL);
-			query.setString(5, novaPessoa.getSexo()+"");
-			query.setString(6, novaPessoa.getCpf());
+			query.setDate(5, dataConvertidaSQL);
+			query.setString(6, novaPessoa.getSexo()+"");
+			query.setString(7, novaPessoa.getCpf());
 			
 			int codigoRetorno = query.executeUpdate();
 			if(codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO) {
@@ -86,8 +87,8 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		Connection conn = Banco.getConnection();
 		
 		String sql = " UPDATE PESSOA "
-				+ " SET IDTIPO=?, IDINSTITUICAO=?, NOME=?, DATA_NASCIMENTO=?, "
-				+ "  SEXO=?, CPF=?"
+				+ " SET IDTIPO=?, IDINSTITUICAO=?, NOME=?, SOBRENOME=?, "
+				+ "  DATA_NASCIMENTO=?, SEXO=?, CPF=? "
 				+ " WHERE IDPESSOA=? ";
 		
 		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
@@ -102,11 +103,12 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 				query.setString(2, null);
 			}
 			query.setString(3, pessoa.getNome());
+			query.setString(4, pessoa.getSobrenome());
 			Date dataConvertidaSQL = java.sql.Date.valueOf(pessoa.getDataNascimento());
-			query.setDate(4, dataConvertidaSQL);
-			query.setString(5, pessoa.getSexo() + "");
-			query.setString(6, pessoa.getCpf());
-			query.setInt(7, pessoa.getId());
+			query.setDate(5, dataConvertidaSQL);
+			query.setString(6, pessoa.getSexo() + "");
+			query.setString(7, pessoa.getCpf());
+			query.setInt(8, pessoa.getId());
 			
 			int codigoRetorno = query.executeUpdate();
 			alterou = (codigoRetorno == Banco.CODIGO_RETORNO_SUCESSO);
@@ -202,6 +204,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		pessoaBuscada.setInstituicao(instituicaoBuscada);
 		
 		pessoaBuscada.setNome(conjuntoResultante.getString("NOME"));
+		pessoaBuscada.setSobrenome(conjuntoResultante.getString("SOBRENOME"));
 		pessoaBuscada.setDataNascimento(conjuntoResultante.getDate("DATA_NASCIMENTO").toLocalDate());
 		pessoaBuscada.setSexo(conjuntoResultante.getString("SEXO").charAt(0));
 		pessoaBuscada.setCpf(conjuntoResultante.getString("CPF"));

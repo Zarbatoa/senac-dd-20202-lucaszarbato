@@ -50,4 +50,12 @@ public class Nota {
 		this.valor = valor;
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "[id=" + this.id + ", pessoa=" + this.pessoa.getNomeCompleto() 
+			+ ", vacina=" + vacina.getNome()
+			+ ", nota=" + this.valor +"]";
+	}
+	
 }

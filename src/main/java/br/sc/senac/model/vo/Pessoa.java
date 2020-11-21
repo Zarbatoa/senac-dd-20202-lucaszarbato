@@ -12,6 +12,7 @@ public class Pessoa {
 	private int idTipo;
 	private Instituicao instituicao;
 	private String nome;
+	private String sobrenome;
 	private LocalDate dataNascimento;
 	private char sexo;
 	private String cpf;
@@ -19,12 +20,13 @@ public class Pessoa {
 	public Pessoa() {
 	}
 
-	public Pessoa(int id, int idTipo, Instituicao instituicao, String nome, LocalDate dataNascimento, char sexo, String cpf) {
+	public Pessoa(int id, int idTipo, Instituicao instituicao, String nome, String sobrenome, LocalDate dataNascimento, char sexo, String cpf) {
 		super();
 		this.id = id;
 		this.idTipo = idTipo;
 		this.instituicao = instituicao;
 		this.nome = nome;
+		this.sobrenome = sobrenome;
 		this.dataNascimento = dataNascimento;
 		this.sexo = sexo;
 		this.cpf = cpf;
@@ -86,11 +88,22 @@ public class Pessoa {
 		this.instituicao = instituicao;
 	}
 
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
+	}
+
+	public String getNomeCompleto() {
+		return this.nome + " " + this.getSobrenome();
+	}
 	
 	@Override
 	public String toString() {
 		return "[id=" + this.id + ", idTipo=" + this.idTipo
-				 + ", instituicao=" + this.instituicao + ", nome=" + this.nome
+				 + ", instituicao=" + this.instituicao + ", nome=" + this.nome + ", sobrenome=" + this.sobrenome
 				 + ", data_nascimento=" + this.dataNascimento + ", sexo=" + this.sexo
 				 + ", cpf=" + formatarCpf() + "]";
 	}
