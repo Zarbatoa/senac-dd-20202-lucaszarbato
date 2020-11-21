@@ -1,8 +1,6 @@
 package br.sc.senac.model.vo;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Vacina {
 
@@ -15,13 +13,13 @@ public class Vacina {
 	private String paisOrigem;
 	private int estagioPesquisa;
 	private LocalDate dataInicioPesquisa;
-	private Pesquisador pesquisadorResponsavel;
+	private Pessoa pesquisadorResponsavel;
 	
 	public Vacina() {
 	}
 	
 	public Vacina(int id, String nome, String paisOrigem, int estagioPesquisa, LocalDate dataInicioPesquisa,
-			Pesquisador pesquisadorResponsavel) {
+			Pessoa pesquisadorResponsavel) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -63,11 +61,11 @@ public class Vacina {
 		this.dataInicioPesquisa = dataInicioPesquisa;
 	}
 
-	public Pesquisador getPesquisadorResponsavel() {
+	public Pessoa getPesquisadorResponsavel() {
 		return pesquisadorResponsavel;
 	}
 
-	public void setPesquisadorResponsavel(Pesquisador pesquisadorResponsavel) {
+	public void setPesquisadorResponsavel(Pessoa pesquisadorResponsavel) {
 		this.pesquisadorResponsavel = pesquisadorResponsavel;
 	}
 

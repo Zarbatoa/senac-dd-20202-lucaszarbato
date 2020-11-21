@@ -145,6 +145,7 @@ public class NotaDAO implements BaseDAO<Nota>{
 
 	public Nota construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		// TODO Auto-generated method stub
+		// Criar o DAO de Vacina antes
 		return null;
 	}
 	

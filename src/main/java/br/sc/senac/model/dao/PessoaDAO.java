@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 
 public class PessoaDAO implements BaseDAO<Pessoa>{
@@ -49,7 +48,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		PreparedStatement query = Banco.getPreparedStatementWithGeneratedKeys(conn, sql);
 		
 		try {
-			query.setInt(1, novaPessoa.getIdTipo());
+			query.setInt(1, novaPessoa.getTipo().getId());
 			if (novaPessoa.getInstituicao() != null) {
 				query.setInt(2, novaPessoa.getInstituicao().getId());
 			} else {
@@ -96,7 +95,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		boolean alterou = false;
 		
 		try {
-			query.setInt(1, pessoa.getIdTipo());
+			query.setInt(1, pessoa.getTipo().getId());
 			if (pessoa.getInstituicao() != null) {
 				query.setInt(2, pessoa.getInstituicao().getId());
 			} else {
@@ -194,14 +193,15 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 	public Pessoa construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		Pessoa pessoaBuscada = new Pessoa();
 		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
-		Instituicao instituicaoBuscada = null;
+		TipoDAO tipoDAO = new TipoDAO();
 		
 		pessoaBuscada.setId(conjuntoResultante.getInt("IDPESSOA"));
-		pessoaBuscada.setIdTipo(conjuntoResultante.getInt("IDTIPO"));
+		
+		int idTipo = conjuntoResultante.getInt("IDTIPO");
+		pessoaBuscada.setTipo(tipoDAO.pesquisarPorId(idTipo));
 		
 		int idInstituicao = conjuntoResultante.getInt("IDINSTITUICAO");
-		instituicaoBuscada = instituicaoDAO.pesquisarPorId(idInstituicao);
-		pessoaBuscada.setInstituicao(instituicaoBuscada);
+		pessoaBuscada.setInstituicao(instituicaoDAO.pesquisarPorId(idInstituicao));
 		
 		pessoaBuscada.setNome(conjuntoResultante.getString("NOME"));
 		pessoaBuscada.setSobrenome(conjuntoResultante.getString("SOBRENOME"));

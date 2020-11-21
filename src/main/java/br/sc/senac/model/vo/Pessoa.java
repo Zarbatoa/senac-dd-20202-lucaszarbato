@@ -3,13 +3,9 @@ package br.sc.senac.model.vo;
 import java.time.LocalDate;
 
 public class Pessoa {
-
-	public static final String TIPO_PESQUISADOR = "PESQUISADOR";
-	public static final String TIPO_PUBLICO_GERAL = "PUBLICO_GERAL";
-	public static final String TIPO_VOLUNTARIO = "VOLUNTARIO";
 	
 	private int id;
-	private int idTipo;
+	private TipoPessoa tipo;
 	private Instituicao instituicao;
 	private String nome;
 	private String sobrenome;
@@ -20,10 +16,10 @@ public class Pessoa {
 	public Pessoa() {
 	}
 
-	public Pessoa(int id, int idTipo, Instituicao instituicao, String nome, String sobrenome, LocalDate dataNascimento, char sexo, String cpf) {
+	public Pessoa(int id, TipoPessoa tipo, Instituicao instituicao, String nome, String sobrenome, LocalDate dataNascimento, char sexo, String cpf) {
 		super();
 		this.id = id;
-		this.idTipo = idTipo;
+		this.tipo = tipo;
 		this.instituicao = instituicao;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
@@ -72,12 +68,12 @@ public class Pessoa {
 		this.cpf = cpf;
 	}
 
-	public int getIdTipo() {
-		return idTipo;
+	public TipoPessoa getTipo() {
+		return tipo;
 	}
 
-	public void setIdTipo(int idTipo) {
-		this.idTipo = idTipo;
+	public void setTipo(TipoPessoa tipo) {
+		this.tipo = tipo;
 	}
 
 	public Instituicao getInstituicao() {
@@ -102,7 +98,7 @@ public class Pessoa {
 	
 	@Override
 	public String toString() {
-		return "[id=" + this.id + ", idTipo=" + this.idTipo
+		return "[id=" + this.id + ", tipo=" + this.tipo.getDescricao()
 				 + ", instituicao=" + this.instituicao + ", nome=" + this.nome + ", sobrenome=" + this.sobrenome
 				 + ", data_nascimento=" + this.dataNascimento + ", sexo=" + this.sexo
 				 + ", cpf=" + formatarCpf() + "]";
