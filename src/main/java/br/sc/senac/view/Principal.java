@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 import br.sc.senac.model.dao.InstituicaoDAO;
+import br.sc.senac.model.dao.NotaDAO;
 import br.sc.senac.model.dao.PessoaDAO;
 import br.sc.senac.model.dao.VacinaDAO;
 import br.sc.senac.model.vo.Instituicao;
+import br.sc.senac.model.vo.Nota;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
 import br.sc.senac.model.vo.Vacina;
@@ -45,40 +47,93 @@ public class Principal {
 		vacinaDAO.inserir(v1);
 		vacinaDAO.inserir(v2);
 		
+		//inserir notas
+		NotaDAO notaDAO = new NotaDAO();
+		Nota n0 = new Nota(1,joao,v0,3);
+		Nota n1 = new Nota(2,joao,v1,2);
+		Nota n2 = new Nota(3,joao,v2,4);
+		
+		Nota n3 = new Nota(4,maria,v0,1);
+		Nota n4 = new Nota(5,maria,v1,2);
+		Nota n5 = new Nota(6,maria,v2,5);
+		
+		Nota n6 = new Nota(7,jose,v0,4);
+		Nota n7 = new Nota(8,jose,v1,3);
+		Nota n8 = new Nota(9,jose,v2,3);
+		
+		Nota n9 = new Nota(10,vladmir,v0,2);
+		Nota n10 = new Nota(11,vladmir,v1,1);
+		Nota n11 = new Nota(12,vladmir,v2,5);
+		
+		notaDAO.inserir(n0);
+		notaDAO.inserir(n1);
+		notaDAO.inserir(n2);
+		
+		notaDAO.inserir(n3);
+		notaDAO.inserir(n4);
+		notaDAO.inserir(n5);
+		
+		notaDAO.inserir(n6);
+		notaDAO.inserir(n7);
+		notaDAO.inserir(n8);
+		
+		notaDAO.inserir(n9);
+		notaDAO.inserir(n10);
+		notaDAO.inserir(n11);
+		
 		// select 1
-		List<Vacina> vacinas1 = vacinaDAO.pesquisarTodos();
-		for (Vacina vacina : vacinas1) {
-			System.out.println(vacina);
+		List<Nota> notas1 = notaDAO.pesquisarTodos();
+		for (Nota nota : notas1) {
+			System.out.println(nota);
 		}
 		System.out.println("=============================");
 		
 		// alterar
-		v1.setPaisOrigem("Georgia");
-		v1.setEstagioPesquisa(Vacina.ESTAGIO_TESTES);
-		v1.setPesquisadorResponsavel(vladmir);
-		v2.setNome("Vacina Vladmir");
-		v2.setDataInicioPesquisa(LocalDate.of(2020,4,28));
-		vacinaDAO.alterar(v1);
-		vacinaDAO.alterar(v2);
+		n6.setVacina(v2);
+		n7.setValor(1);
+		n8.setVacina(v0);
+		
+		notaDAO.alterar(n6);
+		notaDAO.alterar(n7);
+		notaDAO.alterar(n8);
+		
+		n0.setPessoa(maria);
+		n1.setPessoa(maria);
+		n2.setPessoa(maria);
+		n3.setPessoa(joao);
+		n4.setPessoa(joao);
+		n5.setPessoa(joao);
+		
+		notaDAO.alterar(n0);
+		notaDAO.alterar(n1);
+		notaDAO.alterar(n2);
+		notaDAO.alterar(n3);
+		notaDAO.alterar(n4);
+		notaDAO.alterar(n5);
 		
 		// select 2
-		List<Vacina> vacinas2 = vacinaDAO.pesquisarTodos();
-		for (Vacina vacina : vacinas2) {
-			System.out.println(vacina);
+		List<Nota> notas2 = notaDAO.pesquisarTodos();
+		for (Nota nota : notas2) {
+			System.out.println(nota);
 		}
 		System.out.println("=============================");
 		
 		// excluir
-		vacinaDAO.excluir(v1.getId());
+		notaDAO.excluir(n0.getId());
+		notaDAO.excluir(n4.getId());
+		notaDAO.excluir(n8.getId());
+		notaDAO.excluir(n9.getId());
+		notaDAO.excluir(n9.getId());
 		
 		// select 3
-		List<Vacina> vacinas3 = vacinaDAO.pesquisarTodos();
-		for (Vacina vacina : vacinas3) {
-			System.out.println(vacina);
+		List<Nota> notas3 = notaDAO.pesquisarTodos();
+		for (Nota nota : notas3) {
+			System.out.println(nota);
 		}
 		System.out.println("=============================");
+		
 		// select 4 por id
-		System.out.println(vacinaDAO.pesquisarPorId(v2.getId()));
+		System.out.println(notaDAO.pesquisarPorId(n11.getId()));
 		
 	} 
 	

@@ -144,9 +144,21 @@ public class NotaDAO implements BaseDAO<Nota>{
 	}
 
 	public Nota construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
-		// TODO Auto-generated method stub
-		// Criar o DAO de Vacina antes
-		return null;
+		Nota notaBuscada = new Nota();
+		VacinaDAO vacinaDAO = new VacinaDAO();
+		PessoaDAO pessoaDAO = new PessoaDAO();
+		
+		notaBuscada.setId(conjuntoResultante.getInt("IDNOTA"));
+		
+		int idVacina = conjuntoResultante.getInt("IDVACINA");
+		notaBuscada.setVacina(vacinaDAO.pesquisarPorId(idVacina));
+		
+		int idPessoa = conjuntoResultante.getInt("IDPESSOA");
+		notaBuscada.setPessoa(pessoaDAO.pesquisarPorId(idPessoa));
+		
+		notaBuscada.setValor(conjuntoResultante.getDouble("VALOR"));
+		
+		return notaBuscada;
 	}
 	
 }
