@@ -20,8 +20,6 @@ public class VacinaDAO implements BaseDAO<Vacina>{
 		PreparedStatement query = Banco.getPreparedStatementWithGeneratedKeys(conn, sql);
 		
 		try {
-			// fazer verificacao de PesquisadorResponsavel no BO
-			//  e a lista de notas não serão adicionadas aqui
 			query.setInt(1, novaVacina.getPesquisadorResponsavel().getId());
 			query.setString(2, novaVacina.getNome());
 			query.setString(3, novaVacina.getPaisOrigem());
@@ -45,7 +43,6 @@ public class VacinaDAO implements BaseDAO<Vacina>{
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conn);
 		}
-		
 		
 		return novaVacina;
 	}

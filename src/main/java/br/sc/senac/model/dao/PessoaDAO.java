@@ -193,7 +193,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 	public Pessoa construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		Pessoa pessoaBuscada = new Pessoa();
 		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
-		TipoDAO tipoDAO = new TipoDAO();
+		TipoPessoaDAO tipoDAO = new TipoPessoaDAO();
 		
 		pessoaBuscada.setId(conjuntoResultante.getInt("IDPESSOA"));
 		

@@ -31,5 +31,8 @@ public class TipoPessoa {
 		this.descricao = descricao;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "[id=" + this.id + ", descricao=" + this.descricao + "]";
+	}
 }
