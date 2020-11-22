@@ -80,12 +80,31 @@ public class Vacina {
 	
 	@Override
 	public String toString() {
-		String nomePesquisador = this.pesquisadorResponsavel != null ? this.pesquisadorResponsavel.getNome() : null;
+		String nomeCompletoPesquisador = this.pesquisadorResponsavel != null ? this.pesquisadorResponsavel.getNomeCompleto() : null;
 		
 		return "[id=" + this.getId() + ", nome=" + this.nome
-				 + ", paisOrigem=" + this.paisOrigem + ", estagioPesquisa=" + this.estagioPesquisa
+				 + ", paisOrigem=" + this.paisOrigem + ", estagioPesquisa=" + getStringEstagioDePesquisa()
 				 + ", dataInicioPesquisa=" + this.dataInicioPesquisa + ", pesquisadorResponsavel="
-				 + nomePesquisador + "]";
+				 + nomeCompletoPesquisador + "]";
+	}
+
+	private String getStringEstagioDePesquisa() {
+		String estagioPesquisa = null;
+		
+		switch (this.estagioPesquisa) {
+			case Vacina.ESTAGIO_INICIAL:
+				estagioPesquisa = "ESTAGIO_INICIAL";
+				break;
+			case Vacina.ESTAGIO_TESTES:
+				estagioPesquisa = "ESTAGIO_TESTES";
+				break;
+			case Vacina.ESTAGIO_APLICACAO_EM_MASSA:
+				estagioPesquisa = "ESTAGIO_APLICACAO_EM_MASSA";
+				break;
+			default:
+		}
+		
+		return estagioPesquisa;
 	}
 	
 }

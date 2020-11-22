@@ -5,7 +5,6 @@ import java.util.List;
 
 import br.sc.senac.model.dao.InstituicaoDAO;
 import br.sc.senac.model.dao.PessoaDAO;
-import br.sc.senac.model.dao.TipoPessoaDAO;
 import br.sc.senac.model.dao.VacinaDAO;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
@@ -46,49 +45,40 @@ public class Principal {
 		vacinaDAO.inserir(v1);
 		vacinaDAO.inserir(v2);
 		
-		// TipoPessoaDAO:
-		TipoPessoaDAO tipoPessoaDAO = new TipoPessoaDAO();
-		TipoPessoa t0 = new TipoPessoa(1,"ENFERMEIRA");
-		TipoPessoa t1 = new TipoPessoa(1,"MILITAR");
-		TipoPessoa t2 = new TipoPessoa(1,"COBAIA");
-		
-		// inserir
-		tipoPessoaDAO.inserir(t0);
-		tipoPessoaDAO.inserir(t1);
-		tipoPessoaDAO.inserir(t2);
-		
 		// select 1
-		List<TipoPessoa> tipos1 = tipoPessoaDAO.pesquisarTodos();
-		for (TipoPessoa tipoPessoa : tipos1) {
-			System.out.println(tipoPessoa);
+		List<Vacina> vacinas1 = vacinaDAO.pesquisarTodos();
+		for (Vacina vacina : vacinas1) {
+			System.out.println(vacina);
 		}
 		System.out.println("=============================");
 		
 		// alterar
-		t1.setDescricao("PROFICIONAL_MILITAR");
-		t2.setDescricao("COBAIA_ANIMAL");
-		tipoPessoaDAO.alterar(t1);
-		tipoPessoaDAO.alterar(t2);
+		v1.setPaisOrigem("Georgia");
+		v1.setEstagioPesquisa(Vacina.ESTAGIO_TESTES);
+		v1.setPesquisadorResponsavel(vladmir);
+		v2.setNome("Vacina Vladmir");
+		v2.setDataInicioPesquisa(LocalDate.of(2020,4,28));
+		vacinaDAO.alterar(v1);
+		vacinaDAO.alterar(v2);
 		
 		// select 2
-		List<TipoPessoa> tipos2 = tipoPessoaDAO.pesquisarTodos();
-		for (TipoPessoa tipoPessoa : tipos2) {
-			System.out.println(tipoPessoa);
+		List<Vacina> vacinas2 = vacinaDAO.pesquisarTodos();
+		for (Vacina vacina : vacinas2) {
+			System.out.println(vacina);
 		}
 		System.out.println("=============================");
 		
 		// excluir
-		tipoPessoaDAO.excluir(t1.getId());
+		vacinaDAO.excluir(v1.getId());
 		
 		// select 3
-		List<TipoPessoa> tipos3 = tipoPessoaDAO.pesquisarTodos();
-		for (TipoPessoa tipoPessoa : tipos3) {
-			System.out.println(tipoPessoa);
+		List<Vacina> vacinas3 = vacinaDAO.pesquisarTodos();
+		for (Vacina vacina : vacinas3) {
+			System.out.println(vacina);
 		}
 		System.out.println("=============================");
-		
-		// select 4
-		System.out.println(tipoPessoaDAO.pesquisarPorId(t2.getId()));
+		// select 4 por id
+		System.out.println(vacinaDAO.pesquisarPorId(v2.getId()));
 		
 	} 
 	

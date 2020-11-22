@@ -6,38 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import br.sc.senac.model.vo.Pessoa;
 
 public class PessoaDAO implements BaseDAO<Pessoa>{
-
-	private static HashMap<String,Integer> tipos = new HashMap<String,Integer>();
-	
-	static {
-		Connection conn = Banco.getConnection();
-		String sql = " SELECT * FROM TIPO ";
-		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
-		try {
-			ResultSet conjuntoResultante = query.executeQuery();
-			while(conjuntoResultante.next()) {
-				String nomeTipo = conjuntoResultante.getString("DESCRICAO");
-				Integer idTipo = conjuntoResultante.getInt("IDTIPO");
-				tipos.put(nomeTipo, idTipo);
-			}
-			System.out.println("tipos construido com sucesso");
-		}catch (SQLException e) {
-			System.out.println("Erro ao consultar todas os tipos...\nCausa: " + e.getMessage());
-		} finally {
-			Banco.closeStatement(query);
-			Banco.closeConnection(conn);
-		}
-	}
-	
-	public int getIdTipo(String nomeTipo) {
-		return tipos.get(nomeTipo);
-	}
 	
 	public Pessoa inserir(Pessoa novaPessoa) {
 		Connection conn = Banco.getConnection();
