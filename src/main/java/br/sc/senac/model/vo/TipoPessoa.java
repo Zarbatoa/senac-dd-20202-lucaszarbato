@@ -1,5 +1,7 @@
 package br.sc.senac.model.vo;
 
+import br.sc.senac.model.Utils;
+
 public class TipoPessoa {
 
 	public static final TipoPessoa TIPO_PESQUISADOR = new TipoPessoa(1, "PESQUISADOR");
@@ -33,6 +35,10 @@ public class TipoPessoa {
 	
 	@Override
 	public String toString() {
+		return Utils.getNormalizedText(this.descricao);
+	}
+
+	public String toStringVerboso() {
 		return "[id=" + this.id + ", descricao=" + this.descricao + "]";
 	}
 }

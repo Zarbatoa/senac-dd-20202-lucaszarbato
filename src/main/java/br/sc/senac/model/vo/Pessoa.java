@@ -2,7 +2,12 @@ package br.sc.senac.model.vo;
 
 import java.time.LocalDate;
 
+import br.sc.senac.model.Utils;
+
 public class Pessoa {
+	
+	public static final String SEXO_MASCULINO = "Masculino";
+	public static final String SEXO_FEMININO = "Feminino";
 	
 	private int id;
 	private TipoPessoa tipo;
@@ -101,15 +106,7 @@ public class Pessoa {
 		return "[id=" + this.id + ", tipo=" + this.tipo.getDescricao()
 				 + ", instituicao=" + this.instituicao + ", nome=" + this.nome + ", sobrenome=" + this.sobrenome
 				 + ", data_nascimento=" + this.dataNascimento + ", sexo=" + this.sexo
-				 + ", cpf=" + formatarCpf() + "]";
+				 + ", cpf=" + Utils.formatarCpf(this.cpf) + "]";
 	}
 
-	private String formatarCpf() {
-		String formattedCpf = null;
-		if (this.cpf != null) {
-			formattedCpf = this.cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
-		}
-		return formattedCpf;
-	}
-	
 }

@@ -15,6 +15,26 @@ import br.sc.senac.model.vo.Vacina;
 
 public class Principal {
 
+	/*
+	 * 1- Pessoas:
+			* Nome, sobrenome (caso exista no modelo), sexo e CPF são obrigatórios       
+			* Nome deve ter pelo menos 3 letras      
+			* CPF deve ter exatamente 11 dígitos   
+			* indicar o tipo de pessoa. Caso seja pesquisador, informar o nome da instituição onde ele trabalha
+			* indicar se a pessoa é ou não voluntária
+			 
+		2- Vacinas
+			* país de origem, estágio da pesquisa (1-inicial, 2-testes, 3-aplicação em massa), data de início da pesquisa, nome do pesquisador responsável
+			* nome do país e do pesquisador deve possuir no mínimo 3 letras
+			* converter data no formado "dd/MM/YYYY" para LocalDate
+			* todos os campos são obrigatórios
+
+		3- Ao clicar em "Salvar/Cadastrar" em cada uma das telas deve:
+			* Chamar respectivo controller, passando os dados da tela em um objeto de entidade
+			* O controller deve devolver uma String contendo a mensagem de sucesso/erro/validação
+			* Mostrar a mensagem devolvida pelo controller em um JOptionPane, chamado pela tela original criada.
+	 * */
+	
 	public static void main(String[] args) {
 		Instituicao ufsc = new Instituicao(1,"Universidade Federal de Santa Catarina");
 		Instituicao senac = new Instituicao(1,"Serviço Nacional de Aprendizagem Comercial");
