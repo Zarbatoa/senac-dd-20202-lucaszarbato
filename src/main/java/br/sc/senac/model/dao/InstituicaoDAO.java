@@ -172,4 +172,14 @@ public class InstituicaoDAO implements BaseDAO<Instituicao>{
 		return instituicaoBuscada;
 	}
 
+	public boolean jaExisteNome(Instituicao instituicao) {
+		Instituicao instituicaoDoBanco = this.pesquisarPeloNome(instituicao.getNome());
+		
+		if (instituicaoDoBanco == null) {
+			return false;
+		}
+		
+		return true;
+	}
+
 }

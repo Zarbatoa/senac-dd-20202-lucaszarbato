@@ -2,8 +2,9 @@ package br.sc.senac.view;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 
 import javax.swing.JButton;
@@ -23,8 +24,6 @@ import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
 import net.miginfocom.swing.MigLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class TelaCadastroPessoa extends JFrame {
 
@@ -106,6 +105,17 @@ public class TelaCadastroPessoa extends JFrame {
 		
 		TipoPessoa[] opcoesTipoPessoa = {TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
 		cbCategoria = new JComboBox(opcoesTipoPessoa);
+		cbCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TipoPessoa opcaoSelecionada = (TipoPessoa)cbCategoria.getSelectedItem();
+				
+				if(opcaoSelecionada == TipoPessoa.TIPO_PESQUISADOR) {
+					tfInstituicao.setEnabled(true);
+				} else {
+					tfInstituicao.setEnabled(false);
+				}
+			}
+		});
 		contentPane.add(cbCategoria, "cell 1 6 2 1,growx");
 		
 		JLabel lblDataDeNascimento = new JLabel("Data de Nascimento:");
@@ -132,9 +142,6 @@ public class TelaCadastroPessoa extends JFrame {
 				LocalDate novaDataNascimento = null;
 				try {
 					novaDataNascimento = Utils.gerarLocalDateDeString(ftfDataNascimento.getText());
-				} catch (ArrayIndexOutOfBoundsException arrayException) {
-					JOptionPane.showMessageDialog(null, "Por favor, insira todos os campos de data de nascimento.");
-					return;
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Por favor, insira uma data válida em data de nascimento.");
 					return;
@@ -157,6 +164,12 @@ public class TelaCadastroPessoa extends JFrame {
 		contentPane.add(btnSalvar, "cell 2 10");
 		
 		JButton btnCancelar = new JButton("Cancelar");
+		final JFrame janelaAtual = this;
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				janelaAtual.dispose();
+			}
+		});
 		contentPane.add(btnCancelar, "cell 5 10");
 	}
 
