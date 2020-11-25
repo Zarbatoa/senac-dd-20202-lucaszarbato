@@ -2,6 +2,7 @@ package br.sc.senac.controller;
 
 import br.sc.senac.model.bo.PessoaBO;
 import br.sc.senac.model.exception.CpfInvalidoException;
+import br.sc.senac.model.exception.CpfJaCadastradoException;
 import br.sc.senac.model.exception.InstituicaoInvalidaException;
 import br.sc.senac.model.exception.NomeInvalidoException;
 import br.sc.senac.model.exception.SobrenomeInvalidoException;
@@ -29,6 +30,7 @@ public class ControllerPessoa {
 		} catch(CpfInvalidoException
 				| SobrenomeInvalidoException
 				| NomeInvalidoException
+				| CpfJaCadastradoException
 				| InstituicaoInvalidaException e) {
 			mensagem = e.getMessage();
 		}
@@ -38,7 +40,7 @@ public class ControllerPessoa {
 
 	private void validarPessoa(Pessoa novaPessoa)
 			throws CpfInvalidoException, SobrenomeInvalidoException,
-			NomeInvalidoException, InstituicaoInvalidaException {
+			NomeInvalidoException, InstituicaoInvalidaException, CpfJaCadastradoException  {
 		this.validarNome(novaPessoa.getNome());
 		this.validarSobrenome(novaPessoa.getSobrenome());
 		this.validarCpf(novaPessoa.getCpf());

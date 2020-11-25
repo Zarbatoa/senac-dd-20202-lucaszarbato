@@ -163,6 +163,36 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		return pessoasBuscadas;
 	}
 
+	public boolean cpfJaCadastrado(Pessoa umaPessoa) {
+		boolean jaCadastrado = false;
+
+		Connection conexao = Banco.getConnection();
+		String sql = "SELECT count(idpessoa) FROM PESSOA WHERE CPF = ?";
+		
+		if(umaPessoa.getId() > 0) {
+			sql += " AND IDPESSOA <> ? ";
+		}
+		
+		PreparedStatement consulta = Banco.getPreparedStatement(conexao, sql);
+		
+		try {
+			consulta.setString(1, umaPessoa.getCpf());
+			
+			if(umaPessoa.getId() > 0) {
+				consulta.setInt(2, umaPessoa.getId());
+			}
+	
+			ResultSet conjuntoResultante = consulta.executeQuery();
+			jaCadastrado = conjuntoResultante.next();
+		} catch (SQLException e) {
+			System.out.println("Erro ao verificar se CPF (" + umaPessoa.getCpf() + ") já foi usado .\nCausa: " + e.getMessage());
+		}finally {
+			Banco.closeStatement(consulta);
+			Banco.closeConnection(conexao);
+		}
+		return jaCadastrado;
+	}
+
 	public Pessoa construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		Pessoa pessoaBuscada = new Pessoa();
 		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
@@ -184,5 +214,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		
 		return pessoaBuscada;
 	}
+	
+	
 	
 }

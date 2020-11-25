@@ -124,11 +124,7 @@ public class TelaCadastroPessoa extends JFrame {
 		contentPane.add(ftfDataNascimento, "cell 5 6 2 1,growx");
 		
 		JLabel lblInstituicao = new JLabel("Institui\u00E7\u00E3o:");
-		contentPane.add(lblInstituicao, "cell 4 8,alignx trailing");
-		
-		tfInstituicao = new JTextField();
-		contentPane.add(tfInstituicao, "cell 5 8 2 1,growx");
-		tfInstituicao.setColumns(10);
+		contentPane.add(lblInstituicao, "cell 0 8,alignx trailing");
 		
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.addActionListener(new ActionListener() {
@@ -161,6 +157,10 @@ public class TelaCadastroPessoa extends JFrame {
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		});
+		
+		tfInstituicao = new JTextField();
+		contentPane.add(tfInstituicao, "cell 1 8 2 1,growx");
+		tfInstituicao.setColumns(10);
 		contentPane.add(btnSalvar, "cell 2 10");
 		
 		JButton btnCancelar = new JButton("Cancelar");
