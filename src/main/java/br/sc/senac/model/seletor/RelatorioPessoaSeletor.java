@@ -24,7 +24,6 @@ public class RelatorioPessoaSeletor {
 	 * @return verdadeiro se existe algum campo de filtro preenchido
 	 */
 	public boolean temFiltro() {
-
 		if (this.dataInicio != null) {
 			return true;
 		}
