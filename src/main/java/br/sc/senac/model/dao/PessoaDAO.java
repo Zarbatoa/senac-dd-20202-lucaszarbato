@@ -167,20 +167,12 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		boolean jaCadastrado = false;
 
 		Connection conexao = Banco.getConnection();
-		String sql = "SELECT count(idpessoa) FROM PESSOA WHERE CPF = ?";
-		
-		if(umaPessoa.getId() > 0) {
-			sql += " AND IDPESSOA <> ? ";
-		}
+		String sql = " SELECT * FROM PESSOA WHERE CPF = ? ";
 		
 		PreparedStatement consulta = Banco.getPreparedStatement(conexao, sql);
 		
 		try {
 			consulta.setString(1, umaPessoa.getCpf());
-			
-			if(umaPessoa.getId() > 0) {
-				consulta.setInt(2, umaPessoa.getId());
-			}
 	
 			ResultSet conjuntoResultante = consulta.executeQuery();
 			jaCadastrado = conjuntoResultante.next();

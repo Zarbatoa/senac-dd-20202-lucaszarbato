@@ -18,6 +18,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+
 import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.model.Utils;
 import br.sc.senac.model.vo.Instituicao;
@@ -35,7 +38,7 @@ public class TelaCadastroPessoa extends JFrame {
 	private JComboBox cbCategoria;
 	private JComboBox cbSexo;
 	private JTextField tfSobrenome;
-	private JFormattedTextField ftfDataNascimento;
+	private DatePicker dpDataInicioPesquisa;
 	private JFormattedTextField ftfCpf;
 	
 	/**
@@ -100,8 +103,6 @@ public class TelaCadastroPessoa extends JFrame {
 		ftfCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(ftfCpf, "cell 1 4 2 1,growx");
 		
-		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
-		
 		JLabel lblSexo = new JLabel("Sexo:");
 		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblSexo, "cell 4 4,alignx trailing");
@@ -132,9 +133,10 @@ public class TelaCadastroPessoa extends JFrame {
 		JLabel lblDataDeNascimento = new JLabel("Data de Nascimento:");
 		lblDataDeNascimento.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblDataDeNascimento, "cell 4 6,alignx trailing");
-		ftfDataNascimento = new JFormattedTextField(mascaraData);
-		ftfDataNascimento.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(ftfDataNascimento, "cell 5 6 2 1,growx");
+		DatePickerSettings dateSettings = new DatePickerSettings();
+		dateSettings.setAllowKeyboardEditing(false);
+		dpDataInicioPesquisa = new DatePicker(dateSettings);
+		contentPane.add(dpDataInicioPesquisa,"cell 5 6 2 1,growx");
 		
 		JLabel lblInstituicao = new JLabel("Institui\u00E7\u00E3o:");
 		lblInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -150,13 +152,7 @@ public class TelaCadastroPessoa extends JFrame {
 				novaPessoa.setInstituicao(new Instituicao(-1,tfInstituicao.getText()));
 				novaPessoa.setNome(tfNome.getText());
 				novaPessoa.setSobrenome(tfSobrenome.getText());
-				LocalDate novaDataNascimento = null;
-				try {
-					novaDataNascimento = Utils.gerarLocalDateDeString(ftfDataNascimento.getText());
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Por favor, insira uma data válida em data de nascimento.");
-					return;
-				}
+				LocalDate novaDataNascimento = dpDataInicioPesquisa.getDate();
 				novaPessoa.setDataNascimento(novaDataNascimento);
 				novaPessoa.setSexo(((String)cbSexo.getSelectedItem()).charAt(0));
 				// verificar se cpf é vazio e se ele é válido no BO
