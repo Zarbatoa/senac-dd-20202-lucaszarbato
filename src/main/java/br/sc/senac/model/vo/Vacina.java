@@ -106,5 +106,9 @@ public class Vacina {
 		
 		return estagioPesquisa;
 	}
+
+	public static String[] getEstagiosDeVacina() {
+		return new String[] {"ESTAGIO_INICIAL", "ESTAGIO_TESTES", "ESTAGIO_APLICACAO_EM_MASSA"};
+	}
 	
 }

@@ -2,42 +2,32 @@ package br.sc.senac.view;
 
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.time.LocalDate;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.MaskFormatter;
+import javax.swing.table.DefaultTableModel;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
-import br.sc.senac.controller.ControllerPessoa;
-import br.sc.senac.model.Utils;
-import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
-import br.sc.senac.model.vo.TipoPessoa;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
+@SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaGerenciamentoDeVacinas extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField tfNome;
 	private JTextField tfNomePesquisador;
 	private JComboBox cbEstagioPesquisa;
-	private JFormattedTextField ftfInicioPesquisa;
 	private JTable table;
 	private DatePicker dataInicioPesquisa;
 	
@@ -81,8 +71,6 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		
 		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
 		
-		MaskFormatter mascaraCpf = new MaskFormatter("###.###.###-##");
-		
 		JLabel lblEstagioPesquisa = new JLabel("Est\u00E1gio da Pesquisa:");
 		lblEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblEstagioPesquisa, "cell 4 2,alignx trailing");
@@ -90,10 +78,6 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(new String[] {"Todos", "Inicial", "Intermedi\u00E1rio", "Final"}));
 		cbEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbEstagioPesquisa, "cell 5 2 2 1,growx");
-		
-		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
-		
-		TipoPessoa[] opcoesTipoPessoa = {TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
 		
 		JLabel lblNomePesquisador = new JLabel("Nome Pesquisador:");
 		lblNomePesquisador.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -130,44 +114,11 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		dataInicioPesquisa = new DatePicker(dateSettings);
 		contentPane.add(dataInicioPesquisa,"cell 5 6 2 1,growx");
 		
-		//ftfInicioPesquisa = new JFormattedTextField(mascaraData);
-		//ftfInicioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		//contentPane.add(ftfInicioPesquisa, "cell 6 6 2 1,growx");
-		
+		//TODO pensar sobre um botão cancelar ou voltar
 		final JFrame janelaAtual = this;
 		
 		JButton btnFiltrar = new JButton("Filtrar");
 		btnFiltrar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnFiltrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				// Preencher o Objeto com os dados da tela
-				Pessoa novaPessoa = new Pessoa();
-				novaPessoa.setTipo((TipoPessoa)cbInstituicao.getSelectedItem());
-				novaPessoa.setInstituicao(new Instituicao(-1,tfNomePesquisador.getText()));
-				novaPessoa.setNome(tfNome.getText());
-				novaPessoa.setSobrenome(tfSobrenome.getText());
-				LocalDate novaDataNascimento = null;
-				try {
-					novaDataNascimento = Utils.gerarLocalDateDeString(ftfInicioPesquisa.getText());
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Por favor, insira uma data válida em data de nascimento.");
-					return;
-				}
-				novaPessoa.setDataNascimento(novaDataNascimento);
-				novaPessoa.setSexo(((String)cbEstagioPesquisa.getSelectedItem()).charAt(0));
-				// verificar se cpf é vazio e se ele é válido no BO
-				novaPessoa.setCpf(Utils.desformatarCpf(ftfCpf.getText()));
-				
-				// Instanciar um controller adequado
-				ControllerPessoa controller = new ControllerPessoa();
-				
-				// Chamar o método salvar no controller e pegar a mensagem retornada
-				String mensagem = controller.salvar(novaPessoa);
-				
-				// Mostrar a mensagem devolvida pelo controller
-				JOptionPane.showMessageDialog(null, mensagem);
-			}
-		});
 		contentPane.add(btnFiltrar, "cell 2 8");
 		
 		JButton btnEditar = new JButton("Editar");
@@ -176,11 +127,6 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				janelaAtual.dispose();
-			}
-		});
 		
 		contentPane.add(btnExcluir, "cell 5 8");
 		

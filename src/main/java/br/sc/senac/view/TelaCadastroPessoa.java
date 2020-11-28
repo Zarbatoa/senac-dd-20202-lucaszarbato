@@ -25,6 +25,7 @@ import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
 import net.miginfocom.swing.MigLayout;
 
+@SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaCadastroPessoa extends JFrame {
 
 	private JPanel contentPane;
