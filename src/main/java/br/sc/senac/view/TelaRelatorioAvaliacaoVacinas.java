@@ -18,6 +18,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+
 import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.model.Utils;
 import br.sc.senac.model.vo.Instituicao;
@@ -34,6 +37,8 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 	private JComboBox cbRelatorioAvaliacaoVacinas;
 	private JTable table;
 	private JTextField txtUsuario;
+	private DatePicker dataInicio;
+	private DatePicker dataFinal;
 	
 	/**
 	 * Launch the application.
@@ -76,7 +81,7 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 		cbRelatorioAvaliacaoVacinas.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbRelatorioAvaliacaoVacinas, "cell 0 2 8 1,growx");
 		
-		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
+		//MaskFormatter mascaraData = new MaskFormatter("##/##/####");
 		
 		TipoPessoa[] opcoesTipoPessoa = {TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
 		
@@ -93,16 +98,27 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 		lblDataInicio.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblDataInicio, "cell 0 6,alignx trailing");
 		
-		JFormattedTextField ftfDataInicio = new JFormattedTextField();
-		contentPane.add(ftfDataInicio, "cell 1 6 2 1,growx");
+		DatePickerSettings dateSettings = new DatePickerSettings();
+		dateSettings.setAllowKeyboardEditing(false);
+		dataInicio = new DatePicker(dateSettings);
+		contentPane.add(dataInicio,"cell 1 6 2 1,growx");
+		
+		//JFormattedTextField ftfDataInicio = new JFormattedTextField();
+		//contentPane.add(ftfDataInicio, "cell 1 6 2 1,growx");
+		
 		final JFrame janelaAtual = this;
 		
 		JLabel lblDataFinal = new JLabel("At\u00E9:");
 		lblDataFinal.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblDataFinal, "cell 5 6,alignx trailing");
 		
-		JFormattedTextField ftfDataFinal = new JFormattedTextField();
-		contentPane.add(ftfDataFinal, "cell 6 6 2 1,growx");
+		DatePickerSettings dateSettings2 = new DatePickerSettings();
+		dateSettings2.setAllowKeyboardEditing(false);
+		dataFinal = new DatePicker(dateSettings);
+		contentPane.add(dataFinal,"cell 6 6 2 1,growx");
+		
+		//JFormattedTextField ftfDataFinal = new JFormattedTextField();
+		//contentPane.add(ftfDataFinal, "cell 6 6 2 1,growx");
 		
 		JButton btnGerarRelatorio = new JButton("Gerar Relat\u00F3rio");
 		btnGerarRelatorio.setFont(new Font("Tahoma", Font.BOLD, 11));

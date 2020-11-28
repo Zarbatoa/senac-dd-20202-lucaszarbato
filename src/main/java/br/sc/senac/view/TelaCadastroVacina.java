@@ -18,6 +18,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+
 import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.model.Utils;
 import br.sc.senac.model.vo.Instituicao;
@@ -31,6 +34,8 @@ public class TelaCadastroVacina extends JFrame {
 	private JPanel contentPane;
 	private JTextField tfNomeVacina;
 	private JComboBox cbEstagioPesquisa;
+	private DatePicker dataInicioPesquisa;
+	private JComboBox cbPaisOrigem;
 	
 	/**
 	 * Launch the application.
@@ -91,9 +96,9 @@ public class TelaCadastroVacina extends JFrame {
 		
 		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
 		
-		JComboBox cbPaisOrigem = new JComboBox();
+		cbPaisOrigem = new JComboBox();
 		cbPaisOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		cbPaisOrigem.setModel(new DefaultComboBoxModel(new String[] {"Argélia", "Brasil", "China", "Estados Unidos", "Reino Unido", "R\u00FAssia"}));
+		cbPaisOrigem.setModel(new DefaultComboBoxModel(new String[] {"Argélia", "Brasil", "China", "Estados Unidos", "Reino Unido", "Rússia"}));
 		contentPane.add(cbPaisOrigem, "cell 1 4 2 1,growx");
 		
 		JLabel lblEstagioPesquisa = new JLabel("Est\u00E1gio da Pesquisa:");
@@ -143,10 +148,11 @@ public class TelaCadastroVacina extends JFrame {
 		lblnicioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblnicioPesquisa, "cell 0 6,alignx trailing");
 		
-		JFormattedTextField ftfInicioPesquisa = new JFormattedTextField();
-		contentPane.add(ftfInicioPesquisa, "cell 1 6 2 1,growx");
-		contentPane.add(btnSalvar, "cell 2 10");
-		
+		DatePickerSettings dateSettings = new DatePickerSettings();
+		dateSettings.setAllowKeyboardEditing(false);
+		dataInicioPesquisa = new DatePicker(dateSettings);
+		contentPane.add(dataInicioPesquisa,"cell 1 6 2 1,growx");
+				
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		final JFrame janelaAtual = this;

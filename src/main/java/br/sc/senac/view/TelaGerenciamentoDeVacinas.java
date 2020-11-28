@@ -18,6 +18,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+
 import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.model.Utils;
 import br.sc.senac.model.vo.Instituicao;
@@ -36,6 +39,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 	private JComboBox cbEstagioPesquisa;
 	private JFormattedTextField ftfInicioPesquisa;
 	private JTable table;
+	private DatePicker dataInicioPesquisa;
 	
 	/**
 	 * Launch the application.
@@ -64,11 +68,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow][grow][grow][][105.00][47.00][grow][][]", "[][][][][][][][][][136.00][]"));
-		
-		JLabel lblGerenciamentoDeVacina = new JLabel("Gerenciamento de Vacinas");
-		lblGerenciamentoDeVacina.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblGerenciamentoDeVacina, "cell 3 0 3 1");
+		contentPane.setLayout(new MigLayout("", "[74.00,grow][23.00,grow][150.00,grow][105.00][111.00][127.00,grow][15.00][]", "[][][][][][][][][][136.00][]"));
 		
 		JLabel lblNomeVacina = new JLabel("Nome Vacina:");
 		lblNomeVacina.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -85,11 +85,11 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		
 		JLabel lblEstagioPesquisa = new JLabel("Est\u00E1gio da Pesquisa:");
 		lblEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblEstagioPesquisa, "cell 5 2,alignx trailing");
+		contentPane.add(lblEstagioPesquisa, "cell 4 2,alignx trailing");
 		cbEstagioPesquisa = new JComboBox(opcoesSexo);
 		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(new String[] {"Todos", "Inicial", "Intermedi\u00E1rio", "Final"}));
 		cbEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbEstagioPesquisa, "cell 6 2 2 1,growx");
+		contentPane.add(cbEstagioPesquisa, "cell 5 2 2 1,growx");
 		
 		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
 		
@@ -106,11 +106,11 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		
 		JLabel lblInstituicao = new JLabel("Institui\u00E7\u00E3o:");
 		lblInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblInstituicao, "cell 5 4,alignx trailing");
+		contentPane.add(lblInstituicao, "cell 4 4,alignx trailing");
 		
 		JComboBox cbInstituicao = new JComboBox();
 		cbInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbInstituicao, "cell 6 4 2 1,growx");
+		contentPane.add(cbInstituicao, "cell 5 4 2 1,growx");
 		
 		JLabel lblPaisDeOrigem = new JLabel("Pa\u00EDs de Origem:");
 		lblPaisDeOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -118,15 +118,22 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		
 		JComboBox cbPaisOrigem = new JComboBox();
 		cbPaisOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		cbPaisOrigem.setModel(new DefaultComboBoxModel(new String[] {"Arg\u00E9lia", "China", "Reino Unido", "R\u00FAssia"}));
+		cbPaisOrigem.setModel(new DefaultComboBoxModel(new String[] {"Argélia", "China", "Reino Unido", "R\u00FAssia"}));
 		contentPane.add(cbPaisOrigem, "cell 1 6 2 1,growx");
 		
-		JLabel lblInicioPesquisa = new JLabel("In\u00EDcio Pesquisa:");
+		JLabel lblInicioPesquisa = new JLabel("Início Pesquisa:");
 		lblInicioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblInicioPesquisa, "cell 5 6,alignx trailing");
-		ftfInicioPesquisa = new JFormattedTextField(mascaraData);
-		ftfInicioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(ftfInicioPesquisa, "cell 6 6 2 1,growx");
+		contentPane.add(lblInicioPesquisa, "cell 4 6,alignx trailing");
+		
+		DatePickerSettings dateSettings = new DatePickerSettings();
+		dateSettings.setAllowKeyboardEditing(false);
+		dataInicioPesquisa = new DatePicker(dateSettings);
+		contentPane.add(dataInicioPesquisa,"cell 5 6 2 1,growx");
+		
+		//ftfInicioPesquisa = new JFormattedTextField(mascaraData);
+		//ftfInicioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		//contentPane.add(ftfInicioPesquisa, "cell 6 6 2 1,growx");
+		
 		final JFrame janelaAtual = this;
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -165,7 +172,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnEditar, "cell 4 8,alignx right");
+		contentPane.add(btnEditar, "cell 3 8,alignx right");
 		
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -174,13 +181,14 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 				janelaAtual.dispose();
 			}
 		});
-		contentPane.add(btnExcluir, "cell 6 8");
+		
+		contentPane.add(btnExcluir, "cell 5 8");
 		
 		table = new JTable();
 		table.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Nome Vacina", "Pa\u00EDs de Origem", "Est\u00E1gio de Pesquisa", "In\u00EDcio Pesquisa", "Pesquisador", "Institui\u00E7\u00E3o"},
+				{"Nome Vacina", "País de Origem", "Estágio de Pesquisa", "Início Pesquisa", "Pesquisador", "Instituição"},
 				{null, null, null, null, null, null},
 				{null, null, null, null, null, null},
 				{null, null, null, null, null, null},
@@ -193,19 +201,19 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 				"New column", "New column", "New column", "New column", "New column", "New column"
 			}
 		));
-		contentPane.add(table, "cell 0 9 9 1,grow");
+		contentPane.add(table, "cell 0 9 8 1,grow");
 		
 		JButton buttonPagAnterior = new JButton("< Anterior");
 		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(buttonPagAnterior, "cell 2 10");
 		
-		JLabel lblPagAtual = new JLabel("                    1");
+		JLabel lblPagAtual = new JLabel("1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 4 10");
+		contentPane.add(lblPagAtual, "cell 3 10,alignx right");
 		
-		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
+		JButton btnPagProxima = new JButton("Próximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagProxima, "cell 6 10");
+		contentPane.add(btnPagProxima, "cell 5 10");
 	}
 
 }

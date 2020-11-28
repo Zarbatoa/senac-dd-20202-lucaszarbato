@@ -76,8 +76,14 @@ public class TelaPrincipal {
 		JMenu mnRelatrio = new JMenu("Relat\u00F3rio");
 		menuBar.add(mnRelatrio);
 		
-		JMenuItem mntmGerarRelatrio = new JMenuItem("Gerar Relat\u00F3rio");
-		mnRelatrio.add(mntmGerarRelatrio);
+		JMenuItem mntmRelatórioPessoas = new JMenuItem("Pessoas");
+		mnRelatrio.add(mntmRelatórioPessoas);
+		
+		JMenuItem mntmRelatorioVacinas = new JMenuItem("Vacinas");
+		mnRelatrio.add(mntmRelatorioVacinas);
+		
+		JMenuItem mntmRelatorioAvaliacaoDeVacinas = new JMenuItem("Avalia\u00E7\u00E3o de Vacinas");
+		mnRelatrio.add(mntmRelatorioAvaliacaoDeVacinas);
 	}
 
 }

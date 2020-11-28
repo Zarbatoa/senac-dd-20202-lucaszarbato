@@ -31,6 +31,8 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 	private JPanel contentPane;
 	private JComboBox cbNomeSobrenome;
 	private JFormattedTextField ftfNota;
+	private JComboBox cbNomeVacina;
+
 	
 	/**
 	 * Launch the application.
@@ -73,14 +75,15 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 		
 		MaskFormatter mascaraNota = new MaskFormatter("#.#");
 		
-		JComboBox cbNomeVacina = new JComboBox();
+		cbNomeVacina = new JComboBox();
 		cbNomeVacina.setModel(new DefaultComboBoxModel(new String[] {"Oxford", "Russa"}));
 		contentPane.add(cbNomeVacina, "cell 1 2 2 1,growx");
 		
 		JLabel lblNomeSobrenome = new JLabel("Nome e Sobrenome:");
 		lblNomeSobrenome.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblNomeSobrenome, "cell 4 2,alignx trailing");
-		cbNomeSobrenome = new JComboBox(opcoesNomeSobrenome);
+		
+		cbNomeSobrenome = new JComboBox(opcoesNomeSobrenome); //fazer aqui a lista ou método se tiver
 		cbNomeSobrenome.setModel(new DefaultComboBoxModel(new String[] {""}));
 		cbNomeSobrenome.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbNomeSobrenome, "cell 5 2 2 1,growx");
@@ -88,6 +91,7 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 		JLabel lbNota = new JLabel("Nota (1 a 5):");
 		lbNota.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lbNota, "cell 0 4,alignx trailing");
+		
 		ftfNota = new JFormattedTextField(mascaraNota);
 		ftfNota.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(ftfNota, "cell 1 4,growx");
