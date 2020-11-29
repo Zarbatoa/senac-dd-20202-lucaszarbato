@@ -83,6 +83,10 @@ public class Vacina {
 	
 	@Override
 	public String toString() {
+		return this.getNome();
+	}
+	
+	public String toStringVerboso() {
 		return "[id=" + this.getId()
 					+ ", nome=" + this.nome
 					+ ", paisOrigem=" + this.paisOrigem

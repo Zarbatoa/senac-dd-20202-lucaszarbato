@@ -107,5 +107,9 @@ public class ControllerPessoa {
 		return pessoaBO.pegarListaDePesquisadores();
 	}
 
+	public List<Pessoa> coletarTodasPessoas() {
+		return pessoaBO.pegarListaDePessoas();
+	}
+
 }
  

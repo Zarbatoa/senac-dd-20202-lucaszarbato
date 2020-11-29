@@ -1,6 +1,7 @@
 package br.sc.senac.model.bo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import br.sc.senac.model.dao.VacinaDAO;
 import br.sc.senac.model.exception.DataInicioPesquisaInvalidaException;
@@ -18,6 +19,10 @@ public class VacinaBO {
 		vacinaDAO.inserir(novaVacina);
 		
 		return novaVacina;
+	}
+
+	public List<Vacina> pegarListaDeVacinas() {
+		return vacinaDAO.pesquisarTodos();
 	}
 
 }

@@ -65,5 +65,13 @@ public class Utils {
 		}
 		return sb.toString();
 	}
+
+	public static Double stringToDouble(String text) {
+		Double valor = null;
+		try {
+			valor = Double.parseDouble(text);
+		} catch (Exception e) { }
+		return valor;
+	}
 	
 }

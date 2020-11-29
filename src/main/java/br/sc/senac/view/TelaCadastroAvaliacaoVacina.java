@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -18,7 +19,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
 import br.sc.senac.controller.ControllerNota;
+import br.sc.senac.controller.ControllerPessoa;
+import br.sc.senac.controller.ControllerVacina;
+import br.sc.senac.model.Utils;
 import br.sc.senac.model.vo.Nota;
+import br.sc.senac.model.vo.Pessoa;
+import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
 
 
@@ -26,7 +32,7 @@ import net.miginfocom.swing.MigLayout;
 public class TelaCadastroAvaliacaoVacina extends JFrame {
 
 	private JPanel contentPane;
-	private JComboBox cbPesquisador;
+	private JComboBox cbPessoaTestada;
 	private JFormattedTextField ftfNota;
 	private JComboBox cbNomeVacina;
 
@@ -52,6 +58,8 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 	 * @throws ParseException 
 	 */
 	public TelaCadastroAvaliacaoVacina() throws ParseException {
+		ControllerPessoa controllerPessoa = new ControllerPessoa();
+		ControllerVacina controllerVacina = new ControllerVacina();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 650, 280);
@@ -68,24 +76,22 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 		lblNomeVacina.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblNomeVacina, "cell 0 2,alignx trailing");
 		
-		//TODO pegar a lista de pesquisadores do banco
-		//  e alterar o toString de Pessoa para retornar somente o nomeCompleto ou algo similar
-		String[] opcoesNomeSobrenome = {"Nome Exemplo", "Pegar do Banco!", "Mudar!!!"};
-		
 		MaskFormatter mascaraNota = new MaskFormatter("#.#");
 		
+		List<Vacina> listaDeVacinas = controllerVacina.coletarTodasVacinas();
 		cbNomeVacina = new JComboBox();
-		cbNomeVacina.setModel(new DefaultComboBoxModel(new String[] {"Oxford", "Russa"}));
+		cbNomeVacina.setModel(new DefaultComboBoxModel(listaDeVacinas.toArray()));
 		contentPane.add(cbNomeVacina, "cell 1 2 2 1,growx");
 		
-		JLabel lblPesquisador = new JLabel("Pesquisador:");
-		lblPesquisador.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblPesquisador, "cell 4 2,alignx trailing");
+		JLabel lblPessoaTestada = new JLabel("Pessoa Testada:");
+		lblPessoaTestada.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(lblPessoaTestada, "cell 4 2,alignx trailing");
 		
-		cbPesquisador = new JComboBox(); //fazer aqui a lista ou método se tiver
-		cbPesquisador.setModel(new DefaultComboBoxModel(opcoesNomeSobrenome));
-		cbPesquisador.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbPesquisador, "cell 5 2 2 1,growx");
+		List<Pessoa> listaDePessoas = controllerPessoa.coletarTodasPessoas();
+		cbPessoaTestada = new JComboBox();
+		cbPessoaTestada.setModel(new DefaultComboBoxModel(listaDePessoas.toArray()));
+		cbPessoaTestada.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(cbPessoaTestada, "cell 5 2 2 1,growx");
 		
 		JLabel lbNota = new JLabel("Nota (1 a 5):");
 		lbNota.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -103,14 +109,16 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// Preencher o Objeto com os dados da tela
 				Nota novaNota = new Nota();
-				//TODO setar os atributos do Objeto
+				novaNota.setPessoa((Pessoa)cbPessoaTestada.getSelectedItem());
+				novaNota.setVacina((Vacina)cbNomeVacina.getSelectedItem());
+				novaNota.setValor(Utils.stringToDouble(ftfNota.getText()));
 				
 				// Instanciar um controller adequado
 				ControllerNota controller = new ControllerNota();
 				
 				// Chamar o método salvar no controller e pegar a mensagem retornada
 				String mensagem = controller.salvar(novaNota);
-				
+
 				// Mostrar a mensagem devolvida pelo controller
 				JOptionPane.showMessageDialog(null, mensagem);
 			}

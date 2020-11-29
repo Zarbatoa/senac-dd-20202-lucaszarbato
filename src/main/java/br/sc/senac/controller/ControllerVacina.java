@@ -1,6 +1,7 @@
 package br.sc.senac.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import br.sc.senac.model.bo.VacinaBO;
 import br.sc.senac.model.exception.DataInicioPesquisaInvalidaException;
@@ -61,6 +62,10 @@ public class ControllerVacina {
 		if(nome.length() < 3) {
 			throw new NomeInvalidoException("O campo nome deve ter pelo menos 3 letras.");
 		}
+	}
+
+	public List<Vacina> coletarTodasVacinas() {
+		return vacinaBO.pegarListaDeVacinas();
 	}
 
 }
