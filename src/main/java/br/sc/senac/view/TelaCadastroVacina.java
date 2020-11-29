@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -19,7 +20,10 @@ import javax.swing.border.EmptyBorder;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
+import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.controller.ControllerVacina;
+import br.sc.senac.model.vo.Pais;
+import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
 
@@ -29,8 +33,9 @@ public class TelaCadastroVacina extends JFrame {
 	private JPanel contentPane;
 	private JTextField tfNomeVacina;
 	private JComboBox cbEstagioPesquisa;
-	private DatePicker dataInicioPesquisa;
+	private DatePicker dpDataInicioPesquisa;
 	private JComboBox cbPaisOrigem;
+	private JComboBox cbPesquisadorResponsavel;
 	
 	/**
 	 * Launch the application.
@@ -53,9 +58,10 @@ public class TelaCadastroVacina extends JFrame {
 	 * @throws ParseException 
 	 */
 	public TelaCadastroVacina() throws ParseException {
+		ControllerPessoa controllerPessoa = new ControllerPessoa();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 650, 328);
+		setBounds(100, 100, 669, 329);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -78,16 +84,19 @@ public class TelaCadastroVacina extends JFrame {
 		lblPesquisadorResponsavel.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblPesquisadorResponsavel, "cell 4 2,alignx trailing");
 		
-		JComboBox cbPesquisadorResponsavel = new JComboBox();
-		contentPane.add(cbPesquisadorResponsavel, "cell 5 2 2 1,growx");
+		List<Pessoa> listaDePesquisadores = controllerPessoa.coletarListaDePesquisadores();
+		cbPesquisadorResponsavel = new JComboBox();
+		cbPesquisadorResponsavel.setModel(new DefaultComboBoxModel(listaDePesquisadores.toArray()));
+		contentPane.add(cbPesquisadorResponsavel, "cell 5 2,growx");
 		
 		JLabel lblPaisDeOrigem = new JLabel("Pa\u00EDs de Origem:");
 		lblPaisDeOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblPaisDeOrigem, "cell 0 4,alignx trailing");
 		
+		Pais[] listaPaises = Pais.createCountryList();
 		cbPaisOrigem = new JComboBox();
 		cbPaisOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		cbPaisOrigem.setModel(new DefaultComboBoxModel(new String[] {"Argélia", "Brasil", "China", "Estados Unidos", "Reino Unido", "Rússia"}));
+		cbPaisOrigem.setModel(new DefaultComboBoxModel(listaPaises));
 		contentPane.add(cbPaisOrigem, "cell 1 4 2 1,growx");
 		
 		String [] estagiosVacina = Vacina.getEstagiosDeVacina();
@@ -97,7 +106,7 @@ public class TelaCadastroVacina extends JFrame {
 		cbEstagioPesquisa = new JComboBox();
 		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(estagiosVacina));
 		cbEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbEstagioPesquisa, "cell 5 4 2 1,growx");
+		contentPane.add(cbEstagioPesquisa, "cell 5 4,growx");
 		
 		JLabel lblnicioPesquisa = new JLabel("In\u00EDcio Pesquisa:");
 		lblnicioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -105,8 +114,8 @@ public class TelaCadastroVacina extends JFrame {
 		
 		DatePickerSettings dateSettings = new DatePickerSettings();
 		dateSettings.setAllowKeyboardEditing(false);
-		dataInicioPesquisa = new DatePicker(dateSettings);
-		contentPane.add(dataInicioPesquisa,"cell 1 6 2 1,growx");
+		dpDataInicioPesquisa = new DatePicker(dateSettings);
+		contentPane.add(dpDataInicioPesquisa,"cell 1 6 2 1,growx");
 		final JFrame janelaAtual = this;
 		
 		JButton btnSalvar = new JButton("Salvar");
@@ -115,13 +124,18 @@ public class TelaCadastroVacina extends JFrame {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// Preencher o Objeto com os dados da tela
 				Vacina novaVacina = new Vacina();
-				//TODO settar atributos do Objeto
+				novaVacina.setNome(tfNomeVacina.getText());
+				novaVacina.setPesquisadorResponsavel((Pessoa)cbPesquisadorResponsavel.getSelectedItem());
+				novaVacina.setPaisOrigem(((Pais)cbPaisOrigem.getSelectedItem()).getNome());
+				novaVacina.setEstagioPesquisa(Vacina.getIntEstagioDePesquisa((String)cbEstagioPesquisa.getSelectedItem()));
+				novaVacina.setDataInicioPesquisa(dpDataInicioPesquisa.getDate());
+				
 				// Instanciar um controller adequado
 				ControllerVacina controller = new ControllerVacina();
 				
 				// Chamar o método salvar no controller e pegar a mensagem retornada
 				String mensagem = controller.salvar(novaVacina);
-				
+				mensagem = novaVacina.toString();
 				// Mostrar a mensagem devolvida pelo controller
 				JOptionPane.showMessageDialog(null, mensagem);
 			}

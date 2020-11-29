@@ -1,5 +1,7 @@
 package br.sc.senac.model.bo;
 
+import java.util.List;
+
 import br.sc.senac.model.Utils;
 import br.sc.senac.model.dao.InstituicaoDAO;
 import br.sc.senac.model.dao.PessoaDAO;
@@ -47,6 +49,10 @@ public class PessoaBO {
 		boolean excluiu = pessoaDAO.excluir(pessoaQueSeraExcluida.getId());
 		
 		return excluiu;
+	}
+
+	public List<Pessoa> pegarListaDePesquisadores() {
+		return pessoaDAO.pesquisarTodosPesquisadores();
 	}
 
 }

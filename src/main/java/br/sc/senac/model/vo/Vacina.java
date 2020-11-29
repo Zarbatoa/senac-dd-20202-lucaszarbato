@@ -7,6 +7,9 @@ public class Vacina {
 	public static final int ESTAGIO_INICIAL = 1;
 	public static final int ESTAGIO_TESTES = 2;
 	public static final int ESTAGIO_APLICACAO_EM_MASSA = 3;
+	public static final String TXT_ESTAGIO_INICIAL = "Estágio Inicial";
+	public static final String TXT_ESTAGIO_TESTES = "Estágio de Testes";
+	public static final String TXT_ESTAGIO_APLICACAO_EM_MASSA = "Estágio de Aplicação em Massa";
 	
 	private int id;
 	private String nome;
@@ -80,12 +83,12 @@ public class Vacina {
 	
 	@Override
 	public String toString() {
-		String nomeCompletoPesquisador = this.pesquisadorResponsavel != null ? this.pesquisadorResponsavel.getNomeCompleto() : null;
-		
-		return "[id=" + this.getId() + ", nome=" + this.nome
-				 + ", paisOrigem=" + this.paisOrigem + ", estagioPesquisa=" + getStringEstagioDePesquisa()
-				 + ", dataInicioPesquisa=" + this.dataInicioPesquisa + ", pesquisadorResponsavel="
-				 + nomeCompletoPesquisador + "]";
+		return "[id=" + this.getId()
+					+ ", nome=" + this.nome
+					+ ", paisOrigem=" + this.paisOrigem
+					+ ", estagioPesquisa=" + getStringEstagioDePesquisa()
+					+ ", dataInicioPesquisa=" + this.dataInicioPesquisa
+					+ ", pesquisadorResponsavel=" + this.pesquisadorResponsavel + "]";
 	}
 
 	private String getStringEstagioDePesquisa() {
@@ -93,13 +96,13 @@ public class Vacina {
 		
 		switch (this.estagioPesquisa) {
 			case Vacina.ESTAGIO_INICIAL:
-				estagioPesquisa = "ESTAGIO_INICIAL";
+				estagioPesquisa = TXT_ESTAGIO_INICIAL;
 				break;
 			case Vacina.ESTAGIO_TESTES:
-				estagioPesquisa = "ESTAGIO_TESTES";
+				estagioPesquisa = TXT_ESTAGIO_TESTES;
 				break;
 			case Vacina.ESTAGIO_APLICACAO_EM_MASSA:
-				estagioPesquisa = "ESTAGIO_APLICACAO_EM_MASSA";
+				estagioPesquisa = TXT_ESTAGIO_APLICACAO_EM_MASSA;
 				break;
 			default:
 		}
@@ -107,8 +110,24 @@ public class Vacina {
 		return estagioPesquisa;
 	}
 
+	public static int getIntEstagioDePesquisa(String nomeEstagio) {
+		int estagioPesquisa = -1;
+		
+		if(nomeEstagio != null) {
+			if(nomeEstagio.equalsIgnoreCase(TXT_ESTAGIO_INICIAL)) {
+				estagioPesquisa = ESTAGIO_INICIAL;
+			} else if(nomeEstagio.equalsIgnoreCase(TXT_ESTAGIO_TESTES)) {
+				estagioPesquisa = ESTAGIO_TESTES;
+			}  else if(nomeEstagio.equalsIgnoreCase(TXT_ESTAGIO_APLICACAO_EM_MASSA)) {
+				estagioPesquisa = ESTAGIO_APLICACAO_EM_MASSA;
+			}
+		}
+		
+		return estagioPesquisa;
+	}
+	
 	public static String[] getEstagiosDeVacina() {
-		return new String[] {"ESTAGIO_INICIAL", "ESTAGIO_TESTES", "ESTAGIO_APLICACAO_EM_MASSA"};
+		return new String[] {TXT_ESTAGIO_INICIAL, TXT_ESTAGIO_TESTES, TXT_ESTAGIO_APLICACAO_EM_MASSA};
 	}
 	
 }

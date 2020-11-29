@@ -185,6 +185,31 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		return jaCadastrado;
 	}
 
+	
+	public List<Pessoa> pesquisarTodosPesquisadores() {
+		Connection conn = Banco.getConnection();
+		String sql = " SELECT * FROM PESSOA "
+				+ " WHERE IDTIPO=1 ";
+		PreparedStatement query = Banco.getPreparedStatement(conn, sql);
+		List<Pessoa> pessoasBuscadas = new ArrayList<Pessoa>();
+		
+		try {
+			ResultSet conjuntoResultante = query.executeQuery();
+			while(conjuntoResultante.next()) {
+				Pessoa pessoaBuscada = construirDoResultSet(conjuntoResultante);
+				pessoasBuscadas.add(pessoaBuscada);
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar todas os pesquisadores.\nCausa: " + e.getMessage());
+		} finally {
+			Banco.closeStatement(query);
+			Banco.closeConnection(conn);
+		}
+		
+		return pessoasBuscadas;
+	}
+	
+	
 	public Pessoa construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		Pessoa pessoaBuscada = new Pessoa();
 		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
@@ -206,7 +231,6 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		
 		return pessoaBuscada;
 	}
-	
 	
 	
 }

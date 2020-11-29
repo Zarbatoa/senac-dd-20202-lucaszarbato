@@ -103,6 +103,10 @@ public class Pessoa {
 	
 	@Override
 	public String toString() {
+		return Utils.getNormalizedText(this.getNomeCompleto());
+	}
+	
+	public String toStringVerboso() {
 		return "[id=" + this.id + ", tipo=" + this.tipo.getDescricao()
 				 + ", instituicao=" + this.instituicao + ", nome=" + this.nome + ", sobrenome=" + this.sobrenome
 				 + ", data_nascimento=" + this.dataNascimento + ", sexo=" + this.sexo

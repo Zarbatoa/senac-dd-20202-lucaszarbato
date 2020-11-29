@@ -1,6 +1,7 @@
 package br.sc.senac.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import br.sc.senac.model.bo.PessoaBO;
 import br.sc.senac.model.exception.CpfInvalidoException;
@@ -93,6 +94,10 @@ public class ControllerPessoa {
 		if(nome.length() < 3) {
 			throw new NomeInvalidoException("O campo nome deve ter pelo menos 3 letras.");
 		}
+	}
+
+	public List<Pessoa> coletarListaDePesquisadores() {
+		return pessoaBO.pegarListaDePesquisadores();
 	}
 
 }
