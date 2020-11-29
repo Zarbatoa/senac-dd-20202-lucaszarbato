@@ -1,9 +1,13 @@
 package br.sc.senac.controller;
 
+import java.util.List;
+
 import br.sc.senac.model.bo.NotaBO;
 import br.sc.senac.model.exception.PessoaInvalidaException;
 import br.sc.senac.model.exception.VacinaInvalidaException;
 import br.sc.senac.model.exception.ValorInvalidoException;
+import br.sc.senac.model.seletor.AvaliacaoVacinaSeletor;
+import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.vo.Nota;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
@@ -52,6 +56,10 @@ public class ControllerNota {
 		if (pessoa == null) {
 			throw new PessoaInvalidaException("Campo pessoa testada é obrigatório, cadastre uma pessoa antes.");
 		}
+	}
+	
+	public List<Nota> listarNotas(AvaliacaoVacinaSeletor seletor) {
+		return notaBO.listarNotas(seletor);
 	}
 
 }
