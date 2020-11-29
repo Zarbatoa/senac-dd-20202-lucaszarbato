@@ -1,0 +1,23 @@
+package br.sc.senac.model.bo;
+
+import java.time.LocalDate;
+
+import br.sc.senac.model.dao.VacinaDAO;
+import br.sc.senac.model.exception.DataInicioPesquisaInvalidaException;
+import br.sc.senac.model.vo.Vacina;
+
+public class VacinaBO {
+	
+	private VacinaDAO vacinaDAO = new VacinaDAO();
+
+	public Vacina salvar(Vacina novaVacina) throws DataInicioPesquisaInvalidaException {
+		if(novaVacina.getDataInicioPesquisa().isAfter(LocalDate.now())) {
+			throw new DataInicioPesquisaInvalidaException("Data de inicio da pesquisa deve ser anterior a data atual.");
+		}
+		
+		vacinaDAO.inserir(novaVacina);
+		
+		return novaVacina;
+	}
+
+}

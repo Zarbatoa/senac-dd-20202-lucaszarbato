@@ -135,7 +135,7 @@ public class TelaCadastroVacina extends JFrame {
 				
 				// Chamar o método salvar no controller e pegar a mensagem retornada
 				String mensagem = controller.salvar(novaVacina);
-				mensagem = novaVacina.toString();
+
 				// Mostrar a mensagem devolvida pelo controller
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
