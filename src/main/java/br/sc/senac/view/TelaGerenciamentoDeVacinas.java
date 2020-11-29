@@ -2,6 +2,8 @@ package br.sc.senac.view;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -58,7 +60,11 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[74.00,grow][23.00,grow][150.00,grow][105.00][111.00][127.00,grow][15.00][]", "[][][][][][][][][][136.00][]"));
+		contentPane.setLayout(new MigLayout("", "[74.00,grow][23.00,grow][150.00,grow][105.00][111.00][127.00,grow][15.00][]", "[][][][][][][][][][136.00][][]"));
+		
+		JLabel lblGerenciamentoVacinas = new JLabel("Gerenciamento de Vacinas");
+		lblGerenciamentoVacinas.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(lblGerenciamentoVacinas, "cell 3 0");
 		
 		JLabel lblNomeVacina = new JLabel("Nome Vacina:");
 		lblNomeVacina.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -114,7 +120,10 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		dataInicioPesquisa = new DatePicker(dateSettings);
 		contentPane.add(dataInicioPesquisa,"cell 5 6 2 1,growx");
 		
-		//TODO pensar sobre um botão cancelar ou voltar
+		//ftfInicioPesquisa = new JFormattedTextField(mascaraData);
+		//ftfInicioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		//contentPane.add(ftfInicioPesquisa, "cell 6 6 2 1,growx");
+		
 		final JFrame janelaAtual = this;
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -127,6 +136,11 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				janelaAtual.dispose();
+			}
+		});
 		
 		contentPane.add(btnExcluir, "cell 5 8");
 		
@@ -153,13 +167,17 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(buttonPagAnterior, "cell 2 10");
 		
+		JButton btnPagProxima = new JButton("Próximo >");
+		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnPagProxima, "cell 5 10");
+		
 		JLabel lblPagAtual = new JLabel("1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(lblPagAtual, "cell 3 10,alignx right");
 		
-		JButton btnPagProxima = new JButton("Próximo >");
-		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagProxima, "cell 5 10");
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnVoltar, "cell 3 11,alignx right");
 	}
 
 }

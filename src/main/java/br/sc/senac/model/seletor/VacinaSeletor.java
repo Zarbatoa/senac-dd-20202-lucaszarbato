@@ -11,9 +11,10 @@ public class VacinaSeletor {
 	private String nomeVacina;
 	private int estagioPesquisa;
 	private String paisOrigem;
-	private Pessoa nomePesquisador;
-	private Instituicao instituicao;
-	private LocalDate dataInicioPesquisa;
+	
+	private Pessoa nomePesquisador; // dúvida - é assim ou String???
+	private Instituicao instituicao; // dúvida - é assim ou String???
+	private LocalDate dataInicioPesquisa; // dúvida - é assim ou String???
 	
 	//Atributos para possível paginação dos resultados (intervalo)
 	private int limite;

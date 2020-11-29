@@ -57,7 +57,7 @@ public class TelaRelatorioPessoas extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][91.00][41.00][142.00,grow][42.00]", "[][][][][][][][][99.00][][]"));
+		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][91.00][41.00][142.00,grow][42.00]", "[][][][][][][][][99.00][][][]"));
 		
 		JLabel lbbRelatorioPessoas = new JLabel("Relat\u00F3rio de Pessoas");
 		lbbRelatorioPessoas.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -126,6 +126,10 @@ public class TelaRelatorioPessoas extends JFrame {
 		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnPagProxima, "cell 6 10");
+		
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnVoltar, "cell 4 11,alignx center,aligny baseline");
 	}
 
 }

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.sc.senac.model.seletor.VacinaSeletor;
 import br.sc.senac.model.vo.Vacina;
 
 public class VacinaDAO implements BaseDAO<Vacina>{
@@ -164,6 +165,91 @@ public class VacinaDAO implements BaseDAO<Vacina>{
 		vacinaBuscada.setDataInicioPesquisa(conjuntoResultante.getDate("DATA_INICIO_PESQUISA").toLocalDate());
 		
 		return vacinaBuscada;
+	}
+	
+	// a partir daqui estão os métodos dos filtros
+	
+	public ArrayList<Vacina> listarComSeletor(VacinaSeletor seletor) {
+		String sql = " SELECT * FROM VACINA v";
+
+		if (seletor.temFiltro()) {
+			sql = criarFiltros(seletor, sql);
+		}
+
+		if (seletor.temPaginacao()) {
+			sql += " LIMIT " + seletor.getLimite() + " OFFSET " + seletor.getOffset();
+		}
+		Connection conexao = Banco.getConnection();
+		PreparedStatement prepStmt = Banco.getPreparedStatement(conexao, sql);
+		ArrayList<Vacina> vacinas = new ArrayList<Vacina>();
+
+		try {
+			ResultSet result = prepStmt.executeQuery();
+
+			while (result.next()) {
+				Vacina v = construirDoResultSet(result); 
+				vacinas.add(v);
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar vacinas com filtros.\nCausa: " + e.getMessage());
+		}
+		return vacinas;
+	}
+	
+	private String criarFiltros(VacinaSeletor seletor, String sql) {
+		
+		// Tem pelo menos UM filtro
+		sql += " WHERE ";
+		boolean primeiro = true;
+
+		if ((seletor.getNomeVacina() != null) && (seletor.getNomeVacina().trim().length() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "v.nome LIKE '%" + seletor.getNomeVacina() + "%'";
+			primeiro = false;
+		}
+
+		if ((seletor.getEstagioPesquisa() != 0) && (seletor.getEstagioPesquisa() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "v.estagiopesquisa = '" + seletor.getEstagioPesquisa() + "'";
+			primeiro = false;
+		}
+		
+		if ((seletor.getPaisOrigem() != null) && (seletor.getPaisOrigem().trim().length() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "v.pais_origem LIKE '%" + seletor.getPaisOrigem() + "%'";
+			primeiro = false;
+		}
+		
+		if ((seletor.getNomePesquisador().getNomeCompleto() != null) && (seletor.getNomePesquisador().getNomeCompleto().trim().length() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "v.idpesquisador = '" + seletor.getNomePesquisador().getNomeCompleto() + "'";
+			primeiro = false;
+		}
+		
+		if ((seletor.getInstituicao().getNome() != null) && (seletor.getInstituicao().getNome().trim().length() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "v.idinstituicao = '" + seletor.getNomePesquisador().getNomeCompleto() + "'";
+			primeiro = false;
+		}
+			
+		if (seletor.getDataInicioPesquisa() != null) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "v.data_inicio_pesquisa = '" + seletor.getDataInicioPesquisa() + "'";
+			primeiro = false;
+		}
+		return sql;
 	}
 	
 }

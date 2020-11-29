@@ -6,8 +6,8 @@ import br.sc.senac.model.vo.Vacina;
 public class AvaliacaoVacinaSeletor {
 	
 	//Atributos que servirão de filtros
-	private Vacina nomeVacina;
-	private Pessoa nomePessoa;
+	private String nomeVacina;
+	private String nomePessoa;
 	private double nota;
 	
 	//Atributos para possível paginação dos resultados (intervalo)
@@ -21,10 +21,10 @@ public class AvaliacaoVacinaSeletor {
 	}
 	
 	public boolean temFiltro() {
-		if ((this.nomeVacina.getNome() != null) && (this.nomeVacina.getNome().trim().length() > 0)) {
+		if ((this.nomeVacina != null) && (this.nomeVacina.trim().length() > 0)) {
 			return true;
 		}
-		if ((this.nomePessoa.getNomeCompleto() != null) && (this.nomePessoa.getNomeCompleto().trim().length() > 0)) {
+		if ((this.nomePessoa != null) && (this.nomePessoa.trim().length() > 0)) {
 			return true;
 		}
 		if ((this.nota != 0) && (this.nota > 0)) {
@@ -53,26 +53,26 @@ public class AvaliacaoVacinaSeletor {
 
 	//getters e setters
 	
-	public Vacina getNomeVacina() {
+	public String getNomeVacina() {
 		return nomeVacina;
 	}
 
-	public void setNomeVacina(Vacina nomeVacina) {
+	public void setNomeVacina(String nomeVacina) {
 		this.nomeVacina = nomeVacina;
 	}
 
-	public Pessoa getNomePessoa() {
+	public String getNomePessoa() {
 		return nomePessoa;
 	}
 
-	public void setNomePessoa(Pessoa nomePessoa) {
+	public void setNomePessoa(String nomePessoa) {
 		this.nomePessoa = nomePessoa;
 	}
 
 	public double getNota() {
 		return nota;
 	}
-
+	
 	public void setNota(double nota) {
 		this.nota = nota;
 	}

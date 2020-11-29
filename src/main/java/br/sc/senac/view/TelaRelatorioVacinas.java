@@ -58,7 +58,7 @@ public class TelaRelatorioVacinas extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][91.00][41.00][142.00,grow][42.00]", "[][][][][][][][][][][99.00][][]"));
+		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][91.00][41.00][142.00,grow][42.00]", "[][][][][][][][][][][99.00][][][]"));
 		
 		JLabel lbbRelatorioVacinas = new JLabel("Relat\u00F3rio de Vacinas");
 		lbbRelatorioVacinas.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -140,6 +140,10 @@ public class TelaRelatorioVacinas extends JFrame {
 		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnPagProxima, "cell 6 12");
+		
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnVoltar, "cell 4 13,alignx center");
 	}
 
 }

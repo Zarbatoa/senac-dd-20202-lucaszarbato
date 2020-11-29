@@ -10,9 +10,11 @@ import br.sc.senac.model.exception.DataNascimentoInvalidaException;
 import br.sc.senac.model.exception.InstituicaoInvalidaException;
 import br.sc.senac.model.exception.NomeInvalidoException;
 import br.sc.senac.model.exception.SobrenomeInvalidoException;
+import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
+
 
 public class ControllerPessoa {
 	/*1- Pessoas:
@@ -95,6 +97,11 @@ public class ControllerPessoa {
 			throw new NomeInvalidoException("O campo nome deve ter pelo menos 3 letras.");
 		}
 	}
+	
+	public List<Pessoa> listarPessoas(PessoaSeletor seletor) {
+		return this.pessoaBO.listarPessoas(seletor);
+	}
+	
 
 	public List<Pessoa> coletarListaDePesquisadores() {
 		return pessoaBO.pegarListaDePesquisadores();
