@@ -5,38 +5,39 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.time.LocalDate;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
-import br.sc.senac.controller.ControllerPessoa;
-import br.sc.senac.model.Utils;
-import br.sc.senac.model.vo.Instituicao;
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
+@SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaGerenciamentoDePessoas extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField tfNome;
 	private JTextField tfInstituicao;
 	private JComboBox cbSexo;
-	private JFormattedTextField ftfDataNascimento;
+	private DatePicker dpDataInicioPesquisa;
 	private JFormattedTextField ftfCpf;
-	private JTable table;
+	private JTable tableResultados;
+	private JTextField tfSobrenome;
+	private JComboBox cbCategoria;
 	
 	/**
 	 * Launch the application.
@@ -65,7 +66,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow][][grow][][105.00][47.00][grow][][]", "[][][][][][][][][][136.00][]"));
+		contentPane.setLayout(new MigLayout("", "[grow][][grow][][105.00][47.00][grow][][]", "[][][][][][][][][][][][][96.00][]"));
 		
 		JLabel lblGerenciamentoDePessoa = new JLabel("Gerenciamento de Pessoas");
 		lblGerenciamentoDePessoa.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -84,127 +85,110 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		MaskFormatter mascaraCpf = new MaskFormatter("###.###.###-##");
 		
-		JLabel lblSexo = new JLabel("Sexo:");
-		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblSexo, "cell 5 2,alignx trailing");
-		cbSexo = new JComboBox(opcoesSexo);
-		cbSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbSexo, "cell 6 2 2 1,growx");
-		
-		MaskFormatter mascaraData = new MaskFormatter("##/##/####");
-		
 		TipoPessoa[] opcoesTipoPessoa = {TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
 		
-		JLabel lblInstituicao = new JLabel("Institui\u00E7\u00E3o:");
-		lblInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblInstituicao, "cell 0 4,alignx trailing");
+		JLabel lblSobrenome = new JLabel("Sobrenome:");
+		lblSobrenome.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(lblSobrenome, "cell 5 2,alignx trailing");
 		
-		tfInstituicao = new JTextField();
-		tfInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(tfInstituicao, "cell 1 4 2 1,growx");
-		tfInstituicao.setColumns(10);
-		
-		JLabel lblCategoria = new JLabel("Categoria:");
-		lblCategoria.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblCategoria, "cell 5 4,alignx trailing");
-		
-		JComboBox cbCategoria = new JComboBox();
-		cbCategoria.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		cbCategoria.setModel(new DefaultComboBoxModel(new String[] {"Pesquisador", "P\u00FAblico Geral", "Volunt\u00E1rio"}));
-		contentPane.add(cbCategoria, "cell 6 4 2 1,growx");
+		tfSobrenome = new JTextField();
+		tfSobrenome.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(tfSobrenome, "cell 6 2 2 1,growx");
+		tfSobrenome.setColumns(10);
 		
 		JLabel lblCpf = new JLabel("Cpf:");
 		lblCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblCpf, "cell 0 6,alignx trailing");
+		contentPane.add(lblCpf, "cell 0 4,alignx trailing");
 		ftfCpf = new JFormattedTextField(mascaraCpf);
 		ftfCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(ftfCpf, "cell 1 6 2 1,growx");
+		contentPane.add(ftfCpf, "cell 1 4 2 1,growx");
+		//TODO pensar sobre um botão cancelar ou voltar
+		final JFrame janelaAtual = this;
+		
+		JLabel lblSexo = new JLabel("Sexo:");
+		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(lblSexo, "cell 5 4,alignx trailing");
+		cbSexo = new JComboBox(opcoesSexo);
+		cbSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(cbSexo, "cell 6 4 2 1,growx");
+		
+		JLabel lblCategoria = new JLabel("Categoria:");
+		lblCategoria.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(lblCategoria, "cell 0 6,alignx trailing");
+		
+		cbCategoria = new JComboBox();
+		cbCategoria.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		cbCategoria.setModel(new DefaultComboBoxModel(opcoesTipoPessoa));
+		cbCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TipoPessoa opcaoSelecionada = (TipoPessoa)cbCategoria.getSelectedItem();
+				
+				if(opcaoSelecionada == TipoPessoa.TIPO_PESQUISADOR) {
+					tfInstituicao.setEnabled(true);
+				} else {
+					tfInstituicao.setEnabled(false);
+				}
+			}
+		});
+		contentPane.add(cbCategoria, "cell 1 6 2 1,growx");
 		
 		JLabel lblDataDeNascimento = new JLabel("Data de Nascimento:");
 		lblDataDeNascimento.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblDataDeNascimento, "cell 5 6,alignx trailing");
-		ftfDataNascimento = new JFormattedTextField(mascaraData);
-		ftfDataNascimento.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(ftfDataNascimento, "cell 6 6 2 1,growx");
-		final JFrame janelaAtual = this;
+		DatePickerSettings dateSettings = new DatePickerSettings();
+		dateSettings.setAllowKeyboardEditing(false);
+		dpDataInicioPesquisa = new DatePicker(dateSettings);
+		contentPane.add(dpDataInicioPesquisa,"cell 6 6 2 1,growx");
+		
+		JLabel lblInstituicao = new JLabel("Institui\u00E7\u00E3o:");
+		lblInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(lblInstituicao, "cell 0 8,alignx trailing");
+		
+		tfInstituicao = new JTextField();
+		tfInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(tfInstituicao, "cell 1 8 2 1,growx");
+		tfInstituicao.setColumns(10);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
 		btnFiltrar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnFiltrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				// Preencher o Objeto com os dados da tela
-				Pessoa novaPessoa = new Pessoa();
-				novaPessoa.setTipo((TipoPessoa)cbCategoria.getSelectedItem());
-				novaPessoa.setInstituicao(new Instituicao(-1,tfInstituicao.getText()));
-				novaPessoa.setNome(tfNome.getText());
-				novaPessoa.setSobrenome(tfSobrenome.getText());
-				LocalDate novaDataNascimento = null;
-				try {
-					novaDataNascimento = Utils.gerarLocalDateDeString(ftfDataNascimento.getText());
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Por favor, insira uma data válida em data de nascimento.");
-					return;
-				}
-				novaPessoa.setDataNascimento(novaDataNascimento);
-				novaPessoa.setSexo(((String)cbSexo.getSelectedItem()).charAt(0));
-				// verificar se cpf é vazio e se ele é válido no BO
-				novaPessoa.setCpf(Utils.desformatarCpf(ftfCpf.getText()));
-				
-				// Instanciar um controller adequado
-				ControllerPessoa controller = new ControllerPessoa();
-				
-				// Chamar o método salvar no controller e pegar a mensagem retornada
-				String mensagem = controller.salvar(novaPessoa);
-				
-				// Mostrar a mensagem devolvida pelo controller
-				JOptionPane.showMessageDialog(null, mensagem);
-			}
-		});
-		contentPane.add(btnFiltrar, "cell 2 8");
+		contentPane.add(btnFiltrar, "cell 2 10");
 		
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnEditar, "cell 4 8,alignx right");
+		contentPane.add(btnEditar, "cell 4 10,alignx right");
 		
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				janelaAtual.dispose();
-			}
-		});
-		contentPane.add(btnExcluir, "cell 6 8");
+		contentPane.add(btnExcluir, "cell 6 10");
 		
-		table = new JTable();
-		table.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		table.setModel(new DefaultTableModel(
+		tableResultados = new JTable();
+		tableResultados.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		tableResultados.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Nome Completo", "Sexo", "CPF", "Dt.  Nascimento ", "Categoria", "Institui\u00E7\u00E3o"},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
+				{"Nome", "Sobrenome", "Sexo", "CPF ", "Dt.  Nascimento", "Categoria", "Institui\u00E7\u00E3o"},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
 			},
 			new String[] {
-				"New column", "New column", "New column", "New column", "New column", "New column"
+				"New column", "New column", "New column", "New column", "New column", "New column", "New column"
 			}
 		));
-		contentPane.add(table, "cell 0 9 9 1,grow");
+		contentPane.add(tableResultados, "cell 0 12 9 1,grow");
 		
 		JButton buttonPagAnterior = new JButton("< Anterior");
 		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(buttonPagAnterior, "cell 2 10");
+		contentPane.add(buttonPagAnterior, "cell 2 13");
 		
-		JLabel lblPagAtual = new JLabel("                    1");
+		JLabel lblPagAtual = new JLabel("1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 4 10");
+		contentPane.add(lblPagAtual, "cell 4 13,alignx center");
 		
 		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagProxima, "cell 6 10");
+		contentPane.add(btnPagProxima, "cell 6 13");
 	}
 
 }

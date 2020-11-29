@@ -2,35 +2,26 @@ package br.sc.senac.view;
 
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.time.LocalDate;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.MaskFormatter;
+import javax.swing.table.DefaultTableModel;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
-import br.sc.senac.controller.ControllerPessoa;
-import br.sc.senac.model.Utils;
-import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
-import br.sc.senac.model.vo.TipoPessoa;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
+@SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 
 	private JPanel contentPane;
@@ -75,15 +66,10 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 		
 		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
 		
-		MaskFormatter mascaraCpf = new MaskFormatter("###.###.###-##");
 		cbRelatorioAvaliacaoVacinas = new JComboBox(opcoesSexo);
 		cbRelatorioAvaliacaoVacinas.setModel(new DefaultComboBoxModel(new String[] {"M\u00E9dia Nota por Vacina", "M\u00E9dia Nota por Usu\u00E1rio", "M\u00E9dia Nota por Categoria", "M\u00E9dia Nota por Sexo", "", "", ""}));
 		cbRelatorioAvaliacaoVacinas.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbRelatorioAvaliacaoVacinas, "cell 0 2 8 1,growx");
-		
-		//MaskFormatter mascaraData = new MaskFormatter("##/##/####");
-		
-		TipoPessoa[] opcoesTipoPessoa = {TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
 		
 		JLabel lblUsurio = new JLabel("Usu\u00E1rio:");
 		lblUsurio.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -103,9 +89,7 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 		dataInicio = new DatePicker(dateSettings);
 		contentPane.add(dataInicio,"cell 1 6 2 1,growx");
 		
-		//JFormattedTextField ftfDataInicio = new JFormattedTextField();
-		//contentPane.add(ftfDataInicio, "cell 1 6 2 1,growx");
-		
+		//TODO pensar sobre um botão cancelar ou voltar
 		final JFrame janelaAtual = this;
 		
 		JLabel lblDataFinal = new JLabel("At\u00E9:");
@@ -114,11 +98,8 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 		
 		DatePickerSettings dateSettings2 = new DatePickerSettings();
 		dateSettings2.setAllowKeyboardEditing(false);
-		dataFinal = new DatePicker(dateSettings);
+		dataFinal = new DatePicker(dateSettings2);
 		contentPane.add(dataFinal,"cell 6 6 2 1,growx");
-		
-		//JFormattedTextField ftfDataFinal = new JFormattedTextField();
-		//contentPane.add(ftfDataFinal, "cell 6 6 2 1,growx");
 		
 		JButton btnGerarRelatorio = new JButton("Gerar Relat\u00F3rio");
 		btnGerarRelatorio.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -149,9 +130,9 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(buttonPagAnterior, "cell 2 12");
 		
-		JLabel lblPagAtual = new JLabel("                        1");
+		JLabel lblPagAtual = new JLabel("1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 4 12");
+		contentPane.add(lblPagAtual, "cell 4 12,alignx center");
 		
 		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));

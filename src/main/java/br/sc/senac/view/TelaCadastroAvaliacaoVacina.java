@@ -5,8 +5,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.time.LocalDate;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -14,22 +14,19 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
-import br.sc.senac.controller.ControllerPessoa;
-import br.sc.senac.model.Utils;
-import br.sc.senac.model.vo.Instituicao;
-import br.sc.senac.model.vo.Pessoa;
-import br.sc.senac.model.vo.TipoPessoa;
+import br.sc.senac.controller.ControllerNota;
+import br.sc.senac.model.vo.Nota;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.DefaultComboBoxModel;
 
+
+@SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaCadastroAvaliacaoVacina extends JFrame {
 
 	private JPanel contentPane;
-	private JComboBox cbNomeSobrenome;
+	private JComboBox cbPesquisador;
 	private JFormattedTextField ftfNota;
 	private JComboBox cbNomeVacina;
 
@@ -57,11 +54,11 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 	public TelaCadastroAvaliacaoVacina() throws ParseException {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 650, 370);
+		setBounds(100, 100, 650, 280);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[][grow][grow][][161.00][grow][63.00][]", "[][][][][][][][][][][]"));
+		contentPane.setLayout(new MigLayout("", "[][grow][grow][][161.00][grow][63.00][]", "[][][][][][][][]"));
 		
 		JLabel lblCadastroDePessoa = new JLabel("Cadastro Avalia\u00E7\u00E3o Vacina");
 		lblCadastroDePessoa.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -71,7 +68,9 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 		lblNomeVacina.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblNomeVacina, "cell 0 2,alignx trailing");
 		
-		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; // retirar esse e trocar por opcoesNomeSobrenome
+		//TODO pegar a lista de pesquisadores do banco
+		//  e alterar o toString de Pessoa para retornar somente o nomeCompleto ou algo similar
+		String[] opcoesNomeSobrenome = {"Nome Exemplo", "Pegar do Banco!", "Mudar!!!"};
 		
 		MaskFormatter mascaraNota = new MaskFormatter("#.#");
 		
@@ -79,14 +78,14 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 		cbNomeVacina.setModel(new DefaultComboBoxModel(new String[] {"Oxford", "Russa"}));
 		contentPane.add(cbNomeVacina, "cell 1 2 2 1,growx");
 		
-		JLabel lblNomeSobrenome = new JLabel("Nome e Sobrenome:");
-		lblNomeSobrenome.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblNomeSobrenome, "cell 4 2,alignx trailing");
+		JLabel lblPesquisador = new JLabel("Pesquisador:");
+		lblPesquisador.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(lblPesquisador, "cell 4 2,alignx trailing");
 		
-		cbNomeSobrenome = new JComboBox(opcoesNomeSobrenome); //fazer aqui a lista ou método se tiver
-		cbNomeSobrenome.setModel(new DefaultComboBoxModel(new String[] {""}));
-		cbNomeSobrenome.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbNomeSobrenome, "cell 5 2 2 1,growx");
+		cbPesquisador = new JComboBox(); //fazer aqui a lista ou método se tiver
+		cbPesquisador.setModel(new DefaultComboBoxModel(opcoesNomeSobrenome));
+		cbPesquisador.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(cbPesquisador, "cell 5 2 2 1,growx");
 		
 		JLabel lbNota = new JLabel("Nota (1 a 5):");
 		lbNota.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -95,6 +94,7 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 		ftfNota = new JFormattedTextField(mascaraNota);
 		ftfNota.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(ftfNota, "cell 1 4,growx");
+		final JFrame janelaAtual = this;
 		
 				
 		JButton btnSalvar = new JButton("Salvar");
@@ -102,44 +102,29 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// Preencher o Objeto com os dados da tela
-				Pessoa novaPessoa = new Pessoa();
-				novaPessoa.setTipo((TipoPessoa)cbCategoria.getSelectedItem());
-				novaPessoa.setInstituicao(new Instituicao(-1,tfInstituicao.getText()));
-				novaPessoa.setNome(tfNomeVacina.getText());
-				novaPessoa.setSobrenome(tfSobrenome.getText());
-				LocalDate novaDataNascimento = null;
-				try {
-					novaDataNascimento = Utils.gerarLocalDateDeString(ftfDataNascimento.getText());
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Por favor, insira uma data válida em data de nascimento.");
-					return;
-				}
-				novaPessoa.setDataNascimento(novaDataNascimento);
-				novaPessoa.setSexo(((String)cbNomeSobrenome.getSelectedItem()).charAt(0));
-				// verificar se cpf é vazio e se ele é válido no BO
-				novaPessoa.setCpf(Utils.desformatarCpf(ftfNota.getText()));
+				Nota novaNota = new Nota();
+				//TODO setar os atributos do Objeto
 				
 				// Instanciar um controller adequado
-				ControllerPessoa controller = new ControllerPessoa();
+				ControllerNota controller = new ControllerNota();
 				
 				// Chamar o método salvar no controller e pegar a mensagem retornada
-				String mensagem = controller.salvar(novaPessoa);
+				String mensagem = controller.salvar(novaNota);
 				
 				// Mostrar a mensagem devolvida pelo controller
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		});
-		contentPane.add(btnSalvar, "cell 2 10");
+		contentPane.add(btnSalvar, "cell 2 6");
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		final JFrame janelaAtual = this;
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				janelaAtual.dispose();
 			}
 		});
-		contentPane.add(btnCancelar, "cell 5 10");
+		contentPane.add(btnCancelar, "cell 5 6");
 	}
 
 }

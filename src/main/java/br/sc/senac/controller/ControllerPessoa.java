@@ -1,8 +1,11 @@
 package br.sc.senac.controller;
 
+import java.time.LocalDate;
+
 import br.sc.senac.model.bo.PessoaBO;
 import br.sc.senac.model.exception.CpfInvalidoException;
 import br.sc.senac.model.exception.CpfJaCadastradoException;
+import br.sc.senac.model.exception.DataNascimentoInvalidaException;
 import br.sc.senac.model.exception.InstituicaoInvalidaException;
 import br.sc.senac.model.exception.NomeInvalidoException;
 import br.sc.senac.model.exception.SobrenomeInvalidoException;
@@ -31,7 +34,8 @@ public class ControllerPessoa {
 				| SobrenomeInvalidoException
 				| NomeInvalidoException
 				| CpfJaCadastradoException
-				| InstituicaoInvalidaException e) {
+				| InstituicaoInvalidaException
+				| DataNascimentoInvalidaException e) {
 			mensagem = e.getMessage();
 		}
 		
@@ -40,11 +44,19 @@ public class ControllerPessoa {
 
 	private void validarPessoa(Pessoa novaPessoa)
 			throws CpfInvalidoException, SobrenomeInvalidoException,
-			NomeInvalidoException, InstituicaoInvalidaException, CpfJaCadastradoException  {
+			NomeInvalidoException, InstituicaoInvalidaException,
+			CpfJaCadastradoException, DataNascimentoInvalidaException  {
 		this.validarNome(novaPessoa.getNome());
 		this.validarSobrenome(novaPessoa.getSobrenome());
 		this.validarCpf(novaPessoa.getCpf());
 		this.validarInstituicao(novaPessoa);
+		this.validarDataNascimento(novaPessoa.getDataNascimento());
+	}
+
+	private void validarDataNascimento(LocalDate dataNascimento) throws DataNascimentoInvalidaException {
+		if(dataNascimento == null) {
+			throw new DataNascimentoInvalidaException("Data nascimento precisa ser preenchida");
+		}
 	}
 
 	private void validarInstituicao(Pessoa novaPessoa) throws InstituicaoInvalidaException {

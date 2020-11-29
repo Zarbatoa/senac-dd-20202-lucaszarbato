@@ -1,5 +1,6 @@
 package br.sc.senac.model.bo;
 
+import br.sc.senac.model.Utils;
 import br.sc.senac.model.dao.InstituicaoDAO;
 import br.sc.senac.model.dao.PessoaDAO;
 import br.sc.senac.model.exception.CpfJaCadastradoException;
@@ -12,7 +13,6 @@ public class PessoaBO {
 	private InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
 	
 	public Pessoa salvar(Pessoa novaPessoa) throws CpfJaCadastradoException{
-		// faltam mais verificações
 		Instituicao instiutuicaoDoBanco = null;
 		if(instituicaoDAO.jaExisteNome(novaPessoa.getInstituicao())) {
 			instiutuicaoDoBanco = instituicaoDAO.pesquisarPeloNome(novaPessoa.getInstituicao().getNome());
@@ -22,7 +22,7 @@ public class PessoaBO {
 		novaPessoa.setInstituicao(instiutuicaoDoBanco);
 		
 		if(this.pessoaDAO.cpfJaCadastrado(novaPessoa)) {
-			throw new CpfJaCadastradoException("O CPF informado (" + novaPessoa.getCpf() 
+			throw new CpfJaCadastradoException("O CPF informado (" + Utils.formatarCpf(novaPessoa.getCpf()) 
 			+ ") já foi cadastrado.");
 		}
 		this.pessoaDAO.inserir(novaPessoa);
