@@ -110,7 +110,7 @@ public class Principal {
 		
 		// alterar
 		n6.setVacina(v2);
-		n7.setValor(1);
+		n7.setValor(1d);
 		n8.setVacina(v0);
 		
 		notaDAO.alterar(n6);

@@ -5,7 +5,7 @@ public class Nota {
 	private int id;
 	private Pessoa pessoa;
 	private Vacina vacina;
-	private double valor; // de 1 (péssima) a 5 (ótima)
+	private Double valor; // de 1 (péssima) a 5 (ótima)
 	
 	public Nota() {
 	}
@@ -42,19 +42,20 @@ public class Nota {
 		this.vacina = vacina;
 	}
 
-	public double getValor() {
+	public Double getValor() {
 		return valor;
 	}
 
-	public void setValor(double valor) {
+	public void setValor(Double valor) {
 		this.valor = valor;
 	}
 	
 	
 	@Override
 	public String toString() {
-		return "[id=" + this.id + ", pessoa=" + this.pessoa.getNomeCompleto() 
-			+ ", vacina=" + vacina.getNome()
+		return "[id=" + this.id
+			+ ", pessoa=" + this.pessoa
+			+ ", vacina=" + this.vacina
 			+ ", nota=" + this.valor +"]";
 	}
 	
