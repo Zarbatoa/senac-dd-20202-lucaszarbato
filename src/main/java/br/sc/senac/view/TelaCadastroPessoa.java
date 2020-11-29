@@ -155,7 +155,6 @@ public class TelaCadastroPessoa extends JFrame {
 				LocalDate novaDataNascimento = dpDataInicioPesquisa.getDate();
 				novaPessoa.setDataNascimento(novaDataNascimento);
 				novaPessoa.setSexo(((String)cbSexo.getSelectedItem()).charAt(0));
-				// verificar se cpf é vazio e se ele é válido no BO
 				novaPessoa.setCpf(Utils.desformatarCpf(ftfCpf.getText()));
 				
 				// Instanciar um controller adequado
