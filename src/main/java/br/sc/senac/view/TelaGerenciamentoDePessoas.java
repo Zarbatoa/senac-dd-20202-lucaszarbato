@@ -169,7 +169,6 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				consultarPessoas();
 			}
-
 		});
 		
 		JButton btnEditar = new JButton("Editar");
@@ -260,7 +259,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 
 	}
 
-	private void atualizarTabelaPessoas(List<Pessoa> pessoas) {
+	protected void atualizarTabelaPessoas(List<Pessoa> pessoas) {
 		// atualiza o atributo pessoas consultadas
 		List<Pessoa> pessoasConsultadas = pessoas;
 		
@@ -286,7 +285,6 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	private void limparTabela() {
 		tableResultados.setModel(new DefaultTableModel(new String[][] { { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituicao" }, },
 				new String[] { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituicao"}));
-		
 	}
 
 }

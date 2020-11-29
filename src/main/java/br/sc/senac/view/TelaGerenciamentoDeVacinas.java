@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -20,18 +22,28 @@ import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
+import br.sc.senac.controller.ControllerVacina;
+import br.sc.senac.model.seletor.VacinaSeletor;
 import br.sc.senac.model.vo.Pessoa;
+import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaGerenciamentoDeVacinas extends JFrame {
+	
+	private static final int TAMANHO_PAGINA = 0; // relacionado a paginação
 
 	private JPanel contentPane;
 	private JTextField tfNome;
 	private JTextField tfNomePesquisador;
 	private JComboBox cbEstagioPesquisa;
-	private JTable table;
+	private JTable tableResultados;
 	private DatePicker dataInicioPesquisa;
+	
+	private JLabel lblPagAtual;
+	
+	//variável relacionada a paginação
+	private int paginaAtual = 1;
 	
 	/**
 	 * Launch the application.
@@ -77,7 +89,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		
 		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
 		
-		JLabel lblEstagioPesquisa = new JLabel("Est\u00E1gio da Pesquisa:");
+		JLabel lblEstagioPesquisa = new JLabel("Estágio da Pesquisa:");
 		lblEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblEstagioPesquisa, "cell 4 2,alignx trailing");
 		cbEstagioPesquisa = new JComboBox(opcoesSexo);
@@ -130,6 +142,13 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		btnFiltrar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnFiltrar, "cell 2 8");
 		
+		// criei esse método para já adicionar o filtro seletor nessa tela
+		btnFiltrar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				consultarVacinas();
+			}
+		});
+		
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnEditar, "cell 3 8,alignx right");
@@ -144,9 +163,9 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		
 		contentPane.add(btnExcluir, "cell 5 8");
 		
-		table = new JTable();
-		table.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		table.setModel(new DefaultTableModel(
+		tableResultados = new JTable();
+		tableResultados.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		tableResultados.setModel(new DefaultTableModel(
 			new Object[][] {
 				{"Nome Vacina", "País de Origem", "Estágio de Pesquisa", "Início Pesquisa", "Pesquisador", "Instituição"},
 				{null, null, null, null, null, null},
@@ -161,17 +180,35 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 				"New column", "New column", "New column", "New column", "New column", "New column"
 			}
 		));
-		contentPane.add(table, "cell 0 9 8 1,grow");
+		contentPane.add(tableResultados, "cell 0 9 8 1,grow");
 		
 		JButton buttonPagAnterior = new JButton("< Anterior");
 		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(buttonPagAnterior, "cell 2 10");
 		
+		//evento de passar pág anterior
+		buttonPagAnterior.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (paginaAtual > 1) {
+					paginaAtual--;
+				}
+				consultarVacinas();
+			}
+		});
+		
 		JButton btnPagProxima = new JButton("Próximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnPagProxima, "cell 5 10");
 		
-		JLabel lblPagAtual = new JLabel("1");
+		//evento para passar a próxima página
+		btnPagProxima.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				paginaAtual++;
+				consultarVacinas();
+			}
+		});
+		
+		lblPagAtual = new JLabel("1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(lblPagAtual, "cell 3 10,alignx right");
 		
@@ -179,5 +216,51 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnVoltar, "cell 3 11,alignx right");
 	}
+
+	protected void consultarVacinas() {
+		lblPagAtual.setText(paginaAtual + "");
+
+		ControllerVacina controlador = new ControllerVacina();
+		VacinaSeletor seletor = new VacinaSeletor();
+
+		seletor.setPagina(paginaAtual);
+		seletor.setLimite(TAMANHO_PAGINA);
+		
+		// Preenche os campos de filtro da tela no seletor
+		//TODO
+		
+		// aqui é feita a consulta das pessoas e atualizada a tabela
+		//List<Vacina> vacinas = controlador.listarVacinas(seletor); TODO no BO e Controller
+		atualizarTabelaVacinas(vacinas);
+	}
+	
+	protected void atualizarTabelaVacinas(List<Vacina> vacinas) {
+		// atualiza o atributo pessoas consultadas
+		List<Pessoa> pessoasConsultadas = pessoas;
+		
+		this.limparTabela();
+		
+		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
+		for (Vacina vacina : vacinas) {
+			// Crio uma nova linha na tabela
+			// Preencher a linha com os atributos do produto
+			// na ordem do cabeçalho da tabela
+			String dataFormatada = vacina.getDataInicioPesquisa().format(formatter);
+
+			String[] novaLinha = new String[] { vacina.getNome(),  vacina.getPaisOrigem(), vacina.getEstagioPesquisa() + "", 
+					dataFormatada, vacina.getPesquisadorResponsavel().getNomeCompleto(), vacina.getClass() }; // falta colocar instituição não sei como pega
+			modelo.addRow(novaLinha);
+		}
+	}
+
+	private void limparTabela() {
+		tableResultados.setModel(new DefaultTableModel(new String[][] { { "Nome", "País de Origem", "Estágio Pesquisa", "Início Pesquisa", "Pesquisador", "Instituição" }, },
+				new String[] { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituicao"}));
+	}
+	
+	
 
 }
