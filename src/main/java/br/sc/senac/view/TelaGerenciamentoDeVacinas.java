@@ -230,13 +230,13 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		//TODO
 		
 		// aqui é feita a consulta das pessoas e atualizada a tabela
-		//List<Vacina> vacinas = controlador.listarVacinas(seletor); TODO no BO e Controller
+		List<Vacina> vacinas = controlador.listarVacinas(seletor); //TODO no BO e Controller
 		atualizarTabelaVacinas(vacinas);
 	}
 	
 	protected void atualizarTabelaVacinas(List<Vacina> vacinas) {
 		// atualiza o atributo pessoas consultadas
-		List<Pessoa> pessoasConsultadas = pessoas;
+		List<Vacina> vacinasConsultadas = vacinas;
 		
 		this.limparTabela();
 		
@@ -251,7 +251,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 			String dataFormatada = vacina.getDataInicioPesquisa().format(formatter);
 
 			String[] novaLinha = new String[] { vacina.getNome(),  vacina.getPaisOrigem(), vacina.getEstagioPesquisa() + "", 
-					dataFormatada, vacina.getPesquisadorResponsavel().getNomeCompleto(), vacina.getClass() }; // falta colocar instituição não sei como pega
+					dataFormatada, vacina.getPesquisadorResponsavel().getNomeCompleto(), vacina.getPesquisadorResponsavel().getInstituicao().getNome() }; // falta colocar instituição não sei como pega
 			modelo.addRow(novaLinha);
 		}
 	}

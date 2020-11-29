@@ -298,11 +298,11 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		}
 		
 		// dúvidas de como fazer isso no banco de dados...ou senão tiramos por instituição e tipo - não sei se ainda está correto
-		if ((seletor.getInstituicao().getNome() != null) && (seletor.getInstituicao().getNome().trim().length() > 0)) {
+		if ((seletor.getNomeInstituicao() != null) && (seletor.getNomeInstituicao().trim().length() > 0)) {
 			if (!primeiro) {
 				sql += " AND ";
 			}
-			sql += "p.idinstituicao = '" + seletor.getInstituicao() + "'"; // dúvida pois o nome da instituição veio do DAO INSTITUIÇÃO
+			sql += "p.idinstituicao = '" + seletor.getNomeInstituicao() + "'"; // dúvida pois o nome da instituição veio do DAO INSTITUIÇÃO
 			primeiro = false;
 		}
 		

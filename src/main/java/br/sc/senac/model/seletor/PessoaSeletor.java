@@ -2,7 +2,6 @@ package br.sc.senac.model.seletor;
 
 import java.time.LocalDate;
 
-import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.TipoPessoa;
 
 public class PessoaSeletor {
@@ -13,7 +12,7 @@ public class PessoaSeletor {
 	private char sexo;
 	private String cpf;
 	private LocalDate dataNascimento;
-	private String instituicao; 
+	private String nomeInstituicao; 
 	private TipoPessoa tipo; 
 	
 	//Atributos para possível paginação dos resultados (intervalo)
@@ -39,7 +38,7 @@ public class PessoaSeletor {
 		if ((this.cpf != null) && (this.cpf.trim().length() > 0)) {
 			return true;
 		}
-		if ((this.instituicao != null) && (this.instituicao.trim().length()>0)) {
+		if ((this.nomeInstituicao != null) && (this.nomeInstituicao.trim().length()>0)) {
 			return true;
 		}  
 		if ((this.tipo.getDescricao() != null) && (this.tipo.getDescricao().trim().length()>0)) {
@@ -112,12 +111,12 @@ public class PessoaSeletor {
 		this.dataNascimento = dataNascimento;
 	}
 
-	public String getInstituicao() {
-		return instituicao;
+	public String getNomeInstituicao() {
+		return nomeInstituicao;
 	}
 
-	public void setInstituicao(String instituicao) {
-		this.instituicao = instituicao;
+	public void setNomeInstituicao(String nomeInstituicao) {
+		this.nomeInstituicao = nomeInstituicao;
 	}
 
 	public TipoPessoa getTipo() {
