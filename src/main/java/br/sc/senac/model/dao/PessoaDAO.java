@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.vo.Pessoa;
 
 public class PessoaDAO implements BaseDAO<Pessoa>{
@@ -192,7 +193,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		}
 		return jaCadastrado;
 	}
-
+	
 	public Pessoa construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		Pessoa pessoaBuscada = new Pessoa();
 		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
@@ -215,6 +216,98 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		return pessoaBuscada;
 	}
 	
+	// a partir daqui estão os métodos dos filtros
 	
+	public ArrayList<Pessoa> listarComSeletor(PessoaSeletor seletor) {
+		String sql = " SELECT * FROM PESSOA p";
+
+		if (seletor.temFiltro()) {
+			sql = criarFiltros(seletor, sql);
+		}
+
+		if (seletor.temPaginacao()) {
+			sql += " LIMIT " + seletor.getLimite() + " OFFSET " + seletor.getOffset();
+		}
+		Connection conexao = Banco.getConnection();
+		PreparedStatement prepStmt = Banco.getPreparedStatement(conexao, sql);
+		ArrayList<Pessoa> pessoas = new ArrayList<Pessoa>();
+
+		try {
+			ResultSet result = prepStmt.executeQuery();
+
+			while (result.next()) {
+				Pessoa p = construirDoResultSet(result); 
+				pessoas.add(p);
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar pessoas com filtros.\nCausa: " + e.getMessage());
+		}
+		return pessoas;
+	}
+	
+	private String criarFiltros(PessoaSeletor seletor, String sql) {
+		
+		// Tem pelo menos UM filtro
+		sql += " WHERE ";
+		boolean primeiro = true;
+
+		if ((seletor.getNome() != null) && (seletor.getNome().trim().length() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "p.nome LIKE '%" + seletor.getNome() + "%'";
+			primeiro = false;
+		}
+
+		if ((seletor.getSobrenome() != null) && (seletor.getSobrenome().trim().length() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "p.sobrenome LIKE '%" + seletor.getSobrenome() + "%";
+			primeiro = false;
+		}
+		
+		if ((seletor.getSexo() != 0) && (seletor.getSexo() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "p.sexo = '" + seletor.getSexo() + "'";
+			primeiro = false;
+		}
+		
+		if ((seletor.getCpf() != null) && (seletor.getCpf().trim().length() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "p.cpf = '" + seletor.getCpf() + "'";
+			primeiro = false;
+		}
+		
+		// dúvidas de como fazer isso no banco de dados...ou senão tiramos por instituição e tipo - não sei se ainda está correto
+		if ((seletor.getInstituicao().getNome() != null) && (seletor.getInstituicao().getNome().trim().length() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "p.idinstituicao = '" + seletor.getInstituicao() + "'"; // dúvida pois o nome da instituição veio do DAO INSTITUIÇÃO
+			primeiro = false;
+		}
+		
+		if ((seletor.getTipo().getDescricao() != null) && (seletor.getTipo().getDescricao().trim().length() > 0)) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "p.idtipo = '" + seletor.getTipo() + "'"; // dúvida pois o nome da instituição veio do DAO TIPO
+			primeiro = false;
+		}
+		
+		if (seletor.getDataNascimento() != null) {
+			if (!primeiro) {
+				sql += " AND ";
+			}
+			sql += "p.data_nascimento = '" + seletor.getDataNascimento() + "'";
+			primeiro = false;
+		}
+		return sql;
+	}
 	
 }

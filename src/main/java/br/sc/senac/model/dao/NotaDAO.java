@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.sc.senac.model.seletor.AvaliacaoVacinaSeletor;
 import br.sc.senac.model.vo.Nota;
+import br.sc.senac.model.vo.Vacina;
 
 public class NotaDAO implements BaseDAO<Nota>{
 
@@ -160,5 +162,69 @@ public class NotaDAO implements BaseDAO<Nota>{
 		
 		return notaBuscada;
 	}
+	
+	// a partir daqui estão os métodos dos filtros
+	
+		public ArrayList<Nota> listarComSeletor(AvaliacaoVacinaSeletor seletor) {
+			String sql = " SELECT * FROM NOTA n";
+
+			if (seletor.temFiltro()) {
+				sql = criarFiltros(seletor, sql);
+			}
+
+			if (seletor.temPaginacao()) {
+				sql += " LIMIT " + seletor.getLimite() + " OFFSET " + seletor.getOffset();
+			}
+			Connection conexao = Banco.getConnection();
+			PreparedStatement prepStmt = Banco.getPreparedStatement(conexao, sql);
+			ArrayList<Nota> notas = new ArrayList<Nota>();
+
+			try {
+				ResultSet result = prepStmt.executeQuery();
+
+				while (result.next()) {
+					Nota n = construirDoResultSet(result); 
+					notas.add(n);
+				}
+			} catch (SQLException e) {
+				System.out.println("Erro ao consultar as avaliações de vacinas com filtros.\nCausa: " + e.getMessage());
+			}
+			return notas;
+		}
+		
+		private String criarFiltros(AvaliacaoVacinaSeletor seletor, String sql) {
+			
+			// Tem pelo menos UM filtro
+			sql += " WHERE ";
+			boolean primeiro = true;
+
+			if ((seletor.getNomeVacina() != null) && (seletor.getNomeVacina().trim().length() > 0)) {
+				if (!primeiro) {
+					sql += " AND ";
+				}
+				sql += "n.idvacina = '" + seletor.getNomeVacina() + "'";
+				primeiro = false;
+			}
+
+			if ((seletor.getNomePessoa() !=  null) && (seletor.getNomePessoa().trim().length() > 0)) {
+				if (!primeiro) {
+					sql += " AND ";
+				}
+				sql += "n.idpessoa = '" + seletor.getNomePessoa() + "'";
+				primeiro = false;
+			}
+			
+			if ((seletor.getNota() != 0) && (seletor.getNota() > 0)) {
+				if (!primeiro) {
+					sql += " AND ";
+				}
+				sql += "n.nota = '" + seletor.getNota() + "'";
+				primeiro = false;
+			}
+			
+			return sql;
+		}
+	
+	
 	
 }

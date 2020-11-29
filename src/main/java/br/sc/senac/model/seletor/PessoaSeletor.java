@@ -13,8 +13,8 @@ public class PessoaSeletor {
 	private char sexo;
 	private String cpf;
 	private LocalDate dataNascimento;
-	private Instituicao instituicao; // não sei se pode ficar assim
-	private TipoPessoa tipo; // não sei se pode ficar assim
+	private Instituicao instituicao; 
+	private TipoPessoa tipo; 
 	
 	//Atributos para possível paginação dos resultados (intervalo)
 	private int limite;
@@ -43,7 +43,7 @@ public class PessoaSeletor {
 			return true;
 		}  
 		if ((this.tipo.getDescricao() != null) && (this.tipo.getDescricao().trim().length()>0)) {
-			return true; // não sei se está correto
+			return true; 
 		}  
 		if (this.dataNascimento != null) {
 			return true;
@@ -76,90 +76,72 @@ public class PessoaSeletor {
 		return nome;
 	}
 
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 
 	public String getSobrenome() {
 		return sobrenome;
 	}
 
-
 	public void setSobrenome(String sobrenome) {
 		this.sobrenome = sobrenome;
 	}
-
 
 	public char getSexo() {
 		return sexo;
 	}
 
-
 	public void setSexo(char sexo) {
 		this.sexo = sexo;
 	}
-
 
 	public String getCpf() {
 		return cpf;
 	}
 
-
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-
 
 	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}
 
-
 	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
-
 
 	public Instituicao getInstituicao() {
 		return instituicao;
 	}
 
-
 	public void setInstituicao(Instituicao instituicao) {
 		this.instituicao = instituicao;
 	}
-
 
 	public TipoPessoa getTipo() {
 		return tipo;
 	}
 
-
 	public void setTipo(TipoPessoa tipo) {
 		this.tipo = tipo;
 	}
-
 
 	public int getLimite() {
 		return limite;
 	}
 
-
 	public void setLimite(int limite) {
 		this.limite = limite;
 	}
-
 
 	public int getPagina() {
 		return pagina;
 	}
 
-
 	public void setPagina(int pagina) {
 		this.pagina = pagina;
 	}
 	
-
 }
