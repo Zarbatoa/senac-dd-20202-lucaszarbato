@@ -57,7 +57,7 @@ public class PessoaBO {
 	}
 
 	
-	public ArrayList<Pessoa> listarPessoas(PessoaSeletor seletor) {
+	public List<Pessoa> listarPessoas(PessoaSeletor seletor) {
 		return this.pessoaDAO.listarComSeletor(seletor);
 	}
 
