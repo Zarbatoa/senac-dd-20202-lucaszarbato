@@ -24,7 +24,9 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import br.sc.senac.controller.ControllerVacina;
 import br.sc.senac.model.seletor.VacinaSeletor;
+import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
+import br.sc.senac.model.vo.TipoPessoa;
 import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
 
@@ -39,6 +41,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 	private JComboBox cbEstagioPesquisa;
 	private JTable tableResultados;
 	private DatePicker dataInicioPesquisa;
+	private JComboBox cbInstituicao;
 	
 	private JLabel lblPagAtual;
 	
@@ -72,11 +75,11 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[74.00,grow][23.00,grow][150.00,grow][105.00][111.00][127.00,grow][15.00][]", "[][][][][][][][][][136.00][][]"));
+		contentPane.setLayout(new MigLayout("", "[61.00,grow][38.00,grow][130.00,grow][136.00][111.00][127.00,grow][15.00][]", "[][][][][][][][][][136.00][][]"));
 		
 		JLabel lblGerenciamentoVacinas = new JLabel("Gerenciamento de Vacinas");
 		lblGerenciamentoVacinas.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblGerenciamentoVacinas, "cell 3 0");
+		contentPane.add(lblGerenciamentoVacinas, "cell 2 0 2 1,alignx right");
 		
 		JLabel lblNomeVacina = new JLabel("Nome Vacina:");
 		lblNomeVacina.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -110,7 +113,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		lblInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblInstituicao, "cell 4 4,alignx trailing");
 		
-		JComboBox cbInstituicao = new JComboBox();
+		cbInstituicao = new JComboBox();
 		cbInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbInstituicao, "cell 5 4 2 1,growx");
 		
@@ -153,7 +156,13 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnEditar, "cell 3 8,alignx right");
 		
-		JButton btnExcluir = new JButton("Excluir");
+		btnEditar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				editarVacinas();
+			}
+		});
+		
+		JButton btnExcluir = new JButton("Excluir"); //acho que precisa talvez fazer algum método para excluirVacina? ou talvez seria melhor nem excluir. Avaliação vacina não exclui
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -217,6 +226,11 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(btnVoltar, "cell 3 11,alignx right");
 	}
 
+	protected void editarVacinas() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	protected void consultarVacinas() {
 		lblPagAtual.setText(paginaAtual + "");
 
@@ -227,15 +241,19 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		seletor.setLimite(TAMANHO_PAGINA);
 		
 		// Preenche os campos de filtro da tela no seletor
-		//TODO
-		
+		seletor.setNomeVacina(tfNome.getText());
+		seletor.setNomePesquisador((Pessoa)tfNomePesquisador.getClientProperty(tfNomePesquisador)); //não sei se está correto
+		seletor.setEstagioPesquisa(Integer.parseInt((String) cbEstagioPesquisa.getSelectedItem())); //verificar se está correto
+		seletor.setInstituicao((Instituicao)cbInstituicao.getSelectedItem());
+		seletor.setDataInicioPesquisa(dataInicioPesquisa.getDate());
+
 		// aqui é feita a consulta das pessoas e atualizada a tabela
-		List<Vacina> vacinas = controlador.listarVacinas(seletor); //TODO no BO e Controller
+		List<Vacina> vacinas = controlador.listarVacinas(seletor); 
 		atualizarTabelaVacinas(vacinas);
 	}
 	
 	protected void atualizarTabelaVacinas(List<Vacina> vacinas) {
-		// atualiza o atributo pessoas consultadas
+		// atualiza o atributo vacinas consultadas
 		List<Vacina> vacinasConsultadas = vacinas;
 		
 		this.limparTabela();
@@ -251,7 +269,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 			String dataFormatada = vacina.getDataInicioPesquisa().format(formatter);
 
 			String[] novaLinha = new String[] { vacina.getNome(),  vacina.getPaisOrigem(), vacina.getEstagioPesquisa() + "", 
-					dataFormatada, vacina.getPesquisadorResponsavel().getNomeCompleto(), vacina.getPesquisadorResponsavel().getInstituicao().getNome() }; // falta colocar instituição não sei como pega
+					dataFormatada, vacina.getPesquisadorResponsavel().getNomeCompleto(), vacina.getPesquisadorResponsavel().getInstituicao().getNome() }; 
 			modelo.addRow(novaLinha);
 		}
 	}

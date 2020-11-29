@@ -171,13 +171,25 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			}
 		});
 		
-		JButton btnEditar = new JButton("Editar");
+		JButton btnEditar = new JButton("Editar"); // preencho nos campos? se sim precisa de um botão de Salvar.
 		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnEditar, "cell 4 10,alignx right");
+		
+		btnEditar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				editarPessoas();
+			}
+		});
 		
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnExcluir, "cell 6 10");
+		
+		btnExcluir.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				excluirPessoas();
+			}
+		});
 		
 		tableResultados = new JTable();
 		tableResultados.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -231,6 +243,16 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		contentPane.add(btnVoltar, "cell 4 14,alignx right,aligny top");
 	}
 
+	protected void excluirPessoas() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void editarPessoas() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	// método relacionado ao Botão Filtrar
 	protected void consultarPessoas() {
 		
@@ -247,9 +269,9 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		seletor.setSobrenome(tfSobrenome.getText());
 		seletor.setSexo(cbSexo.getSelectedItem().toString().charAt(0)); 
 		seletor.setCpf(ftfCpf.getText());
-		seletor.setNomeInstituicao(tfInstituicao.getText()); // falta arrumar lá no DAO - não sei lá os comandos --> inclusive já apontou erro no Pessoa DAO.
+		seletor.setNomeInstituicao(tfInstituicao.getText()); 
 		
-		seletor.setTipo((TipoPessoa)cbCategoria.getSelectedItem()); //  não sei como faz quando pega de outro objeto
+		seletor.setTipo((TipoPessoa)cbCategoria.getSelectedItem()); 
 				
 		seletor.setDataNascimento(dpDataInicioPesquisa.getDate());
 		
@@ -283,8 +305,8 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	}
 
 	private void limparTabela() {
-		tableResultados.setModel(new DefaultTableModel(new String[][] { { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituicao" }, },
-				new String[] { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituicao"}));
+		tableResultados.setModel(new DefaultTableModel(new String[][] { { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituição" }, },
+				new String[] { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituição"}));
 	}
 
 }
