@@ -14,8 +14,7 @@ import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
-import model.seletor.ProdutoSeletor;
-import model.vo.Produto;
+
 
 public class ControllerPessoa {
 	/*1- Pessoas:
@@ -102,7 +101,6 @@ public class ControllerPessoa {
 	public List<Pessoa> listarPessoas(PessoaSeletor seletor) {
 		return this.pessoaBO.listarPessoas(seletor);
 	}
-	
 	
 
 }

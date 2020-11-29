@@ -56,7 +56,7 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][105.00][47.00][96.00,grow][42.00]", "[][][][][][][][][99.00][][]"));
+		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][105.00][47.00][96.00,grow][42.00]", "[][][][][][][][][99.00][][][]"));
 		
 		JLabel lblGerenciamentoDeVacina = new JLabel("Gerenciamento de Avalia\u00E7\u00E3o de Vacinas");
 		lblGerenciamentoDeVacina.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -116,13 +116,17 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JFrame {
 		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(buttonPagAnterior, "cell 1 10");
 		
-		JLabel lblPagAtual = new JLabel("1");
-		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 2 10 4 1,alignx center");
-		
 		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnPagProxima, "cell 6 10");
+		
+		JLabel lblPagAtual = new JLabel("                          1");
+		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(lblPagAtual, "cell 4 10");
+		
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnVoltar, "cell 4 11,alignx right,aligny baseline");
 	}
 
 }

@@ -66,7 +66,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow][][grow][][105.00][47.00][grow][][]", "[][][][][][][][][][][][][96.00][]"));
+		contentPane.setLayout(new MigLayout("", "[grow][][grow][24.00][105.00][47.00][grow][][]", "[][][][][][][][][][][][][96.00][][]"));
 		
 		JLabel lblGerenciamentoDePessoa = new JLabel("Gerenciamento de Pessoas");
 		lblGerenciamentoDePessoa.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -78,7 +78,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		tfNome = new JTextField();
 		tfNome.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(tfNome, "cell 1 2 2 1,growx");
+		contentPane.add(tfNome, "cell 1 2 3 1,growx");
 		tfNome.setColumns(10);
 		
 		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
@@ -101,8 +101,8 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		contentPane.add(lblCpf, "cell 0 4,alignx trailing");
 		ftfCpf = new JFormattedTextField(mascaraCpf);
 		ftfCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(ftfCpf, "cell 1 4 2 1,growx");
-		//TODO pensar sobre um botão cancelar ou voltar
+		contentPane.add(ftfCpf, "cell 1 4 3 1,growx");
+		//TODO pensar sobre um botão cancelar ou voltar --> acabei de acrescentar o botão de Voltar!
 		final JFrame janelaAtual = this;
 		
 		JLabel lblSexo = new JLabel("Sexo:");
@@ -130,7 +130,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 				}
 			}
 		});
-		contentPane.add(cbCategoria, "cell 1 6 2 1,growx");
+		contentPane.add(cbCategoria, "cell 1 6 3 1,growx");
 		
 		JLabel lblDataDeNascimento = new JLabel("Data de Nascimento:");
 		lblDataDeNascimento.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -146,12 +146,20 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		tfInstituicao = new JTextField();
 		tfInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(tfInstituicao, "cell 1 8 2 1,growx");
+		contentPane.add(tfInstituicao, "cell 1 8 3 1,growx");
 		tfInstituicao.setColumns(10);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
 		btnFiltrar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnFiltrar, "cell 2 10");
+		
+		// criei esse método para já adicionar o filtro seletor nessa tela
+		btnFiltrar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				consultarPessoas();
+			}
+
+		});
 		
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -182,13 +190,23 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(buttonPagAnterior, "cell 2 13");
 		
-		JLabel lblPagAtual = new JLabel("1");
+		JLabel lblPagAtual = new JLabel("                        1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 4 13,alignx center");
+		contentPane.add(lblPagAtual, "cell 4 13");
 		
 		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnPagProxima, "cell 6 13");
+		
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnVoltar, "cell 4 14,alignx right,aligny top");
+	}
+
+	// método relacionado ao Botão Filtrar
+	protected void consultarPessoas() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
