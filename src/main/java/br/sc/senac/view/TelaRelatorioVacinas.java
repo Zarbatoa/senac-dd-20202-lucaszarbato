@@ -2,6 +2,8 @@ package br.sc.senac.view;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -24,12 +26,19 @@ import javax.swing.ImageIcon;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaRelatorioVacinas extends JFrame {
+	
+	private static final int TAMANHO_PAGINA = 0; // relacionado a paginação
 
 	private JPanel contentPane;
 	private JComboBox cbRelatorioVacinas;
 	private JTable tableResultados;
 	private JTextField txtUsuario;
 	private DatePicker dpDataFiltro;
+	
+	private JLabel lblPagAtual;
+	
+	//variável relacionada a paginação
+	private int paginaAtual = 1;
 	
 	/**
 	 * Launch the application.
@@ -127,7 +136,17 @@ public class TelaRelatorioVacinas extends JFrame {
 		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(buttonPagAnterior, "cell 2 10");
 		
-		JLabel lblPagAtual = new JLabel("1");
+		//evento de passar pág anterior
+		buttonPagAnterior.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (paginaAtual > 1) {
+					paginaAtual--;
+				}
+				gerarRelatorio();
+			}
+		});
+		
+		lblPagAtual = new JLabel("1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(lblPagAtual, "cell 4 10,alignx center");
 		
@@ -135,9 +154,21 @@ public class TelaRelatorioVacinas extends JFrame {
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnPagProxima, "cell 6 10");
 		
+		//evento para passar a próxima página
+		btnPagProxima.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				paginaAtual++;
+				gerarRelatorio();
+			}
+		});
+		
 		JButton btnVoltar = new JButton("Voltar");
 		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnVoltar, "cell 4 11,alignx center");
+	}
+
+	protected void gerarRelatorio() {
+		// TODO Auto-generated method stub
 	}
 
 }

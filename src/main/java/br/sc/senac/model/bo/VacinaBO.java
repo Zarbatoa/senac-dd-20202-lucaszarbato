@@ -5,6 +5,9 @@ import java.util.List;
 
 import br.sc.senac.model.dao.VacinaDAO;
 import br.sc.senac.model.exception.DataInicioPesquisaInvalidaException;
+import br.sc.senac.model.seletor.AvaliacaoVacinaSeletor;
+import br.sc.senac.model.seletor.VacinaSeletor;
+import br.sc.senac.model.vo.Nota;
 import br.sc.senac.model.vo.Vacina;
 
 public class VacinaBO {
@@ -23,6 +26,10 @@ public class VacinaBO {
 
 	public List<Vacina> pegarListaDeVacinas() {
 		return vacinaDAO.pesquisarTodos();
+	}
+	
+	public List<Vacina> listarVacinas(VacinaSeletor seletor) {
+		return vacinaDAO.listarComSeletor(seletor);
 	}
 
 }

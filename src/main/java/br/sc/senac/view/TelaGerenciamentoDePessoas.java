@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -22,12 +24,16 @@ import javax.swing.text.MaskFormatter;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
+import br.sc.senac.controller.ControllerPessoa;
+import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaGerenciamentoDePessoas extends JFrame {
+	
+	private static final int TAMANHO_PAGINA = 0; // relacionado a paginação
 
 	private JPanel contentPane;
 	private JTextField tfNome;
@@ -38,6 +44,11 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	private JTable tableResultados;
 	private JTextField tfSobrenome;
 	private JComboBox cbCategoria;
+	
+	private JLabel lblPagAtual;
+	
+	//variável relacionada a paginação
+	private int paginaAtual = 1;
 	
 	/**
 	 * Launch the application.
@@ -158,7 +169,6 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				consultarPessoas();
 			}
-
 		});
 		
 		JButton btnEditar = new JButton("Editar");
@@ -190,7 +200,17 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(buttonPagAnterior, "cell 2 13");
 		
-		JLabel lblPagAtual = new JLabel("                        1");
+		//evento de passar pág anterior
+		buttonPagAnterior.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (paginaAtual > 1) {
+					paginaAtual--;
+				}
+				consultarPessoas();
+			}
+		});
+		
+		lblPagAtual = new JLabel("                        1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(lblPagAtual, "cell 4 13");
 		
@@ -198,6 +218,14 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnPagProxima, "cell 6 13");
 		
+		//evento para passar a próxima página
+		btnPagProxima.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				paginaAtual++;
+				consultarPessoas();
+			}
+		});
+				
 		JButton btnVoltar = new JButton("Voltar");
 		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnVoltar, "cell 4 14,alignx right,aligny top");
@@ -205,8 +233,58 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 
 	// método relacionado ao Botão Filtrar
 	protected void consultarPessoas() {
-		// TODO Auto-generated method stub
 		
+		lblPagAtual.setText(paginaAtual + "");
+
+		ControllerPessoa controlador = new ControllerPessoa();
+		PessoaSeletor seletor = new PessoaSeletor();
+
+		seletor.setPagina(paginaAtual);
+		seletor.setLimite(TAMANHO_PAGINA);
+		
+		// Preenche os campos de filtro da tela no seletor
+		seletor.setNome(tfNome.getText());
+		seletor.setSobrenome(tfSobrenome.getText());
+		seletor.setSexo(cbSexo.getSelectedItem().toString().charAt(0)); 
+		seletor.setCpf(ftfCpf.getText());
+		seletor.setInstituicao(tfInstituicao.getText()); // falta arrumar lá no DAO - não sei lá os comandos --> inclusive já apontou erro no Pessoa DAO.
+		
+		seletor.setTipo(cbCategoria.getSelectedObjects()); //  não sei como faz quando pega de outro objeto
+				
+		seletor.setDataNascimento(dpDataInicioPesquisa.getDate());
+		
+		// aqui é feita a consulta das pessoas e atualizada a tabela
+		List<Pessoa> pessoas = controlador.listarPessoas(seletor);
+		atualizarTabelaPessoas(pessoas);
+
+	}
+
+	protected void atualizarTabelaPessoas(List<Pessoa> pessoas) {
+		// atualiza o atributo pessoas consultadas
+		List<Pessoa> pessoasConsultadas = pessoas;
+		
+		this.limparTabela();
+		
+		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
+		for (Pessoa pessoa : pessoas) {
+			// Crio uma nova linha na tabela
+			// Preencher a linha com os atributos do produto
+			// na ordem do cabeçalho da tabela
+			String dataFormatada = pessoa.getDataNascimento().format(formatter);
+
+			String[] novaLinha = new String[] { pessoa.getNome(),  pessoa.getSobrenome(), pessoa.getSexo() + "", 
+					pessoa.getCpf() , dataFormatada, pessoa.getTipo().getDescricao(), pessoa.getInstituicao().getNome() };
+			modelo.addRow(novaLinha);
+		}
+		
+	}
+
+	private void limparTabela() {
+		tableResultados.setModel(new DefaultTableModel(new String[][] { { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituicao" }, },
+				new String[] { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituicao"}));
 	}
 
 }

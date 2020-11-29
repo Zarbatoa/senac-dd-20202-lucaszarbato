@@ -7,6 +7,8 @@ import br.sc.senac.model.bo.VacinaBO;
 import br.sc.senac.model.exception.DataInicioPesquisaInvalidaException;
 import br.sc.senac.model.exception.NomeInvalidoException;
 import br.sc.senac.model.exception.PesquisadorInvalidoException;
+import br.sc.senac.model.seletor.PessoaSeletor;
+import br.sc.senac.model.seletor.VacinaSeletor;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
 
@@ -66,6 +68,10 @@ public class ControllerVacina {
 
 	public List<Vacina> coletarTodasVacinas() {
 		return vacinaBO.pegarListaDeVacinas();
+	}
+	
+	public List<Vacina> listarVacinas(VacinaSeletor seletor) {
+		return vacinaBO.listarVacinas(seletor);
 	}
 
 }

@@ -23,6 +23,8 @@ import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaGerenciamentoDeAvaliacaoVacinas extends JFrame {
+	
+	private static final int TAMANHO_PAGINA = 0; // relacionado a paginação
 
 	private JPanel contentPane;
 	private JTextField tfNome;
