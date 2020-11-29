@@ -1,7 +1,6 @@
 package br.sc.senac.model.bo;
 
 import java.util.List;
-import java.util.ArrayList;
 import br.sc.senac.model.Utils;
 import br.sc.senac.model.dao.InstituicaoDAO;
 import br.sc.senac.model.dao.PessoaDAO;
@@ -57,7 +56,7 @@ public class PessoaBO {
 	}
 
 	
-	public ArrayList<Pessoa> listarPessoas(PessoaSeletor seletor) {
+	public List<Pessoa> listarPessoas(PessoaSeletor seletor) {
 		return this.pessoaDAO.listarComSeletor(seletor);
 	}
 
