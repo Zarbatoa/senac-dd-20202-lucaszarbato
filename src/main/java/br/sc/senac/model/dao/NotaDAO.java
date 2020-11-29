@@ -218,13 +218,10 @@ public class NotaDAO implements BaseDAO<Nota>{
 				if (!primeiro) {
 					sql += " AND ";
 				}
-				sql += "n.nota = '" + seletor.getNota() + "'";
+				sql += "n.valor = '" + seletor.getNota() + "'";
 				primeiro = false;
 			}
-			
 			return sql;
 		}
-	
-	
 	
 }

@@ -1,9 +1,13 @@
 package br.sc.senac.model.bo;
 
+import java.awt.List;
+import java.util.ArrayList;
+
 import br.sc.senac.model.Utils;
 import br.sc.senac.model.dao.InstituicaoDAO;
 import br.sc.senac.model.dao.PessoaDAO;
 import br.sc.senac.model.exception.CpfJaCadastradoException;
+import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 
@@ -48,5 +52,9 @@ public class PessoaBO {
 		
 		return excluiu;
 	}
-
+	
+	public ArrayList<Pessoa> listarPessoas(PessoaSeletor seletor) {
+		return this.pessoaDAO.listarComSeletor(seletor);
+	}
+	
 }
