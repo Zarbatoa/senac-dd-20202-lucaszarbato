@@ -248,8 +248,10 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		seletor.setSobrenome(tfSobrenome.getText());
 		seletor.setSexo(cbSexo.getSelectedItem().toString().charAt(0)); 
 		seletor.setCpf(ftfCpf.getText());
-		seletor.setInstituicao(tfInstituicao.getText()); //  não sei como faz quando pega de outro objeto
-		seletor.setTipo(cbCategoria.getSelectedItem().toString()); //  não sei como faz quando pega de outro objeto
+		seletor.setInstituicao(tfInstituicao.getText()); // falta arrumar lá no DAO - não sei lá os comandos --> inclusive já apontou erro no Pessoa DAO.
+		
+		seletor.setTipo(cbCategoria.getSelectedObjects()); //  não sei como faz quando pega de outro objeto
+				
 		seletor.setDataNascimento(dpDataInicioPesquisa.getDate());
 		
 		// aqui é feita a consulta das pessoas e atualizada a tabela

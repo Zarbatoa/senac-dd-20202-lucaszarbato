@@ -13,7 +13,7 @@ public class PessoaSeletor {
 	private char sexo;
 	private String cpf;
 	private LocalDate dataNascimento;
-	private Instituicao instituicao; 
+	private String instituicao; 
 	private TipoPessoa tipo; 
 	
 	//Atributos para possível paginação dos resultados (intervalo)
@@ -39,7 +39,7 @@ public class PessoaSeletor {
 		if ((this.cpf != null) && (this.cpf.trim().length() > 0)) {
 			return true;
 		}
-		if ((this.instituicao.getNome() != null) && (this.instituicao.getNome().trim().length()>0)) {
+		if ((this.instituicao != null) && (this.instituicao.trim().length()>0)) {
 			return true;
 		}  
 		if ((this.tipo.getDescricao() != null) && (this.tipo.getDescricao().trim().length()>0)) {
@@ -112,11 +112,11 @@ public class PessoaSeletor {
 		this.dataNascimento = dataNascimento;
 	}
 
-	public Instituicao getInstituicao() {
+	public String getInstituicao() {
 		return instituicao;
 	}
 
-	public void setInstituicao(Instituicao instituicao) {
+	public void setInstituicao(String instituicao) {
 		this.instituicao = instituicao;
 	}
 
