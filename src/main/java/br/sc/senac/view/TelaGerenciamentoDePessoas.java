@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -25,6 +26,7 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import br.sc.senac.controller.ControllerPessoa;
+import br.sc.senac.model.Utils;
 import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
@@ -32,8 +34,11 @@ import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaGerenciamentoDePessoas extends JFrame {
+
+	public static final String OPCAO_SEXO_TODOS = "Todos";
+	public static final TipoPessoa OPCAO_CATEGORIA_TODAS = new TipoPessoa(-1,"Todas");
 	
-	private static final int TAMANHO_PAGINA = 0; // relacionado a paginação
+	private static final int TAMANHO_PAGINA = 5; // relacionado a paginação
 
 	private JPanel contentPane;
 	private JTextField tfNome;
@@ -92,11 +97,11 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		contentPane.add(tfNome, "cell 1 2 3 1,growx");
 		tfNome.setColumns(10);
 		
-		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
+		String[] opcoesSexo = {OPCAO_SEXO_TODOS, Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
 		
 		MaskFormatter mascaraCpf = new MaskFormatter("###.###.###-##");
 		
-		TipoPessoa[] opcoesTipoPessoa = {TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
+		TipoPessoa[] opcoesTipoPessoa = {OPCAO_CATEGORIA_TODAS ,TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
 		
 		JLabel lblSobrenome = new JLabel("Sobrenome:");
 		lblSobrenome.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -137,6 +142,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 				if(opcaoSelecionada == TipoPessoa.TIPO_PESQUISADOR) {
 					tfInstituicao.setEnabled(true);
 				} else {
+					tfInstituicao.setText("");
 					tfInstituicao.setEnabled(false);
 				}
 			}
@@ -159,13 +165,14 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		tfInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(tfInstituicao, "cell 1 8 3 1,growx");
 		tfInstituicao.setColumns(10);
+		tfInstituicao.setEnabled(false);
 		
-		JButton btnFiltrar = new JButton("Filtrar");
-		btnFiltrar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnFiltrar, "cell 2 10");
+		JButton btnConsultar = new JButton("Consultar");
+		btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnConsultar, "cell 2 10");
 		
 		// criei esse método para já adicionar o filtro seletor nessa tela
-		btnFiltrar.addActionListener(new ActionListener(){
+		btnConsultar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				consultarPessoas();
 			}
@@ -191,21 +198,10 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			}
 		});
 		
+		//DefaultTableModel tableModel = new 
 		tableResultados = new JTable();
 		tableResultados.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		tableResultados.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Nome", "Sobrenome", "Sexo", "CPF ", "Dt.  Nascimento", "Categoria", "Institui\u00E7\u00E3o"},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column", "New column", "New column", "New column"
-			}
-		));
+		definirModeloPadraoTabela();
 		contentPane.add(tableResultados, "cell 0 12 9 1,grow");
 		
 		JButton buttonPagAnterior = new JButton("< Anterior");
@@ -268,7 +264,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		seletor.setNome(tfNome.getText());
 		seletor.setSobrenome(tfSobrenome.getText());
 		seletor.setSexo(cbSexo.getSelectedItem().toString().charAt(0)); 
-		seletor.setCpf(ftfCpf.getText());
+		seletor.setCpf(Utils.desformatarCpf(ftfCpf.getText()));
 		seletor.setNomeInstituicao(tfInstituicao.getText()); 
 		
 		seletor.setTipo((TipoPessoa)cbCategoria.getSelectedItem()); 
@@ -277,36 +273,56 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		// aqui é feita a consulta das pessoas e atualizada a tabela
 		List<Pessoa> pessoas = controlador.listarPessoas(seletor);
+
 		atualizarTabelaPessoas(pessoas);
 
 	}
 
 	protected void atualizarTabelaPessoas(List<Pessoa> pessoas) {
-		// atualiza o atributo pessoas consultadas
-		List<Pessoa> pessoasConsultadas = pessoas;
-		
-		this.limparTabela();
+		this.definirModeloPadraoTabela();
 		
 		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
-		for (Pessoa pessoa : pessoas) {
-			// Crio uma nova linha na tabela
-			// Preencher a linha com os atributos do produto
-			// na ordem do cabeçalho da tabela
+		for (int i = 0; i < pessoas.size(); i++) {
+			Pessoa pessoa = pessoas.get(i);
 			String dataFormatada = pessoa.getDataNascimento().format(formatter);
+			String nomeInstituicao = pessoa.getInstituicao() == null ? "-" : pessoa.getInstituicao().toString();
 
 			String[] novaLinha = new String[] { pessoa.getNome(),  pessoa.getSobrenome(), pessoa.getSexo() + "", 
-					pessoa.getCpf() , dataFormatada, pessoa.getTipo().getDescricao(), pessoa.getInstituicao().getNome() };
-			modelo.addRow(novaLinha);
+					Utils.formatarCpf(pessoa.getCpf()) , dataFormatada, pessoa.getTipo().toString(), nomeInstituicao };
+			modelo.setValueAt(novaLinha[0], i+1, 0);//insertRow(i+1, novaLinha);
+			modelo.setValueAt(novaLinha[1], i+1, 1);
+			modelo.setValueAt(novaLinha[2], i+1, 2);
+			modelo.setValueAt(novaLinha[3], i+1, 3);
+			modelo.setValueAt(novaLinha[4], i+1, 4);
+			modelo.setValueAt(novaLinha[5], i+1, 5);
+			modelo.setValueAt(novaLinha[6], i+1, 6);
 		}
 		
 	}
 
-	private void limparTabela() {
-		tableResultados.setModel(new DefaultTableModel(new String[][] { { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituição" }, },
-				new String[] { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituição"}));
+	private void definirModeloPadraoTabela() {
+		tableResultados.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"Nome", "Sobrenome", "Sexo", "CPF ", "Dt.  Nascimento", "Categoria", "Institui\u00E7\u00E3o"},
+					{null, null, null, null, null, null, null},
+					{null, null, null, null, null, null, null},
+					{null, null, null, null, null, null, null},
+					{null, null, null, null, null, null, null},
+					{null, null, null, null, null, null, null},
+				},
+				new String[] {
+					"Nome", "Sobrenome", "Sexo", "CPF", "DataNascimento", "Categoria", "Instituicao"
+				}
+			) {
+				@Override
+			    public boolean isCellEditable(int row, int column) {
+			       // nenhuma celula eh editavel
+			       return false;
+			    }
+			});
 	}
 
 }

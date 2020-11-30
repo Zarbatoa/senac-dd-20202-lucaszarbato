@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.sc.senac.model.seletor.PessoaSeletor;
+import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 
 public class PessoaDAO implements BaseDAO<Pessoa>{
@@ -233,7 +234,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 	
 	// a partir daqui estão os métodos dos filtros
 	public ArrayList<Pessoa> listarComSeletor(PessoaSeletor seletor) {
-		String sql = " SELECT * FROM PESSOA p";
+		String sql = " SELECT * FROM PESSOA p ";
 
 		if (seletor.temFiltro()) {
 			sql = criarFiltros(seletor, sql);
@@ -245,7 +246,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		Connection conexao = Banco.getConnection();
 		PreparedStatement prepStmt = Banco.getPreparedStatement(conexao, sql);
 		ArrayList<Pessoa> pessoas = new ArrayList<Pessoa>();
-
+System.out.println("PessoaDAO, metodo listarComSeletor(PessoaSeletor)-> " + sql);
 		try {
 			ResultSet result = prepStmt.executeQuery();
 
@@ -265,7 +266,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		sql += " WHERE ";
 		boolean primeiro = true;
 
-		if ((seletor.getNome() != null) && (seletor.getNome().trim().length() > 0)) {
+		if (seletor.temFiltroDeNome()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}
@@ -273,15 +274,15 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 			primeiro = false;
 		}
 
-		if ((seletor.getSobrenome() != null) && (seletor.getSobrenome().trim().length() > 0)) {
+		if (seletor.temFiltroDeSobrenome()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}
-			sql += "p.sobrenome LIKE '%" + seletor.getSobrenome() + "%";
+			sql += "p.sobrenome LIKE '%" + seletor.getSobrenome() + "%'";
 			primeiro = false;
 		}
 		
-		if ((seletor.getSexo() != 0) && (seletor.getSexo() > 0)) {
+		if (seletor.temFiltroDeSexo()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}
@@ -289,7 +290,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 			primeiro = false;
 		}
 		
-		if ((seletor.getCpf() != null) && (seletor.getCpf().trim().length() > 0)) {
+		if (seletor.temFiltroDeCPF()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}
@@ -297,24 +298,29 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 			primeiro = false;
 		}
 		
-		// dúvidas de como fazer isso no banco de dados...ou senão tiramos por instituição e tipo - não sei se ainda está correto
-		if ((seletor.getNomeInstituicao() != null) && (seletor.getNomeInstituicao().trim().length() > 0)) {
+		//TODO consertar o sql para pegar por nome de instituicao
+		if (seletor.temFiltroDeNomeInstituicao()) {
 			if (!primeiro) {
 				sql += " AND ";
+			}
+			InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
+			Instituicao instituicaoPesquisada = instituicaoDAO.pesquisarPeloNome(seletor.getNomeInstituicao());
+			if(instituicaoPesquisada != null) {
+				seletor.setNomeInstituicao(instituicaoPesquisada.getId() + "");
 			}
 			sql += "p.idinstituicao = '" + seletor.getNomeInstituicao() + "'"; // dúvida pois o nome da instituição veio do DAO INSTITUIÇÃO
 			primeiro = false;
 		}
 		
-		if ((seletor.getTipo().getDescricao() != null) && (seletor.getTipo().getDescricao().trim().length() > 0)) {
+		if (seletor.temFiltroDeTipo()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}
-			sql += "p.idtipo = '" + seletor.getTipo() + "'"; // dúvida pois o nome da instituição veio do DAO TIPO
+			sql += "p.idtipo = '" + seletor.getTipo().getId() + "'"; // dúvida pois o nome da instituição veio do DAO TIPO
 			primeiro = false;
 		}
 		
-		if (seletor.getDataNascimento() != null) {
+		if (seletor.temFiltroDeDataNascimento()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}

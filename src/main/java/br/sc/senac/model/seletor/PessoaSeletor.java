@@ -9,7 +9,7 @@ public class PessoaSeletor {
 	//Atributos que servirão de filtros
 	private String nome;
 	private String sobrenome;
-	private char sexo;
+	private Character sexo;
 	private String cpf;
 	private LocalDate dataNascimento;
 	private String nomeInstituicao; 
@@ -25,50 +25,6 @@ public class PessoaSeletor {
 		this.pagina = -1;
 	}
 	
-	public boolean temFiltro() {
-		if ((this.nome != null) && (this.nome.trim().length() > 0)) {
-			return true;
-		}
-		if ((this.sobrenome != null) && (this.sobrenome.trim().length() > 0)) {
-			return true;
-		}
-		if ((this.sexo != 0) && (this.sexo > 0)) {
-			return true; // não sei se está correto
-		}
-		if ((this.cpf != null) && (this.cpf.trim().length() > 0)) {
-			return true;
-		}
-		if ((this.nomeInstituicao != null) && (this.nomeInstituicao.trim().length()>0)) {
-			return true;
-		}  
-		if ((this.tipo.getDescricao() != null) && (this.tipo.getDescricao().trim().length()>0)) {
-			return true; 
-		}  
-		if (this.dataNascimento != null) {
-			return true;
-		}
-
-		return false;
-	}
-		
-	/**
-	 * Verifica se os campos de paginacao estao preenchidos
-	 *
-	 * @return verdadeiro se os campos limite e pagina estao preenchidos
-	 */
-	public boolean temPaginacao() {
-		return ((this.limite > 0) && (this.pagina > -1));
-	}
-
-	/**
-	 * Calcula deslocamento (offset) a partir da pagina e do limite
-	 *
-	 * @return offset
-	 */
-	public int getOffset() {
-		return (this.limite * (this.pagina - 1));
-	}
-
 	//getters e setters
 	
 	public String getNome() {
@@ -87,11 +43,11 @@ public class PessoaSeletor {
 		this.sobrenome = sobrenome;
 	}
 
-	public char getSexo() {
+	public Character getSexo() {
 		return sexo;
 	}
 
-	public void setSexo(char sexo) {
+	public void setSexo(Character sexo) {
 		this.sexo = sexo;
 	}
 
@@ -143,4 +99,79 @@ public class PessoaSeletor {
 		this.pagina = pagina;
 	}
 	
+	
+
+	public boolean temFiltro() {
+		if (this.temFiltroDeNome()) {
+			return true;
+		}
+		if (this.temFiltroDeSobrenome()) {
+			return true;
+		}
+		if (this.temFiltroDeSexo()) {
+			return true;
+		}
+		if (this.temFiltroDeCPF()) {
+			return true;
+		}
+		if (this.temFiltroDeNomeInstituicao()) {
+			return true;
+		}  
+		if (this.temFiltroDeTipo()) {
+			return true; 
+		}  
+		if (this.temFiltroDeDataNascimento()) {
+			return true;
+		}
+
+		return false;
+	}
+		
+	public boolean temFiltroDeDataNascimento() {
+		return this.dataNascimento != null;
+	}
+
+	public boolean temFiltroDeTipo() {
+		return (this.tipo != null);
+	}
+
+	public boolean temFiltroDeNomeInstituicao() {
+		return (this.nomeInstituicao != null) && (this.nomeInstituicao.trim().length()>0);
+	}
+
+	public boolean temFiltroDeCPF() {
+		return (this.cpf != null) && (this.cpf.trim().length() > 0);
+	}
+
+	public boolean temFiltroDeSexo() {
+		// (this.sexo != 0) && (this.sexo > 0);
+		return this.sexo != null;
+	}
+
+	public boolean temFiltroDeSobrenome() {
+		return (this.sobrenome != null) && (this.sobrenome.trim().length() > 0);
+	}
+
+	public boolean temFiltroDeNome() {
+		return (this.nome != null) && (this.nome.trim().length() > 0);
+	}
+
+	/**
+	 * Verifica se os campos de paginacao estao preenchidos
+	 *
+	 * @return verdadeiro se os campos limite e pagina estao preenchidos
+	 */
+	public boolean temPaginacao() {
+		return ((this.limite > 0) && (this.pagina > -1));
+	}
+
+	/**
+	 * Calcula deslocamento (offset) a partir da pagina e do limite
+	 *
+	 * @return offset
+	 */
+	public int getOffset() {
+		return (this.limite * (this.pagina - 1));
+	}
+
 }

@@ -14,6 +14,7 @@ import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
+import br.sc.senac.view.TelaGerenciamentoDePessoas;
 
 
 public class ControllerPessoa {
@@ -99,6 +100,24 @@ public class ControllerPessoa {
 	}
 	
 	public List<Pessoa> listarPessoas(PessoaSeletor seletor) {
+		//tratar sexo, cpf e tipo
+		if (seletor.getSexo() != null) {
+			if(seletor.getSexo() != Pessoa.SEXO_MASCULINO.charAt(0)
+					  && seletor.getSexo() != Pessoa.SEXO_FEMININO.charAt(0)) {
+				seletor.setSexo(null);
+			}
+		}
+		
+		try {
+			validarCpf(seletor.getCpf());
+		} catch (CpfInvalidoException e) {
+			seletor.setCpf(null);
+		}
+		
+		if(seletor.getTipo() == TelaGerenciamentoDePessoas.OPCAO_CATEGORIA_TODAS) {
+			seletor.setTipo(null);
+		}
+		
 		return this.pessoaBO.listarPessoas(seletor);
 	}
 	
