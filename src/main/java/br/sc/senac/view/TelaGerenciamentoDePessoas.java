@@ -52,10 +52,23 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	private JComboBox cbCategoria;
 	
 	private JLabel lblPagAtual;
+	private JButton btnExcluir;
+	private JButton btnConsultar;
+	private JButton btnPagAnterior;
+	private JButton btnPagProxima;
+	private JButton btnVoltar;
+	private JButton btnPegarRegistro;
+	private JButton btnEditar;
+	private JButton btnLimpar;
+	
+	private final String[] opcoesSexoGeral = {OPCAO_SEXO_TODOS, Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO};
+	private final TipoPessoa[] opcoesTipoPessoaGeral = {OPCAO_CATEGORIA_TODAS ,TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
+	private final String[] opcoesSexoEdicao = {OPCAO_SEXO_TODOS, Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO};
+	private final TipoPessoa[] opcoesTipoPessoaEdicao = {OPCAO_CATEGORIA_TODAS ,TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
 	
 	private PessoaSeletor ultimoSeletorUsado;
-	//variável relacionada a paginação
 	private int paginaAtual = 1;
+	
 	
 	/**
 	 * Launch the application.
@@ -81,7 +94,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		ultimoSeletorUsado = null;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 654, 452);
+		setBounds(100, 100, 700, 490);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -100,11 +113,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		contentPane.add(tfNome, "cell 1 2 3 1,growx");
 		tfNome.setColumns(10);
 		
-		String[] opcoesSexo = {OPCAO_SEXO_TODOS, Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
-		
 		MaskFormatter mascaraCpf = new MaskFormatter("###.###.###-##");
-		
-		TipoPessoa[] opcoesTipoPessoa = {OPCAO_CATEGORIA_TODAS ,TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
 		
 		JLabel lblSobrenome = new JLabel("Sobrenome:");
 		lblSobrenome.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -121,13 +130,11 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		ftfCpf = new JFormattedTextField(mascaraCpf);
 		ftfCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(ftfCpf, "cell 1 4 3 1,growx");
-		//TODO pensar sobre um botão cancelar ou voltar --> acabei de acrescentar o botão de Voltar!
-		final JFrame janelaAtual = this;
 		
 		JLabel lblSexo = new JLabel("Sexo:");
 		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblSexo, "cell 5 4,alignx trailing");
-		cbSexo = new JComboBox(opcoesSexo);
+		cbSexo = new JComboBox(opcoesSexoGeral);
 		cbSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbSexo, "cell 6 4 2 1,growx");
 		
@@ -137,7 +144,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		cbCategoria = new JComboBox();
 		cbCategoria.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		cbCategoria.setModel(new DefaultComboBoxModel(opcoesTipoPessoa));
+		cbCategoria.setModel(new DefaultComboBoxModel(opcoesTipoPessoaGeral));
 		cbCategoria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TipoPessoa opcaoSelecionada = (TipoPessoa)cbCategoria.getSelectedItem();
@@ -170,30 +177,9 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		tfInstituicao.setColumns(10);
 		tfInstituicao.setEnabled(false);
 		
-		JButton btnConsultar = new JButton("Consultar");
-		btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnConsultar, "cell 2 10");
-		
-		// criei esse método para já adicionar o filtro seletor nessa tela
-		btnConsultar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
-				consultarPessoas();
-			}
-		});
-		
-		JButton btnEditar = new JButton("Editar"); // preencho nos campos? se sim precisa de um botão de Salvar.
-		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnEditar, "cell 4 10,alignx right");
-		
-		btnEditar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
-				editarPessoas();
-			}
-		});
-		
-		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir = new JButton("Excluir");
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnExcluir, "cell 6 10");
+		contentPane.add(btnExcluir, "cell 2 10,alignx center");
 		
 		btnExcluir.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
@@ -202,18 +188,26 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			}
 		});
 		
-		//DefaultTableModel tableModel = new 
 		tableResultados = new JTable();
 		tableResultados.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		definirModeloPadraoTabela();
+		
+		btnConsultar = new JButton("Consultar");
+		btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnConsultar, "cell 6 10,alignx center");
+		
+		btnConsultar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				consultarPessoas();
+			}
+		});
 		contentPane.add(tableResultados, "cell 0 12 9 1,grow");
 		
-		JButton buttonPagAnterior = new JButton("< Anterior");
-		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(buttonPagAnterior, "cell 2 13");
+		btnPagAnterior = new JButton("< Anterior");
+		btnPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnPagAnterior, "cell 2 13,alignx center");
 		
-		//evento de passar pág anterior
-		buttonPagAnterior.addActionListener(new ActionListener() {
+		btnPagAnterior.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (paginaAtual > 1) {
 					paginaAtual--;
@@ -224,25 +218,179 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		lblPagAtual = new JLabel(paginaAtual+"");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 4 13,alignx center");
+		contentPane.add(lblPagAtual, "cell 4 13 2 1,alignx center");
 		
-		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
+		btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagProxima, "cell 6 13");
+		contentPane.add(btnPagProxima, "cell 6 13,alignx center");
 		
-		//evento para passar a próxima página
 		btnPagProxima.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				paginaAtual++;
 				consultarPessoas();
 			}
 		});
-				
-		JButton btnVoltar = new JButton("Voltar");
+		
+		
+		btnEditar = new JButton("Editar");
+		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnEditar.setEnabled(false);
+		btnEditar.setVisible(false);
+		btnEditar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				tentarEditar();
+			}
+		});
+		contentPane.add(btnEditar, "cell 6 8,alignx center");
+		
+		
+		btnPegarRegistro = new JButton("<html>Pegar Registro<br />para Edi\u00E7\u00E3o</html>");
+		btnPegarRegistro.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnPegarRegistro.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				coletarRegistroParaEdicao();
+			}
+		});
+		contentPane.add(btnPegarRegistro, "cell 4 14 2 1,alignx center");
+		
+		btnVoltar = new JButton("Voltar");
+		btnVoltar.setEnabled(false);
+		btnVoltar.setVisible(false);
+		btnVoltar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				desativarBotoesDeEdicao();
+			}
+		});
 		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnVoltar, "cell 4 14,alignx right,aligny top");
+		contentPane.add(btnVoltar, "cell 4 8,alignx center,aligny top");
+		
+		btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetarTodosOsCampos();
+			}
+		});
+		btnLimpar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnLimpar, "cell 5 8,alignx center");
+	}
+	
+	
+	protected void tentarEditar() {
+		//TODO  completar logica editar	
+		JOptionPane.showMessageDialog(null, "teste");
+		abilitarTabelaBotoesConsultaExclusao();
+		redefinirComboboxsParaGeral();
+		desativarBotoesDeEdicao();
+	}
+	
+	protected void coletarRegistroParaEdicao() {
+		String mensagem = "";
+		// Pegar alguma linha da tabela
+		if(tableResultados.getSelectedRowCount() == 0) {
+			mensagem = "Por favor selecione uma linha para poder continuar para a tela de edição.";
+			// Pegar uma unica linha da tabela
+		} else if(tableResultados.getSelectedRowCount() > 1){
+			mensagem = "Por favor selecione uma  única linha para poder continuar para a tela de edição.";
+		} else {
+			// Não permitir pegar a linha com os nomes dos campos
+			if(tableResultados.getSelectedRow() == 0) {
+				mensagem = "A linha com as descrições dos campos não pode ser editada. Escolha um registro válido.";
+			} else {
+				int linhaSelecionada = tableResultados.getSelectedRow();
+				Integer idSelecionado = (Integer) tableResultados.getModel().getValueAt(linhaSelecionada, 0);
+				// Essa linha precisa estar preenchida (precisa ter um id?)
+				if(idSelecionado == null) {
+					mensagem = "A linha não pode estar vazia! Para inserir uma nova pessoa, vá para a tela de cadastro de pessoas.";
+				} else {
+					// se tiver uma unica linha e ser valida:
+					//   desabilitar a tabela e os botoes (tirando o limpar)
+					desabilitarTabelaBotoesConsultaExclusao();
+					//TODO tentar marcar a linha a ser editada em negrito
+					//   redefinir temporariamente os comboboxs
+					redefinirComboboxsParaEdicao();
+					//   preencher os campos de input com os dados da linha
+					preencherInputsComALinhaDeEdicao(linhaSelecionada);
+					//   ativar o botao editar e voltar
+					ativarBotoesDeEdicao();
+				}
+				
+			}
+		}
+		JOptionPane.showMessageDialog(null, mensagem);
+	}
+	
+	private void preencherInputsComALinhaDeEdicao(int linhaSelecionada) {
+		//TODO testar atualizacao de comboboxs
+		tfNome.setText((String) tableResultados.getModel().getValueAt(linhaSelecionada, 1));
+		tfSobrenome.setText((String) tableResultados.getModel().getValueAt(linhaSelecionada, 2));
+		if(((Character) tableResultados.getModel().getValueAt(linhaSelecionada, 3)) == Pessoa.SEXO_MASCULINO.charAt(0)) {
+			cbSexo.setSelectedIndex(0);
+		} else {
+			cbSexo.setSelectedIndex(1);
+		}
+		ftfCpf.setText(Utils.desformatarCpf((String) tableResultados.getModel().getValueAt(linhaSelecionada, 4)));
+		dpDataInicioPesquisa.setDate( Utils.gerarLocalDateDeString((String) tableResultados.getModel().getValueAt(linhaSelecionada, 5)));
+		cbCategoria.setSelectedItem(tableResultados.getModel().getValueAt(linhaSelecionada, 6));
+		tfInstituicao.setText((String) tableResultados.getModel().getValueAt(linhaSelecionada, 7));
+		
 	}
 
+	private void redefinirComboboxsParaGeral() {
+		cbSexo.setModel(new DefaultComboBoxModel(opcoesSexoGeral));
+		cbCategoria.setModel(new DefaultComboBoxModel(opcoesTipoPessoaGeral));
+	}
+	
+	private void redefinirComboboxsParaEdicao() {
+		//TODO testar este metodo
+		cbSexo.setModel(new DefaultComboBoxModel(opcoesSexoEdicao));
+		cbCategoria.setModel(new DefaultComboBoxModel(opcoesTipoPessoaEdicao));
+	}
+
+	private void abilitarTabelaBotoesConsultaExclusao() {
+		tableResultados.setEnabled(true);
+		btnExcluir.setEnabled(true);
+		btnConsultar.setEnabled(true);
+		tableResultados.setEnabled(true);
+		btnPagAnterior.setEnabled(true);
+		btnPegarRegistro.setEnabled(true);
+		btnPagProxima.setEnabled(true);
+	}
+	
+	private void desabilitarTabelaBotoesConsultaExclusao() {
+		tableResultados.setEnabled(false);
+		btnExcluir.setEnabled(false);
+		btnConsultar.setEnabled(false);
+		tableResultados.setEnabled(false);
+		btnPagAnterior.setEnabled(false);
+		btnPegarRegistro.setEnabled(false);
+		btnPagProxima.setEnabled(false);
+	}
+
+	protected void ativarBotoesDeEdicao() {
+		btnEditar.setVisible(true);
+		btnEditar.setEnabled(true);
+		btnVoltar.setVisible(true);
+		btnVoltar.setEnabled(true);
+	}
+	
+	protected void desativarBotoesDeEdicao() {
+		btnEditar.setVisible(false);
+		btnEditar.setEnabled(false);
+		btnVoltar.setVisible(false);
+		btnVoltar.setEnabled(false);
+	}
+
+	protected void resetarTodosOsCampos() {
+		tfNome.setText("");
+		tfSobrenome.setText("");
+		ftfCpf.setText("");
+		cbSexo.setSelectedIndex(0);
+		cbCategoria.setSelectedIndex(0);
+		dpDataInicioPesquisa.clear();
+		tfInstituicao.setText("");
+		definirModeloPadraoTabela();
+	}
+	
 	protected void atualizarTabelaComUltimoSeletor() {
 		if(ultimoSeletorUsado != null) {
 			ControllerPessoa controlador = new ControllerPessoa();
@@ -271,10 +419,6 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			}
 		}
 		JOptionPane.showMessageDialog(null, mensagem);
-	}
-
-	protected void editarPessoas() {
-		//TODO
 	}
 
 	protected void consultarPessoas() {

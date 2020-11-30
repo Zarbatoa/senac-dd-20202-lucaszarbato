@@ -130,9 +130,10 @@ public class TelaRelatorioVacinas extends JFrame {
 					String caminho = janelaArquivos.getSelectedFile().getAbsolutePath();
 
 					ControllerVacina controller = new ControllerVacina();
-					String mensagem = controller.gerarRelatorioTotalVacinaPorPesquisador(vacinas, caminhoEscolhido, tipoRelatorio); //aqui está ligado ao método gerar relatório, que equivale a uma consulta de vacina
-
-					JOptionPane.showMessageDialog(null, mensagem);
+					// Não deixar erros no código!
+//					String mensagem = controller.gerarRelatorioTotalVacinaPorPesquisador(vacinas, caminhoEscolhido, tipoRelatorio); //aqui está ligado ao método gerar relatório, que equivale a uma consulta de vacina
+//
+//					JOptionPane.showMessageDialog(null, mensagem);
 				}
 			}
 		});
