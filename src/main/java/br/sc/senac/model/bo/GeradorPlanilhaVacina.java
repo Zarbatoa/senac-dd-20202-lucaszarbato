@@ -21,6 +21,9 @@ import br.sc.senac.model.vo.Vacina;
 
 public class GeradorPlanilhaVacina {
 	
+	// essa classe GeradorPlanilhaVacina precisa também ser referenciada em VacinaBO. 
+	// isso serve para a criação de qualquer planilha relacionada a vacina
+	
 	public void gerarPlanilhaVacinaTotalPorPesquisador(List<Vacina> vacinas, String caminhoEscolhido) {
 		String[] columns = { "Nome Vacina","País de Origem", "Pesquisador Responsável", "Instituição" }; //teria que fazer um método no  VO vacina? 
 
