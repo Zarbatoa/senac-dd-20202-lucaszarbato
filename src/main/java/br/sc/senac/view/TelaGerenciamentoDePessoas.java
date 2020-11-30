@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -52,6 +53,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	
 	private JLabel lblPagAtual;
 	
+	private PessoaSeletor ultimoSeletorUsado;
 	//variável relacionada a paginação
 	private int paginaAtual = 1;
 	
@@ -76,6 +78,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	 * @throws ParseException 
 	 */
 	public TelaGerenciamentoDePessoas() throws ParseException {
+		ultimoSeletorUsado = null;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 654, 452);
@@ -195,6 +198,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		btnExcluir.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				excluirPessoas();
+				atualizarTabelaComUltimoSeletor();
 			}
 		});
 		
@@ -218,9 +222,9 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			}
 		});
 		
-		lblPagAtual = new JLabel("                        1");
+		lblPagAtual = new JLabel(paginaAtual+"");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 4 13");
+		contentPane.add(lblPagAtual, "cell 4 13,alignx center");
 		
 		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -239,17 +243,40 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		contentPane.add(btnVoltar, "cell 4 14,alignx right,aligny top");
 	}
 
+	protected void atualizarTabelaComUltimoSeletor() {
+		if(ultimoSeletorUsado != null) {
+			ControllerPessoa controlador = new ControllerPessoa();
+			List<Pessoa> pessoas = controlador.listarPessoas(ultimoSeletorUsado);
+			atualizarTabelaPessoas(pessoas);
+		}
+	}
+	
 	protected void excluirPessoas() {
-		// TODO Auto-generated method stub
-		
+		String mensagem = "";
+		if(tableResultados.getSelectedRowCount() == 0) {
+			mensagem = "Por favor selecione uma ou mais linhas para excluir os registros.";
+		} else {
+			if(tableResultados.getSelectedRow() == 0) {
+				mensagem = "A linha com as descrições dos campos não pode ser excluída. Nenhuma linha será excluída.";
+			} else {
+				ControllerPessoa controllerPessoa = new ControllerPessoa();
+				List<Integer> idsASeremExcluidos = new ArrayList<Integer>();
+				for(int row : tableResultados.getSelectedRows()) {
+					Integer idASerExcluido = (Integer) (tableResultados.getValueAt(row, 0));
+					if(idASerExcluido != null) {
+						idsASeremExcluidos.add(idASerExcluido);
+					}
+				}
+				mensagem = controllerPessoa.excluir(idsASeremExcluidos);
+			}
+		}
+		JOptionPane.showMessageDialog(null, mensagem);
 	}
 
 	protected void editarPessoas() {
-		// TODO Auto-generated method stub
-		
+		//TODO
 	}
 
-	// método relacionado ao Botão Filtrar
 	protected void consultarPessoas() {
 		
 		lblPagAtual.setText(paginaAtual + "");
@@ -273,6 +300,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		// aqui é feita a consulta das pessoas e atualizada a tabela
 		List<Pessoa> pessoas = controlador.listarPessoas(seletor);
+		ultimoSeletorUsado = seletor;
 
 		atualizarTabelaPessoas(pessoas);
 
@@ -290,15 +318,14 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			String dataFormatada = pessoa.getDataNascimento().format(formatter);
 			String nomeInstituicao = pessoa.getInstituicao() == null ? "-" : pessoa.getInstituicao().toString();
 
-			String[] novaLinha = new String[] { pessoa.getNome(),  pessoa.getSobrenome(), pessoa.getSexo() + "", 
-					Utils.formatarCpf(pessoa.getCpf()) , dataFormatada, pessoa.getTipo().toString(), nomeInstituicao };
-			modelo.setValueAt(novaLinha[0], i+1, 0);//insertRow(i+1, novaLinha);
-			modelo.setValueAt(novaLinha[1], i+1, 1);
-			modelo.setValueAt(novaLinha[2], i+1, 2);
-			modelo.setValueAt(novaLinha[3], i+1, 3);
-			modelo.setValueAt(novaLinha[4], i+1, 4);
-			modelo.setValueAt(novaLinha[5], i+1, 5);
-			modelo.setValueAt(novaLinha[6], i+1, 6);
+			modelo.setValueAt(pessoa.getId(), i+1, 0);
+			modelo.setValueAt(pessoa.getNome(), i+1, 1);
+			modelo.setValueAt(pessoa.getSobrenome(), i+1, 2);
+			modelo.setValueAt(pessoa.getSexo(), i+1, 3);
+			modelo.setValueAt(Utils.formatarCpf(pessoa.getCpf()), i+1, 4);
+			modelo.setValueAt(dataFormatada, i+1, 5);
+			modelo.setValueAt(pessoa.getTipo(), i+1, 6);
+			modelo.setValueAt(nomeInstituicao, i+1, 7);
 		}
 		
 	}
@@ -306,15 +333,15 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	private void definirModeloPadraoTabela() {
 		tableResultados.setModel(new DefaultTableModel(
 				new Object[][] {
-					{"Nome", "Sobrenome", "Sexo", "CPF ", "Dt.  Nascimento", "Categoria", "Institui\u00E7\u00E3o"},
-					{null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null},
+					{"#", "Nome", "Sobrenome", "Sexo", "CPF ", "Dt.  Nascimento", "Categoria", "Institui\u00E7\u00E3o"},
+					{null, null, null, null, null, null, null, null},
+					{null, null, null, null, null, null, null, null},
+					{null, null, null, null, null, null, null, null},
+					{null, null, null, null, null, null, null, null},
+					{null, null, null, null, null, null, null, null},
 				},
 				new String[] {
-					"Nome", "Sobrenome", "Sexo", "CPF", "DataNascimento", "Categoria", "Instituicao"
+					"#", "Nome", "Sobrenome", "Sexo", "CPF", "DataNascimento", "Categoria", "Instituicao"
 				}
 			) {
 				@Override
