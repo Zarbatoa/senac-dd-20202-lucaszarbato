@@ -14,6 +14,7 @@ import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
+import br.sc.senac.model.vo.Vacina;
 import br.sc.senac.view.TelaGerenciamentoDePessoas;
 
 
@@ -25,6 +26,9 @@ public class ControllerPessoa {
 		* indicar o tipo de pessoa. Caso seja pesquisador, informar o nome da instituição onde ele trabalha
 		* indicar se a pessoa é ou não voluntária
 	* */
+	
+	public static final String TIPO_RELATORIO_XLS = "xls"; 
+	
 	PessoaBO pessoaBO = new PessoaBO();
 	
 	public String salvar(Pessoa novaPessoa) {
@@ -132,6 +136,18 @@ public class ControllerPessoa {
 
 	public String excluir(List<Integer> idsASeremExcluidos) {
 		return pessoaBO.excluirPessoas(idsASeremExcluidos);
+	}
+	
+	public void gerarRelatorioPessoaTotalPorSexo(List<Pessoa> pessoas, String caminhoEscolhido, String tipoRelatorio) {
+		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+			pessoaBO.gerarPlanilhaPessoaTotalPorSexo(pessoas, caminhoEscolhido);
+		}
+	}
+	
+	public void gerarRelatorioPessoaTotalPorSexoPorPeriodo(List<Pessoa> pessoas, String caminhoEscolhido, String tipoRelatorio) {
+		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+			pessoaBO.gerarPlanilhaPessoaTotalPorSexoPorPeriodo(pessoas, caminhoEscolhido);
+		}
 	}
 
 }

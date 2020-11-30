@@ -13,6 +13,8 @@ import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
 
 public class ControllerNota {
+	
+	public static final String TIPO_RELATORIO_XLS = "xls"; 
 
 	private NotaBO notaBO = new NotaBO();
 	
@@ -60,6 +62,12 @@ public class ControllerNota {
 	
 	public List<Nota> listarNotas(AvaliacaoVacinaSeletor seletor) {
 		return notaBO.listarNotas(seletor);
+	}
+	
+	public void gerarRelatorioMediaNoraPorVacina(List<Nota> notas, String caminhoEscolhido, String tipoRelatorio) {
+		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+			notaBO.gerarPlanilhaMediaNotaPorVacina(notas, caminhoEscolhido);
+		}
 	}
 
 }

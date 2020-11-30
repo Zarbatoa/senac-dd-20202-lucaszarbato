@@ -82,5 +82,29 @@ public class ControllerVacina {
 			vacinaBO.gerarPlanilhaVacinaTotalPorPesquisador(vacinas, caminhoEscolhido);
 		}
 	}
+	
+	public void gerarRelatorioTotalVacinaPorPaisDeOrigem(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
+		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+			vacinaBO.gerarPlanilhaVacinaTotalPorPaisDeOrigem(vacinas, caminhoEscolhido);
+		}
+	}
+	
+	public void gerarRelatorioTotalVacinaPorPaisDeOrigemPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
+		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+			vacinaBO.gerarPlanilhaVacinaTotalPorPaisDeOrigemPorPeriodo(vacinas, caminhoEscolhido);
+		}
+	}
+	
+	public void gerarRelatorioTotalVacinaPorEstagioDePesquisa(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
+		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+			vacinaBO.gerarPlanilhaVacinaTotalPorEstagioDePesquisa(vacinas, caminhoEscolhido);
+		}
+	}
+	
+	public void gerarRelatorioTotalVacinaPorEstagioDePesquisaPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
+		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+			vacinaBO.gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(vacinas, caminhoEscolhido);
+		}
+	}
 
 }

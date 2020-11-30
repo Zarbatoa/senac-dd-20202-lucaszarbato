@@ -134,6 +134,21 @@ public class GeradorPlanilhaVacina {
 			}
 		}
 	}
+
+	public void gerarPlanilhaVacinaTotalPorPaisDeOrigemPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void gerarPlanilhaVacinaTotalPorEstagioDePesquisa(List<Vacina> vacinas, String caminhoEscolhido) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 

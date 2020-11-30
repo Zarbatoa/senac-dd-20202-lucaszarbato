@@ -10,6 +10,7 @@ import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 
+
 public class PessoaBO {
 
 	private PessoaDAO pessoaDAO = new PessoaDAO();
@@ -117,5 +118,16 @@ public class PessoaBO {
 		
 		return mensagem.toString();
 	}
+	
+	public void gerarPlanilhaPessoaTotalPorSexoPorPeriodo(List<Pessoa> pessoas, String caminhoEscolhido) {
+		GeradorPlanilhaPessoa gerador = new GeradorPlanilhaPessoa();
+		gerador.gerarPlanilhaPessoaTotalPorSexoPorPeriodo(pessoas, caminhoEscolhido);
+	}
+	
+	public void gerarPlanilhaPessoaTotalPorSexo(List<Pessoa> pessoas, String caminhoEscolhido) {
+		GeradorPlanilhaPessoa gerador = new GeradorPlanilhaPessoa();
+		gerador.gerarPlanilhaPessoaTotalPorSexo(pessoas, caminhoEscolhido);
+	}
+	
 	
 }

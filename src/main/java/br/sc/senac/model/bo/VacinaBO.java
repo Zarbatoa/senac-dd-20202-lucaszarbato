@@ -36,5 +36,25 @@ public class VacinaBO {
 		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
 		gerador.gerarPlanilhaVacinaTotalPorPesquisador(vacinas, caminhoEscolhido);
 	}
+	
+	public void gerarPlanilhaVacinaTotalPorPaisDeOrigem(List<Vacina> vacinas, String caminhoEscolhido) {
+		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
+		gerador.gerarPlanilhaVacinaTotalPorPaisOrigem(vacinas, caminhoEscolhido);
+	}
+	
+	public void gerarPlanilhaVacinaTotalPorPaisDeOrigemPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido) {
+		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
+		gerador.gerarPlanilhaVacinaTotalPorPaisDeOrigemPorPeriodo(vacinas, caminhoEscolhido);
+	}
+	
+	public void gerarPlanilhaVacinaTotalPorEstagioDePesquisa(List<Vacina> vacinas, String caminhoEscolhido) {
+		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
+		gerador.gerarPlanilhaVacinaTotalPorEstagioDePesquisa(vacinas, caminhoEscolhido);
+	}
+	
+	public void gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido) {
+		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
+		gerador.gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(vacinas, caminhoEscolhido);
+	}
 
 }
