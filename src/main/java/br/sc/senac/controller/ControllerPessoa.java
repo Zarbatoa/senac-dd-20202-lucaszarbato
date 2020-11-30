@@ -130,5 +130,9 @@ public class ControllerPessoa {
 		return pessoaBO.pegarListaDePessoas();
 	}
 
+	public String excluir(List<Integer> idsASeremExcluidos) {
+		return pessoaBO.excluirPessoas(idsASeremExcluidos);
+	}
+
 }
  

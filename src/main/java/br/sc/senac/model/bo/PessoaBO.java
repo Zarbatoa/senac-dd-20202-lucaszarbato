@@ -1,5 +1,6 @@
 package br.sc.senac.model.bo;
 
+import java.util.ArrayList;
 import java.util.List;
 import br.sc.senac.model.Utils;
 import br.sc.senac.model.dao.InstituicaoDAO;
@@ -62,6 +63,59 @@ public class PessoaBO {
 
 	public List<Pessoa> pegarListaDePessoas() {
 		return this.pessoaDAO.pesquisarTodos();
+	}
+
+	public String excluirPessoas(List<Integer> idsASeremExcluidos) {
+		StringBuffer mensagem = new StringBuffer();
+		StringBuffer msgPessoasExcluidasComSucesso = new StringBuffer();
+		StringBuffer msgPessoasExcluidasSemSucesso = new StringBuffer();
+		List<Pessoa> pessoasExcluidas = new ArrayList<Pessoa>();
+		List<Boolean> statusPessoasExcluidas = new ArrayList<Boolean>();
+		boolean nenhumaPessoaExcluida = true;
+		
+		for(Integer idASerExcluido : idsASeremExcluidos) {
+			Pessoa pessoaExcluida = pessoaDAO.pesquisarPorId(idASerExcluido);
+			if (pessoaExcluida != null) {
+				statusPessoasExcluidas.add(pessoaDAO.excluir(idASerExcluido));
+				pessoasExcluidas.add(pessoaExcluida);
+			}
+		}
+		
+		for(int i = 0; i < statusPessoasExcluidas.size(); i++) {
+			Boolean foiExcluida = statusPessoasExcluidas.get(i);
+			Pessoa pessoaExcluida = pessoasExcluidas.get(i);
+			if(foiExcluida) {
+				if(msgPessoasExcluidasComSucesso.length() > 0) {
+					msgPessoasExcluidasComSucesso.append(", ");
+				}
+				msgPessoasExcluidasComSucesso.append(
+						"(" + pessoaExcluida.getId() + " - " + pessoaExcluida.toString() + ")"
+						);
+				nenhumaPessoaExcluida = false;
+			} else {
+				if(msgPessoasExcluidasSemSucesso.length() > 0) {
+					msgPessoasExcluidasSemSucesso.append(", ");
+				}
+				msgPessoasExcluidasSemSucesso.append(
+						"(" + pessoaExcluida.getId() + " - " + pessoaExcluida.toString() + ")"
+						);
+			}
+		}
+		
+		if(nenhumaPessoaExcluida) {
+			mensagem.append("Nenhuma pessoa excluída.");
+		} else {
+			mensagem.append("Pessoa(s) ");
+			mensagem.append(msgPessoasExcluidasComSucesso);
+			mensagem.append(" excluída(s) com sucesso!\n");
+			if(msgPessoasExcluidasSemSucesso.length() > 0) {
+				mensagem.append("Não foi possível excluir a(s) pessoa(s) ");
+				mensagem.append(msgPessoasExcluidasSemSucesso);
+				mensagem.append('!');
+			}
+		}
+		
+		return mensagem.toString();
 	}
 	
 }
