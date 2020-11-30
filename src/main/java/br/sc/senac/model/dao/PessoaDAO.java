@@ -246,7 +246,6 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 		Connection conexao = Banco.getConnection();
 		PreparedStatement prepStmt = Banco.getPreparedStatement(conexao, sql);
 		ArrayList<Pessoa> pessoas = new ArrayList<Pessoa>();
-System.out.println("PessoaDAO, metodo listarComSeletor(PessoaSeletor)-> " + sql);
 		try {
 			ResultSet result = prepStmt.executeQuery();
 
