@@ -121,6 +121,8 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 		btnGerarXls.setIcon(new ImageIcon("C:\\Users\\rosan\\git\\senac-dd-20202-lucaszarbato2\\icones\\iconeExcelmenor.png"));
 		btnGerarXls.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnGerarXls, "cell 6 8,alignx center");
+		
+		
 				
 		table = new JTable();
 		table.setFont(new Font("Tahoma", Font.PLAIN, 11));
