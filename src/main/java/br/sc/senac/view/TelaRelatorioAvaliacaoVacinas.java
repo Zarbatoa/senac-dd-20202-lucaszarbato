@@ -22,7 +22,6 @@ import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
-import br.sc.senac.controller.ControllerVacina;
 import br.sc.senac.model.vo.Pessoa;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.ImageIcon;
@@ -122,25 +121,7 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 		btnGerarXls.setIcon(new ImageIcon("C:\\Users\\rosan\\git\\senac-dd-20202-lucaszarbato2\\icones\\iconeExcelmenor.png"));
 		btnGerarXls.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnGerarXls, "cell 6 8,alignx center");
-		
-		//método chamar xls no botão. Falta fazer o método de gerar relatório.
-		btnGerarXls.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser janelaArquivos = new JFileChooser();
-
-				int opcaoSelecionada = janelaArquivos.showSaveDialog(null);
-
-				if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
-					String caminho = janelaArquivos.getSelectedFile().getAbsolutePath();
-
-					ControllerVacina controller = new ControllerVacina();
-					String mensagem = controller.gerarRelatorioTotalVacinaPorPesquisador(vacinas, caminhoEscolhido, tipoRelatorio); //aqui está ligado ao método gerar relatório, que equivale a uma consulta de vacina
-
-					JOptionPane.showMessageDialog(null, mensagem);
-				}
-			}
-		});
-		
+				
 		table = new JTable();
 		table.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		table.setModel(new DefaultTableModel(
@@ -194,6 +175,7 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 	}
 
 	protected void gerarRelatorio() {
+		
 		
 		
 
