@@ -19,6 +19,9 @@ public class ControllerVacina {
 		* converter data no formado "dd/MM/YYYY" para LocalDate
 		* todos os campos são obrigatórios
 	* */
+	
+	public static final String TIPO_RELATORIO_XLS = "xls"; 
+	
 	VacinaBO vacinaBO = new VacinaBO();
 	
 	public String salvar(Vacina novaVacina) {
@@ -72,6 +75,12 @@ public class ControllerVacina {
 	
 	public List<Vacina> listarVacinas(VacinaSeletor seletor) {
 		return vacinaBO.listarVacinas(seletor);
+	}
+	
+	public void gerarRelatorioTotalVacinaPorPesquisador(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
+		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+			vacinaBO.gerarPlanilhaVacinaTotalPorPesquisador(vacinas, caminhoEscolhido);
+		}
 	}
 
 }

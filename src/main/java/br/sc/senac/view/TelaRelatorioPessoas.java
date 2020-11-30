@@ -21,6 +21,7 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import br.sc.senac.model.vo.Pessoa;
 import net.miginfocom.swing.MigLayout;
+import javax.swing.ImageIcon;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaRelatorioPessoas extends JFrame {
@@ -102,9 +103,10 @@ public class TelaRelatorioPessoas extends JFrame {
 		btnGerarRelatorio.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnGerarRelatorio, "cell 2 6,alignx right");
 		
-		JButton btnGerarPdf = new JButton("Gerar Pdf");
-		btnGerarPdf.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnGerarPdf, "cell 6 6");
+		JButton btnGerarXls = new JButton("Gerar xls");
+		btnGerarXls.setIcon(new ImageIcon("C:\\Users\\rosan\\git\\senac-dd-20202-lucaszarbato2\\icones\\iconeExcelmenor.png"));
+		btnGerarXls.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnGerarXls, "cell 6 6");
 		
 		table = new JTable();
 		table.setFont(new Font("Tahoma", Font.PLAIN, 11));

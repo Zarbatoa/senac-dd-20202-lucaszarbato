@@ -31,5 +31,10 @@ public class VacinaBO {
 	public List<Vacina> listarVacinas(VacinaSeletor seletor) {
 		return vacinaDAO.listarComSeletor(seletor);
 	}
+	
+	public void gerarPlanilhaVacinaTotalPorPesquisador(List<Vacina> vacinas, String caminhoEscolhido) {
+		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
+		gerador.gerarPlanilhaVacinaTotalPorPesquisador(vacinas, caminhoEscolhido);
+	}
 
 }
