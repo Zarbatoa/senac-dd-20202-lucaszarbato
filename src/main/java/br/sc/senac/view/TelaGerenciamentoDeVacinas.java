@@ -5,8 +5,10 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -28,6 +30,8 @@ import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.controller.ControllerVacina;
 import br.sc.senac.model.seletor.VacinaSeletor;
 import br.sc.senac.model.utilidades.Constantes;
+import br.sc.senac.model.utilidades.StatusMensagem;
+import br.sc.senac.model.utilidades.Utils;
 import br.sc.senac.model.vo.Pais;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
@@ -56,6 +60,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 	
 	private List<Pessoa> listaDePesquisadoresGeral;
 	private List<Pessoa> listaDePesquisadoresParaEdicao;
+	private HashMap<String, Integer> mapaPaisesParaIndicesEdicao;
 	private VacinaSeletor ultimoSeletorUsado;
 	private int paginaAtual = 1;
 	
@@ -82,6 +87,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 	public TelaGerenciamentoDeVacinas() throws ParseException {
 		ultimoSeletorUsado = null;
 		ControllerPessoa controllerPessoa = new ControllerPessoa();
+		mapaPaisesParaIndicesEdicao = new HashMap<String, Integer>();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 450);
@@ -127,6 +133,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 
 		listaDePesquisadoresParaEdicao = controllerPessoa.coletarListaDePesquisadores();
 		preencherListaPesquisadoresGeral(listaDePesquisadoresParaEdicao);
+		preencherMapaDePaisesParaIndiceEdicao();
 		cbPesquisador = new JComboBox();
 		cbPesquisador.setModel(new DefaultComboBoxModel(listaDePesquisadoresGeral.toArray()));
 		contentPane.add(cbPesquisador, "cell 6 4 2 1,growx");
@@ -142,6 +149,13 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(dpDataInicioPesquisa, "cell 1 6 3 1,growx");
 		
 		btnVoltar = new JButton("Voltar");
+		btnVoltar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				abilitarTabelaBotoesConsultaExclusao();
+				redefinirComboboxsParaGeral();
+				desativarBotoesDeEdicao();
+			}
+		});
 		btnVoltar.setEnabled(false);
 		btnVoltar.setVisible(false);
 		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -167,6 +181,11 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(btnExcluir, "cell 2 8,alignx center");
 		
 		btnEditar = new JButton("Editar");
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tentarEditar();
+			}
+		});
 		btnEditar.setEnabled(false);
 		btnEditar.setVisible(false);
 		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -175,7 +194,6 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO verificar o porquê do erro do select data_inicio_pesquisa
 				consultarPessoas();
 			}
 		});
@@ -214,18 +232,155 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(lblPagAtual, "cell 4 11 2 1,alignx center");
 		
 		btnPegarRegistro = new JButton("<html>Pegar Registro<br />para Edi\u00E7\u00E3o</html>");
+		btnPegarRegistro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				coletarRegistroParaEdicao();
+			}
+		});
 		btnPegarRegistro.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnPegarRegistro, "cell 4 12 2 1,alignx center");
 	}
 
-	private void preencherListaPesquisadoresGeral(List<Pessoa> listaPesquisadores) {
-		listaDePesquisadoresGeral = new ArrayList<Pessoa>();
-		for (Pessoa pessoa : listaPesquisadores) {
-			listaDePesquisadoresGeral.add(pessoa.fazerCopia());
+	protected void tentarEditar() {
+		// Preencher o Objeto com os dados da tela
+		Vacina vacinaAlterada = new Vacina();
+		// pegar id
+		int linhaSelecionada = tableResultados.getSelectedRow();
+		vacinaAlterada.setId((Integer) tableResultados.getModel().getValueAt(linhaSelecionada, 0));
+		vacinaAlterada.setNome(tfNomeVacina.getText());
+		vacinaAlterada.setPaisOrigem(((Pais) cbPaisOrigem.getSelectedItem()).getNome());
+		vacinaAlterada.setEstagioPesquisa(Vacina.getIntEstagioDePesquisa((String) cbEstagioPesquisa.getSelectedItem()));
+		LocalDate novaDataInicioPEsquisa = dpDataInicioPesquisa.getDate();
+		vacinaAlterada.setDataInicioPesquisa(novaDataInicioPEsquisa);
+		vacinaAlterada.setPesquisadorResponsavel((Pessoa) cbPesquisador.getSelectedItem());
+		
+		// Instanciar um controller adequado
+		ControllerVacina controller = new ControllerVacina();
+		
+		// Chamar o método salvar no controller e pegar a mensagem retornada
+		StatusMensagem statusMensagem = controller.atualizar(vacinaAlterada);
+		
+		// Mostrar a mensagem devolvida pelo controller
+		JOptionPane.showMessageDialog(null, statusMensagem.getMensagem());
+		
+		//caso sucesso na edicao:
+		if(statusMensagem.getStatus()) {
+			abilitarTabelaBotoesConsultaExclusao();
+			redefinirComboboxsParaGeral();
+			desativarBotoesDeEdicao();
+			atualizarTabelaComUltimoSeletor();
 		}
-		listaDePesquisadoresGeral.add(0, Constantes.OPCAO_PESQUISADOR_RESPONSAVEL_TODOS);
+	}
+	
+	protected void coletarRegistroParaEdicao() {
+		String mensagem = "";
+		if(tableResultados.getSelectedRowCount() == 0) {
+			mensagem = "Por favor selecione uma linha para poder continuar para a tela de edição.";
+		} else if(tableResultados.getSelectedRowCount() > 1){
+			mensagem = "Por favor selecione uma  única linha para poder continuar para a tela de edição.";
+		} else {
+			if(tableResultados.getSelectedRow() == 0) {
+				mensagem = "A linha com as descrições dos campos não pode ser editada. Escolha um registro válido.";
+			} else {
+				int linhaSelecionada = tableResultados.getSelectedRow();
+				Integer idSelecionado = (Integer) tableResultados.getModel().getValueAt(linhaSelecionada, 0);
+				if(idSelecionado == null) {
+					mensagem = "A linha não pode estar vazia! Para inserir uma nova vacina, vá para a tela de cadastro de vacinas.";
+				} else {
+					desabilitarTabelaBotoesConsultaExclusao();
+					redefinirComboboxsParaEdicao();
+					preencherInputsComALinhaDeEdicao(linhaSelecionada);
+					ativarBotoesDeEdicao();
+					mensagem = null;
+				}
+				
+			}
+		}
+		if (mensagem != null) {
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
+	}
+	
+	private void preencherInputsComALinhaDeEdicao(int linhaSelecionada) {
+		tfNomeVacina.setText((String) tableResultados.getModel().getValueAt(linhaSelecionada, 1));
+		String nomePais = (String) tableResultados.getModel().getValueAt(linhaSelecionada, 2);
+		cbPaisOrigem.setSelectedIndex(mapaPaisesParaIndicesEdicao.get(nomePais.toUpperCase()));
+		cbEstagioPesquisa.setSelectedIndex(getIndexFromEstagioPesquisa((String) tableResultados.getModel().getValueAt(linhaSelecionada, 3)));
+		dpDataInicioPesquisa.setDate(Utils.gerarLocalDateDeString((String) tableResultados.getModel().getValueAt(linhaSelecionada, 4)));
+		cbPesquisador.setSelectedIndex(getIndexFromPesquisador((Pessoa) tableResultados.getModel().getValueAt(linhaSelecionada, 5)));
 	}
 
+	private int getIndexFromPesquisador(Pessoa pesquisadorSelecionado) {
+		int indice = 0;
+		
+		for(Pessoa pesquisador : listaDePesquisadoresParaEdicao) {
+			if(pesquisador.getId() == pesquisadorSelecionado.getId()) {
+				break;
+			}
+			indice++;
+		}
+		
+		return indice;
+	}
+
+	private int getIndexFromEstagioPesquisa(String estagioSelecionado) {
+		int indice = 0 ;
+		if(estagioSelecionado.equals(Constantes.LISTA_ESTAGIOS_VACINA_GERAL[1])) {
+			indice = 0;
+		} else if(estagioSelecionado.equals(Constantes.LISTA_ESTAGIOS_VACINA_GERAL[2])) {
+			indice = 1;
+		} else if(estagioSelecionado.equals(Constantes.LISTA_ESTAGIOS_VACINA_GERAL[3])) {
+			indice = 2;
+		}
+		return indice;
+	}
+
+	private void redefinirComboboxsParaGeral() {
+		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(Constantes.LISTA_ESTAGIOS_VACINA_GERAL));
+		cbPaisOrigem.setModel(new DefaultComboBoxModel(Constantes.OPCOES_PAISES_GERAL.toArray()));
+		cbPesquisador.setModel(new DefaultComboBoxModel(listaDePesquisadoresGeral.toArray()));
+	}
+	
+	private void redefinirComboboxsParaEdicao() {
+		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(Constantes.LISTA_ESTAGIOS_VACINA_EDICAO_CADASTRO));
+		cbPaisOrigem.setModel(new DefaultComboBoxModel(Constantes.OPCOES_PAISES_EDICAO_CADASTRO));
+		cbPesquisador.setModel(new DefaultComboBoxModel(listaDePesquisadoresParaEdicao.toArray()));
+	}
+
+	private void abilitarTabelaBotoesConsultaExclusao() {
+		tableResultados.setEnabled(true);
+		btnExcluir.setEnabled(true);
+		btnConsultar.setEnabled(true);
+		tableResultados.setEnabled(true);
+		btnPagAnterior.setEnabled(true);
+		btnPegarRegistro.setEnabled(true);
+		btnPagProxima.setEnabled(true);
+	}
+	
+	private void desabilitarTabelaBotoesConsultaExclusao() {
+		tableResultados.setEnabled(false);
+		btnExcluir.setEnabled(false);
+		btnConsultar.setEnabled(false);
+		tableResultados.setEnabled(false);
+		btnPagAnterior.setEnabled(false);
+		btnPegarRegistro.setEnabled(false);
+		btnPagProxima.setEnabled(false);
+	}
+
+	protected void ativarBotoesDeEdicao() {
+		btnEditar.setVisible(true);
+		btnEditar.setEnabled(true);
+		btnVoltar.setVisible(true);
+		btnVoltar.setEnabled(true);
+	}
+	
+	protected void desativarBotoesDeEdicao() {
+		btnEditar.setVisible(false);
+		btnEditar.setEnabled(false);
+		btnVoltar.setVisible(false);
+		btnVoltar.setEnabled(false);
+	}
+	
 	protected void resetarTodosOsCampos() {
 		tfNomeVacina.setText("");
 		cbEstagioPesquisa.setSelectedIndex(0);
@@ -244,7 +399,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 			ultimoSeletorUsado.setLimite(Constantes.TAMANHO_PAGINA);
 			ControllerVacina controlador = new ControllerVacina();
 			List<Vacina> vacinas = controlador.listarVacinas(ultimoSeletorUsado);
-			atualizarTabelaPessoas(vacinas);
+			atualizarTabelaVacinas(vacinas);
 		}
 	}
 	
@@ -291,15 +446,16 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		List<Vacina> vacinas = controlador.listarVacinas(seletor);
 		ultimoSeletorUsado = seletor;
 
-		atualizarTabelaPessoas(vacinas);
+		atualizarTabelaVacinas(vacinas);
 
 	}
 	
-	private void atualizarTabelaPessoas(List<Vacina> vacinas) {
+	//TODO data_inicio_pesquisa vom com um dia a menos do conjunto resultande de VacinaDAO, ver a causa
+	private void atualizarTabelaVacinas(List<Vacina> vacinas) {
 		this.definirModeloPadraoTabela();
 		
 		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
-		
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
 		for (int i = 0; i < vacinas.size(); i++) {
@@ -335,6 +491,21 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 			       return false;
 			    }
 			});
+	}
+	
+	private void preencherListaPesquisadoresGeral(List<Pessoa> listaPesquisadores) {
+		listaDePesquisadoresGeral = new ArrayList<Pessoa>();
+		for (Pessoa pessoa : listaPesquisadores) {
+			listaDePesquisadoresGeral.add(pessoa.fazerCopia());
+		}
+		listaDePesquisadoresGeral.add(0, Constantes.OPCAO_PESQUISADOR_RESPONSAVEL_TODOS);
+	}
+	
+	private void preencherMapaDePaisesParaIndiceEdicao() {
+		int i = 0;
+		for (Pais pais : Constantes.OPCOES_PAISES_EDICAO_CADASTRO) {
+			 mapaPaisesParaIndicesEdicao.put(pais.getNome().toUpperCase(), i++);
+		}
 	}
 
 }

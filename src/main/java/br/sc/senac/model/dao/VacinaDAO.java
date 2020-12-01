@@ -150,6 +150,8 @@ public class VacinaDAO implements BaseDAO<Vacina>{
 		return vacinasBuscadas;
 	}
 
+	//TODO verificar porquê conjuntoResultante.getDate("DATA_INICIO_PESQUISA")
+	//  retorna a data com um dia a menos
 	public Vacina construirDoResultSet(ResultSet conjuntoResultante) throws SQLException {
 		Vacina vacinaBuscada = new Vacina();
 		PessoaDAO pessoaDAO = new PessoaDAO();

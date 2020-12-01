@@ -109,4 +109,13 @@ public class VacinaBO {
 		return mensagem.toString();
 	}
 
+	public boolean atualizar(Vacina vacinaAtualizada) throws DataInicioPesquisaInvalidaException {
+		
+		if(vacinaAtualizada.getDataInicioPesquisa().isAfter(LocalDate.now())) {
+			throw new DataInicioPesquisaInvalidaException("Data de inicio da pesquisa deve ser anterior a data atual.");
+		}
+		
+		return this.vacinaDAO.alterar(vacinaAtualizada);
+	}
+
 }

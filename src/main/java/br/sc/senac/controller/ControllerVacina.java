@@ -9,6 +9,7 @@ import br.sc.senac.model.exception.NomeInvalidoException;
 import br.sc.senac.model.exception.PesquisadorInvalidoException;
 import br.sc.senac.model.seletor.VacinaSeletor;
 import br.sc.senac.model.utilidades.Constantes;
+import br.sc.senac.model.utilidades.StatusMensagem;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
 
@@ -119,6 +120,27 @@ public class ControllerVacina {
 		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
 			vacinaBO.gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(vacinas, caminhoEscolhido);
 		}
+	}
+
+	public StatusMensagem atualizar(Vacina vacinaAlterada) {
+		StatusMensagem statusMensagem = new StatusMensagem();
+
+		try {
+			this.validarVacina(vacinaAlterada);
+			statusMensagem.setStatus(vacinaBO.atualizar(vacinaAlterada));
+			if (statusMensagem.getStatus()) {
+				statusMensagem.setMensagem("Vacina atualizada com sucesso!");
+			} else {
+				statusMensagem.setMensagem("Não foi possível atualizar esta vacina!");
+			}
+		} catch(NomeInvalidoException
+				| PesquisadorInvalidoException
+				| DataInicioPesquisaInvalidaException e) {
+			statusMensagem.setMensagem(e.getMessage());
+			statusMensagem.setStatus(false);
+		}
+		
+		return statusMensagem;
 	}
 
 }

@@ -44,7 +44,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	private JTextField tfNome;
 	private JTextField tfInstituicao;
 	private JComboBox cbSexo;
-	private DatePicker dpDataInicioPesquisa;
+	private DatePicker dpDataNascimento;
 	private JFormattedTextField ftfCpf;
 	private JTable tableResultados;
 	private JTextField tfSobrenome;
@@ -152,8 +152,8 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		contentPane.add(lblDataDeNascimento, "cell 5 6,alignx trailing");
 		DatePickerSettings dateSettings = new DatePickerSettings();
 		dateSettings.setAllowKeyboardEditing(false);
-		dpDataInicioPesquisa = new DatePicker(dateSettings);
-		contentPane.add(dpDataInicioPesquisa,"cell 6 6 2 1,growx");
+		dpDataNascimento = new DatePicker(dateSettings);
+		contentPane.add(dpDataNascimento,"cell 6 6 2 1,growx");
 		
 		JLabel lblInstituicao = new JLabel("Institui\u00E7\u00E3o:");
 		lblInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -286,7 +286,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		pessoaAlterada.setInstituicao(new Instituicao(-1,tfInstituicao.getText()));
 		pessoaAlterada.setNome(tfNome.getText());
 		pessoaAlterada.setSobrenome(tfSobrenome.getText());
-		LocalDate novaDataNascimento = dpDataInicioPesquisa.getDate();
+		LocalDate novaDataNascimento = dpDataNascimento.getDate();
 		pessoaAlterada.setDataNascimento(novaDataNascimento);
 		pessoaAlterada.setSexo(((String)cbSexo.getSelectedItem()).charAt(0));
 		pessoaAlterada.setCpf(Utils.desformatarCpf(ftfCpf.getText()));
@@ -347,7 +347,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			cbSexo.setSelectedIndex(1);
 		}
 		ftfCpf.setText(Utils.desformatarCpf((String) tableResultados.getModel().getValueAt(linhaSelecionada, 4)));
-		dpDataInicioPesquisa.setDate( Utils.gerarLocalDateDeString((String) tableResultados.getModel().getValueAt(linhaSelecionada, 5)));
+		dpDataNascimento.setDate( Utils.gerarLocalDateDeString((String) tableResultados.getModel().getValueAt(linhaSelecionada, 5)));
 		cbCategoria.setSelectedIndex(getIndexFromTipo((TipoPessoa)tableResultados.getModel().getValueAt(linhaSelecionada, 6)));
 		tfInstituicao.setText((String) tableResultados.getModel().getValueAt(linhaSelecionada, 7));
 	}
@@ -414,7 +414,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		ftfCpf.setText("");
 		cbSexo.setSelectedIndex(0);
 		cbCategoria.setSelectedIndex(0);
-		dpDataInicioPesquisa.clear();
+		dpDataNascimento.clear();
 		tfInstituicao.setText("");
 		definirModeloPadraoTabela();
 	}
@@ -471,7 +471,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		seletor.setTipo((TipoPessoa)cbCategoria.getSelectedItem()); 
 				
-		seletor.setDataNascimento(dpDataInicioPesquisa.getDate());
+		seletor.setDataNascimento(dpDataNascimento.getDate());
 		
 		// aqui é feita a consulta das pessoas e atualizada a tabela
 		List<Pessoa> pessoas = controlador.listarPessoas(seletor);
