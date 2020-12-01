@@ -2,8 +2,6 @@ package br.sc.senac.view;
 
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -22,10 +20,11 @@ import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
+import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.controller.ControllerVacina;
 import br.sc.senac.model.seletor.VacinaSeletor;
 import br.sc.senac.model.utilidades.Constantes;
-import br.sc.senac.model.vo.Instituicao;
+import br.sc.senac.model.vo.Pais;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
@@ -34,12 +33,21 @@ import net.miginfocom.swing.MigLayout;
 public class TelaGerenciamentoDeVacinas extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField tfNome;
-	private JTextField tfNomePesquisador;
+	private JTextField tfNomeVacina;
 	private JComboBox cbEstagioPesquisa;
 	private JTable tableResultados;
-	private DatePicker dataInicioPesquisa;
-	private JComboBox cbInstituicao;
+	private DatePicker dpDataInicioPesquisa;
+	
+	private JComboBox cbPaisOrigem;
+	private JComboBox cbPesquisador;
+	private JButton btnVoltar;
+	private JButton btnLimpar;
+	private JButton btnExcluir;
+	private JButton btnEditar;
+	private JButton btnConsultar;
+	private JButton btnPagAnterior;
+	private JButton btnPagProxima;
+	private JButton btnPegarRegistro;
 	
 	private JLabel lblPagAtual;
 	
@@ -67,161 +75,110 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 	 * @throws ParseException 
 	 */
 	public TelaGerenciamentoDeVacinas() throws ParseException {
+		ControllerPessoa controllerPessoa = new ControllerPessoa();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 654, 452);
+		setBounds(100, 100, 700, 450);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[61.00,grow][38.00,grow][130.00,grow][136.00][111.00][127.00,grow][15.00][]", "[][][][][][][][][][136.00][][]"));
+		contentPane.setLayout(new MigLayout("", "[grow][][grow][24.00][105.00][47.00][grow][][]", "[][][][][][][][][][][][][]"));
 		
 		JLabel lblGerenciamentoVacinas = new JLabel("Gerenciamento de Vacinas");
 		lblGerenciamentoVacinas.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblGerenciamentoVacinas, "cell 2 0 2 1,alignx right");
+		contentPane.add(lblGerenciamentoVacinas, "cell 3 0 3 1,alignx center");
 		
 		JLabel lblNomeVacina = new JLabel("Nome Vacina:");
 		lblNomeVacina.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblNomeVacina, "cell 0 2,alignx trailing");
 		
-		tfNome = new JTextField();
-		tfNome.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(tfNome, "cell 1 2 2 1,growx");
-		tfNome.setColumns(10);
-		
-		String[] opcoesSexo = {Constantes.SEXO_MASCULINO, Constantes.SEXO_FEMININO}; 
+		tfNomeVacina = new JTextField();
+		tfNomeVacina.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(tfNomeVacina, "cell 1 2 3 1,growx");
+		tfNomeVacina.setColumns(10);
 		
 		JLabel lblEstagioPesquisa = new JLabel("Estágio da Pesquisa:");
 		lblEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblEstagioPesquisa, "cell 4 2,alignx trailing");
-		cbEstagioPesquisa = new JComboBox(opcoesSexo);
-		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(new String[] {"Todos", "Inicial", "Intermedi\u00E1rio", "Final"}));
+		contentPane.add(lblEstagioPesquisa, "cell 5 2,alignx trailing");
+		
+		cbEstagioPesquisa = new JComboBox();
+		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(Constantes.LISTA_ESTAGIOS_VACINA));
 		cbEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbEstagioPesquisa, "cell 5 2 2 1,growx");
-		
-		JLabel lblNomePesquisador = new JLabel("Nome Pesquisador:");
-		lblNomePesquisador.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblNomePesquisador, "cell 0 4,alignx trailing");
-		
-		tfNomePesquisador = new JTextField();
-		tfNomePesquisador.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(tfNomePesquisador, "cell 1 4 2 1,growx");
-		tfNomePesquisador.setColumns(10);
-		
-		JLabel lblInstituicao = new JLabel("Institui\u00E7\u00E3o:");
-		lblInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblInstituicao, "cell 4 4,alignx trailing");
-		
-		cbInstituicao = new JComboBox();
-		cbInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbInstituicao, "cell 5 4 2 1,growx");
+		contentPane.add(cbEstagioPesquisa, "cell 6 2 2 1,growx");
 		
 		JLabel lblPaisDeOrigem = new JLabel("Pa\u00EDs de Origem:");
 		lblPaisDeOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblPaisDeOrigem, "cell 0 6,alignx trailing");
+		contentPane.add(lblPaisDeOrigem, "cell 0 4,alignx trailing");
 		
-		JComboBox cbPaisOrigem = new JComboBox();
+		Pais[] listaPaises = Pais.createCountryList();
+		cbPaisOrigem = new JComboBox();
 		cbPaisOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		cbPaisOrigem.setModel(new DefaultComboBoxModel(new String[] {"Argélia", "China", "Reino Unido", "R\u00FAssia"}));
-		contentPane.add(cbPaisOrigem, "cell 1 6 2 1,growx");
+		cbPaisOrigem.setModel(new DefaultComboBoxModel(listaPaises));
+		contentPane.add(cbPaisOrigem, "cell 1 4 3 1,growx");
+		
+		JLabel lblPesquisador = new JLabel("Pesquisador:");
+		lblPesquisador.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(lblPesquisador, "cell 5 4,alignx trailing");
+		
+		List<Pessoa> listaDePesquisadores = controllerPessoa.coletarListaDePesquisadores();
+		cbPesquisador = new JComboBox();
+		cbPesquisador.setModel(new DefaultComboBoxModel(listaDePesquisadores.toArray()));
+		contentPane.add(cbPesquisador, "cell 6 4 2 1,growx");
 		
 		JLabel lblInicioPesquisa = new JLabel("Início Pesquisa:");
 		lblInicioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblInicioPesquisa, "cell 4 6,alignx trailing");
+		contentPane.add(lblInicioPesquisa, "cell 0 6,alignx trailing");
+		
 		
 		DatePickerSettings dateSettings = new DatePickerSettings();
 		dateSettings.setAllowKeyboardEditing(false);
-		dataInicioPesquisa = new DatePicker(dateSettings);
-		contentPane.add(dataInicioPesquisa,"cell 5 6 2 1,growx");
+		dpDataInicioPesquisa = new DatePicker(dateSettings);
+		contentPane.add(dpDataInicioPesquisa, "cell 1 6 3 1,growx");
 		
-		//ftfInicioPesquisa = new JFormattedTextField(mascaraData);
-		//ftfInicioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		//contentPane.add(ftfInicioPesquisa, "cell 6 6 2 1,growx");
+		btnVoltar = new JButton("Voltar");
+		btnVoltar.setEnabled(false);
+		btnVoltar.setVisible(false);
+		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnVoltar, "cell 4 6,alignx center");
 		
-		final JFrame janelaAtual = this;
+		btnLimpar = new JButton("Limpar");
+		btnLimpar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnLimpar, "cell 5 6,alignx center");
 		
-		JButton btnFiltrar = new JButton("Filtrar");
-		btnFiltrar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnFiltrar, "cell 2 8");
-		
-		// criei esse método para já adicionar o filtro seletor nessa tela
-		btnFiltrar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
-				consultarVacinas();
-			}
-		});
-		
-		JButton btnEditar = new JButton("Editar");
-		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnEditar, "cell 3 8,alignx right");
-		
-		btnEditar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
-				editarVacinas();
-			}
-		});
-		
-		JButton btnExcluir = new JButton("Excluir"); //acho que precisa talvez fazer algum método para excluirVacina? ou talvez seria melhor nem excluir. Avaliação vacina não exclui
+		btnExcluir = new JButton("Excluir");
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				janelaAtual.dispose();
-			}
-		});
+		contentPane.add(btnExcluir, "cell 2 8,alignx center");
 		
-		contentPane.add(btnExcluir, "cell 5 8");
+		btnEditar = new JButton("Editar");
+		btnEditar.setEnabled(false);
+		btnEditar.setVisible(false);
+		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnEditar, "cell 6 6,alignx center");
+		
+		btnConsultar = new JButton("Consultar");
+		btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnConsultar, "cell 6 8,alignx center");
 		
 		tableResultados = new JTable();
 		tableResultados.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		tableResultados.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Nome Vacina", "País de Origem", "Estágio de Pesquisa", "Início Pesquisa", "Pesquisador", "Instituição"},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column", "New column", "New column"
-			}
-		));
-		contentPane.add(tableResultados, "cell 0 9 8 1,grow");
+		definirModeloPadraoTabela();
+		contentPane.add(tableResultados, "cell 0 10 10 1,grow");
 		
-		JButton buttonPagAnterior = new JButton("< Anterior");
-		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(buttonPagAnterior, "cell 2 10");
+		btnPagAnterior = new JButton("< Anterior");
+		btnPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnPagAnterior, "cell 2 11,alignx center");
 		
-		//evento de passar pág anterior
-		buttonPagAnterior.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (paginaAtual > 1) {
-					paginaAtual--;
-				}
-				consultarVacinas();
-			}
-		});
-		
-		JButton btnPagProxima = new JButton("Próximo >");
+		btnPagProxima = new JButton("Próximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagProxima, "cell 5 10");
-		
-		//evento para passar a próxima página
-		btnPagProxima.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				paginaAtual++;
-				consultarVacinas();
-			}
-		});
+		contentPane.add(btnPagProxima, "cell 6 11,alignx center");
 		
 		lblPagAtual = new JLabel("1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 3 10,alignx right");
+		contentPane.add(lblPagAtual, "cell 4 11 2 1,alignx center");
 		
-		JButton btnVoltar = new JButton("Voltar");
-		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnVoltar, "cell 3 11,alignx right");
+		btnPegarRegistro = new JButton("<html>Pegar Registro<br />para Edi\u00E7\u00E3o</html>");
+		btnPegarRegistro.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnPegarRegistro, "cell 4 12 2 1,alignx center");
 	}
 
 	protected void editarVacinas() {
@@ -239,11 +196,11 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		seletor.setLimite(Constantes.TAMANHO_PAGINA);
 		
 		// Preenche os campos de filtro da tela no seletor
-		seletor.setNomeVacina(tfNome.getText());
-		seletor.setNomePesquisador((Pessoa)tfNomePesquisador.getClientProperty(tfNomePesquisador)); //não sei se está correto
+		seletor.setNomeVacina(tfNomeVacina.getText());
+		//TODO seletor.setNomePesquisador((Pessoa)tfNomePesquisador.getClientProperty(tfNomePesquisador)); //não sei se está correto
 		seletor.setEstagioPesquisa(Integer.parseInt((String) cbEstagioPesquisa.getSelectedItem())); //verificar se está correto
-		seletor.setInstituicao((Instituicao)cbInstituicao.getSelectedItem());
-		seletor.setDataInicioPesquisa(dataInicioPesquisa.getDate());
+		//TODO seletor.setInstituicao((Instituicao)cbInstituicao.getSelectedItem());
+		seletor.setDataInicioPesquisa(dpDataInicioPesquisa.getDate());
 
 		// aqui é feita a consulta das pessoas e atualizada a tabela
 		List<Vacina> vacinas = controlador.listarVacinas(seletor); 
@@ -252,9 +209,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 	
 	protected void atualizarTabelaVacinas(List<Vacina> vacinas) {
 		// atualiza o atributo vacinas consultadas
-		List<Vacina> vacinasConsultadas = vacinas;
-		
-		this.limparTabela();
+		//this.limparTabela();
 		
 		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
 		
@@ -272,11 +227,25 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		}
 	}
 
-	private void limparTabela() {
-		tableResultados.setModel(new DefaultTableModel(new String[][] { { "Nome", "País de Origem", "Estágio Pesquisa", "Início Pesquisa", "Pesquisador", "Instituição" }, },
-				new String[] { "Nome", "Sobrenome", "Sexo", "Dt. Nascimento", "Instituicao"}));
+	private void definirModeloPadraoTabela() {
+		tableResultados.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"#", "Nome", "Pa\u00EDs de Origem", "Est\u00E1gio da Pesquisa", "In\u00EDcio Pesquisa", "Pesquisador"},
+					{null, null, null, null, null, null},
+					{null, null, null, null, null, null},
+					{null, null, null, null, null, null},
+					{null, null, null, null, null, null},
+					{null, null, null, null, null, null},
+				},
+				new String[] {
+					"#", "Nome", "PaisDeOrigem", "EstagioDaPesquisa", "InicioPesquisa", "Pesquisador"
+				}
+			) {
+				@Override
+			    public boolean isCellEditable(int row, int column) {
+			       return false;
+			    }
+			});
 	}
-	
-	
 
 }

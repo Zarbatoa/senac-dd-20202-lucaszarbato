@@ -96,7 +96,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		JLabel lblGerenciamentoDePessoa = new JLabel("Gerenciamento de Pessoas");
 		lblGerenciamentoDePessoa.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblGerenciamentoDePessoa, "cell 3 0 3 1");
+		contentPane.add(lblGerenciamentoDePessoa, "cell 3 0 3 1,alignx center");
 		
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -521,7 +521,6 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			) {
 				@Override
 			    public boolean isCellEditable(int row, int column) {
-			       // nenhuma celula eh editavel
 			       return false;
 			    }
 			});
