@@ -87,6 +87,10 @@ public class ControllerVacina {
 		return vacinaBO.listarVacinas(seletor);
 	}
 	
+	public String excluir(List<Integer> idsASeremExcluidos) {
+		return vacinaBO.excluirVacinas(idsASeremExcluidos);
+	}
+	
 	public void gerarRelatorioTotalVacinaPorPesquisador(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
 		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
 			vacinaBO.gerarPlanilhaVacinaTotalPorPesquisador(vacinas, caminhoEscolhido);

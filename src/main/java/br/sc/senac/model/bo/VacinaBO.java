@@ -1,6 +1,7 @@
 package br.sc.senac.model.bo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.sc.senac.model.dao.VacinaDAO;
@@ -53,6 +54,59 @@ public class VacinaBO {
 	public void gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido) {
 		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
 		gerador.gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(vacinas, caminhoEscolhido);
+	}
+
+	public String excluirVacinas(List<Integer> idsASeremExcluidos) {
+		StringBuffer mensagem = new StringBuffer();
+		StringBuffer msgVacinasExcluidasComSucesso = new StringBuffer();
+		StringBuffer msgVacinasExcluidasSemSucesso = new StringBuffer();
+		List<Vacina> vacinasExcluidas = new ArrayList<Vacina>();
+		List<Boolean> statusVacinasExcluidas = new ArrayList<Boolean>();
+		boolean nenhumaVacinaExcluida = true;
+		
+		for(Integer idASerExcluido : idsASeremExcluidos) {
+			Vacina vacinaExcluida = vacinaDAO.pesquisarPorId(idASerExcluido);
+			if (vacinaExcluida != null) {
+				statusVacinasExcluidas.add(vacinaDAO.excluir(idASerExcluido));
+				vacinasExcluidas.add(vacinaExcluida);
+			}
+		}
+		
+		for(int i = 0; i < statusVacinasExcluidas.size(); i++) {
+			Boolean foiExcluida = statusVacinasExcluidas.get(i);
+			Vacina vacinaExcluida = vacinasExcluidas.get(i);
+			if(foiExcluida) {
+				if(msgVacinasExcluidasComSucesso.length() > 0) {
+					msgVacinasExcluidasComSucesso.append(", ");
+				}
+				msgVacinasExcluidasComSucesso.append(
+						"(" + vacinaExcluida.getId() + " - " + vacinaExcluida.toString() + ")"
+						);
+				nenhumaVacinaExcluida = false;
+			} else {
+				if(msgVacinasExcluidasSemSucesso.length() > 0) {
+					msgVacinasExcluidasSemSucesso.append(", ");
+				}
+				msgVacinasExcluidasSemSucesso.append(
+						"(" + vacinaExcluida.getId() + " - " + vacinaExcluida.toString() + ")"
+						);
+			}
+		}
+		
+		if(nenhumaVacinaExcluida) {
+			mensagem.append("Nenhuma vacina excluída.");
+		} else {
+			mensagem.append("Vacina(s) ");
+			mensagem.append(msgVacinasExcluidasComSucesso);
+			mensagem.append(" excluída(s) com sucesso!\n");
+			if(msgVacinasExcluidasSemSucesso.length() > 0) {
+				mensagem.append("Não foi possível excluir a(s) pessoa(s) ");
+				mensagem.append(msgVacinasExcluidasSemSucesso);
+				mensagem.append('!');
+			}
+		}
+		
+		return mensagem.toString();
 	}
 
 }

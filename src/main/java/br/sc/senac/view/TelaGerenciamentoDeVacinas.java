@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -156,6 +157,12 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(btnLimpar, "cell 5 6,alignx center");
 		
 		btnExcluir = new JButton("Excluir");
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				excluirVacinas();
+				atualizarTabelaComUltimoSeletor();
+			}
+		});
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnExcluir, "cell 2 8,alignx center");
 		
@@ -239,6 +246,28 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 			List<Vacina> vacinas = controlador.listarVacinas(ultimoSeletorUsado);
 			atualizarTabelaPessoas(vacinas);
 		}
+	}
+	
+	protected void excluirVacinas() {
+		String mensagem = "";
+		if(tableResultados.getSelectedRowCount() == 0) {
+			mensagem = "Por favor selecione uma ou mais linhas para excluir os registros.";
+		} else {
+			if(tableResultados.getSelectedRow() == 0) {
+				mensagem = "A linha com as descrições dos campos não pode ser excluída. Nenhuma linha será excluída.";
+			} else {
+				ControllerVacina controllerVacina = new ControllerVacina();
+				List<Integer> idsASeremExcluidos = new ArrayList<Integer>();
+				for(int row : tableResultados.getSelectedRows()) {
+					Integer idASerExcluido = (Integer) (tableResultados.getValueAt(row, 0));
+					if(idASerExcluido != null) {
+						idsASeremExcluidos.add(idASerExcluido);
+					}
+				}
+				mensagem = controllerVacina.excluir(idsASeremExcluidos);
+			}
+		}
+		JOptionPane.showMessageDialog(null, mensagem);
 	}
 
 	protected void consultarPessoas() {
