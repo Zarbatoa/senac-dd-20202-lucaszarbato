@@ -81,14 +81,16 @@ public class TelaCadastroVacina extends JFrame {
 		contentPane.add(tfNomeVacina, "cell 1 2 2 1,growx");
 		tfNomeVacina.setColumns(10);
 		
-		JLabel lblPesquisadorResponsavel = new JLabel("Pesquisador Respons\u00E1vel:");
-		lblPesquisadorResponsavel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblPesquisadorResponsavel, "cell 4 2,alignx trailing");
-		
 		List<Pessoa> listaDePesquisadores = controllerPessoa.coletarListaDePesquisadores();
-		cbPesquisadorResponsavel = new JComboBox();
-		cbPesquisadorResponsavel.setModel(new DefaultComboBoxModel(listaDePesquisadores.toArray()));
-		contentPane.add(cbPesquisadorResponsavel, "cell 5 2,growx");
+		
+		JLabel lblEstagioPesquisa = new JLabel("Est\u00E1gio da Pesquisa:");
+		lblEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(lblEstagioPesquisa, "cell 4 2,alignx trailing");
+		
+		cbEstagioPesquisa = new JComboBox();
+		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(Constantes.LISTA_ESTAGIOS_VACINA));
+		cbEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(cbEstagioPesquisa, "cell 5 2,growx");
 		
 		JLabel lblPaisDeOrigem = new JLabel("Pa\u00EDs de Origem:");
 		lblPaisDeOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -100,13 +102,12 @@ public class TelaCadastroVacina extends JFrame {
 		cbPaisOrigem.setModel(new DefaultComboBoxModel(listaPaises));
 		contentPane.add(cbPaisOrigem, "cell 1 4 2 1,growx");
 		
-		JLabel lblEstagioPesquisa = new JLabel("Est\u00E1gio da Pesquisa:");
-		lblEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblEstagioPesquisa, "cell 4 4,alignx trailing");
-		cbEstagioPesquisa = new JComboBox();
-		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(Constantes.LISTA_ESTAGIOS_VACINA));
-		cbEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbEstagioPesquisa, "cell 5 4,growx");
+		JLabel lblPesquisadorResponsavel = new JLabel("Pesquisador Respons\u00E1vel:");
+		lblPesquisadorResponsavel.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(lblPesquisadorResponsavel, "cell 4 4,alignx trailing");
+		cbPesquisadorResponsavel = new JComboBox();
+		cbPesquisadorResponsavel.setModel(new DefaultComboBoxModel(listaDePesquisadores.toArray()));
+		contentPane.add(cbPesquisadorResponsavel, "cell 5 4,growx");
 		
 		JLabel lblnicioPesquisa = new JLabel("In\u00EDcio Pesquisa:");
 		lblnicioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
