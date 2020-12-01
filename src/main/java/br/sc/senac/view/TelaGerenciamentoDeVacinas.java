@@ -24,16 +24,14 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import br.sc.senac.controller.ControllerVacina;
 import br.sc.senac.model.seletor.VacinaSeletor;
+import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
-import br.sc.senac.model.vo.TipoPessoa;
 import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaGerenciamentoDeVacinas extends JFrame {
-	
-	private static final int TAMANHO_PAGINA = 0; // relacionado a paginação
 
 	private JPanel contentPane;
 	private JTextField tfNome;
@@ -90,7 +88,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(tfNome, "cell 1 2 2 1,growx");
 		tfNome.setColumns(10);
 		
-		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
+		String[] opcoesSexo = {Constantes.SEXO_MASCULINO, Constantes.SEXO_FEMININO}; 
 		
 		JLabel lblEstagioPesquisa = new JLabel("Estágio da Pesquisa:");
 		lblEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -238,7 +236,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		VacinaSeletor seletor = new VacinaSeletor();
 
 		seletor.setPagina(paginaAtual);
-		seletor.setLimite(TAMANHO_PAGINA);
+		seletor.setLimite(Constantes.TAMANHO_PAGINA);
 		
 		// Preenche os campos de filtro da tela no seletor
 		seletor.setNomeVacina(tfNome.getText());

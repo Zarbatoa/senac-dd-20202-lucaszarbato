@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import br.sc.senac.model.vo.Pessoa;
 
-public class RelatorioVacinaSeletor {
+public class RelatorioVacinaSeletor extends AbstractSeletor {
 	
 	//Atributos que servirão de filtros
 	private Pessoa nome;
@@ -13,14 +13,8 @@ public class RelatorioVacinaSeletor {
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	
-	//Atributos para possível paginação dos resultados (intervalo)
-	private int limite;
-	private int pagina;
-	
 	public RelatorioVacinaSeletor() {
-		//Default: traz os resultados sem limite e sem página
-		this.limite = 0;
-		this.pagina = -1;
+		super();
 	}
 	
 	public boolean temFiltro() {
@@ -35,26 +29,6 @@ public class RelatorioVacinaSeletor {
 		}
 		return false;
 	}
-		
-	/**
-	 * Verifica se os campos de paginacao estao preenchidos
-	 *
-	 * @return verdadeiro se os campos limite e pagina estao preenchidos
-	 */
-	public boolean temPaginacao() {
-		return ((this.limite > 0) && (this.pagina > -1));
-	}
-
-	/**
-	 * Calcula deslocamento (offset) a partir da pagina e do limite
-	 *
-	 * @return offset
-	 */
-	public int getOffset() {
-		return (this.limite * (this.pagina - 1));
-	}
-
-	//getters e setters
 	
 	public Pessoa getNome() {
 		return nome;
@@ -78,22 +52,6 @@ public class RelatorioVacinaSeletor {
 
 	public void setDataFim(LocalDate dataFim) {
 		this.dataFim = dataFim;
-	}
-
-	public int getLimite() {
-		return limite;
-	}
-
-	public void setLimite(int limite) {
-		this.limite = limite;
-	}
-
-	public int getPagina() {
-		return pagina;
-	}
-
-	public void setPagina(int pagina) {
-		this.pagina = pagina;
 	}
 	
 }

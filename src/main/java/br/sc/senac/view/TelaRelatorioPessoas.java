@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -19,15 +20,12 @@ import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
-import br.sc.senac.model.vo.Pessoa;
+import br.sc.senac.model.utilidades.Constantes;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.ImageIcon;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaRelatorioPessoas extends JFrame {
 	
-	private static final int TAMANHO_PAGINA = 0; // relacionado a paginação
-
 	private JPanel contentPane;
 	private JComboBox cbRelatorioPessoas;
 	private JTable table;
@@ -72,7 +70,7 @@ public class TelaRelatorioPessoas extends JFrame {
 		lbbRelatorioPessoas.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(lbbRelatorioPessoas, "cell 3 0 3 1");
 		
-		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
+		String[] opcoesSexo = {Constantes.SEXO_MASCULINO, Constantes.SEXO_FEMININO}; 
 		
 		cbRelatorioPessoas = new JComboBox(opcoesSexo);
 		cbRelatorioPessoas.setModel(new DefaultComboBoxModel(new String[] {"Total de Pessoas por Sexo", "Total de Pessoas por Instituição", "Total de Pessoas por Categoria", "Total de Pessoas por Faixa de Idade (intervalo: 5 anos)", "Total de Pessoas por Faixa de Idade (intervalo: 10 anos)", "", ""}));
@@ -87,9 +85,6 @@ public class TelaRelatorioPessoas extends JFrame {
 		dateSettings.setAllowKeyboardEditing(false);
 		dataInicio = new DatePicker(dateSettings);
 		contentPane.add(dataInicio,"cell 1 4 2 1,growx");
-		
-		//TODO pensar sobre um botão cancelar ou voltar
-		final JFrame janelaAtual = this;
 		
 		JLabel lblDataFinal = new JLabel("At\u00E9:");
 		contentPane.add(lblDataFinal, "cell 5 4,alignx trailing");

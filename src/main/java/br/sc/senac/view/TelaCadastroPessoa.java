@@ -22,6 +22,7 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import br.sc.senac.controller.ControllerPessoa;
+import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.utilidades.Utils;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
@@ -83,8 +84,6 @@ public class TelaCadastroPessoa extends JFrame {
 		contentPane.add(tfNome, "cell 1 2 2 1,growx");
 		tfNome.setColumns(10);
 		
-		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
-		
 		MaskFormatter mascaraCpf = new MaskFormatter("###.###.###-##");
 		
 		JLabel lblSobrenome = new JLabel("Sobrenome:");
@@ -106,7 +105,7 @@ public class TelaCadastroPessoa extends JFrame {
 		JLabel lblSexo = new JLabel("Sexo:");
 		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblSexo, "cell 4 4,alignx trailing");
-		cbSexo = new JComboBox(opcoesSexo);
+		cbSexo = new JComboBox(Constantes.OPCOES_SEXO_EDICAO_CADASTRO);
 		cbSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbSexo, "cell 5 4 2 1,growx");
 		
@@ -114,14 +113,13 @@ public class TelaCadastroPessoa extends JFrame {
 		lblCategoria.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblCategoria, "cell 0 6,alignx trailing");
 		
-		TipoPessoa[] opcoesTipoPessoa = {TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
-		cbCategoria = new JComboBox(opcoesTipoPessoa);
+		cbCategoria = new JComboBox(Constantes.OPCOES_TIPO_PESSOA_EDICAO_CADASTRO);
 		cbCategoria.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		cbCategoria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TipoPessoa opcaoSelecionada = (TipoPessoa)cbCategoria.getSelectedItem();
 				
-				if(opcaoSelecionada == TipoPessoa.TIPO_PESQUISADOR) {
+				if(opcaoSelecionada == Constantes.TIPO_PESQUISADOR) {
 					tfInstituicao.setEnabled(true);
 				} else {
 					tfInstituicao.setEnabled(false);

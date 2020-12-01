@@ -11,24 +11,14 @@ import br.sc.senac.model.exception.InstituicaoInvalidaException;
 import br.sc.senac.model.exception.NomeInvalidoException;
 import br.sc.senac.model.exception.SobrenomeInvalidoException;
 import br.sc.senac.model.seletor.PessoaSeletor;
+import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.utilidades.StatusMensagem;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
-import br.sc.senac.model.vo.TipoPessoa;
-import br.sc.senac.view.TelaGerenciamentoDePessoas;
 
 
 public class ControllerPessoa {
-	/*1- Pessoas:
-		* Nome, sobrenome (caso exista no modelo), sexo e CPF são obrigatórios       
-		* Nome deve ter pelo menos 3 letras      
-		* CPF deve ter exatamente 11 dígitos   
-		* indicar o tipo de pessoa. Caso seja pesquisador, informar o nome da instituição onde ele trabalha
-		* indicar se a pessoa é ou não voluntária
-	* */
-	
-	public static final String TIPO_RELATORIO_XLS = "xls"; 
-	
+
 	PessoaBO pessoaBO = new PessoaBO();
 	
 	public String salvar(Pessoa novaPessoa) {
@@ -68,7 +58,7 @@ public class ControllerPessoa {
 	}
 
 	private void validarInstituicao(Pessoa novaPessoa) throws InstituicaoInvalidaException {
-		if(novaPessoa.getTipo() == TipoPessoa.TIPO_PESQUISADOR) {
+		if(novaPessoa.getTipo() == Constantes.TIPO_PESQUISADOR) {
 			Instituicao instituicao = novaPessoa.getInstituicao();
 			if(instituicao.getNome() == null || instituicao.getNome().isEmpty()) {
 				throw new InstituicaoInvalidaException("O campo instituição deve ser preenchido para pessoas do tipo pesquisador.");
@@ -106,8 +96,8 @@ public class ControllerPessoa {
 	public List<Pessoa> listarPessoas(PessoaSeletor seletor) {
 		//tratar sexo, cpf e tipo
 		if (seletor.getSexo() != null) {
-			if(seletor.getSexo() != Pessoa.SEXO_MASCULINO.charAt(0)
-					  && seletor.getSexo() != Pessoa.SEXO_FEMININO.charAt(0)) {
+			if(seletor.getSexo() != Constantes.SEXO_MASCULINO.charAt(0)
+					  && seletor.getSexo() != Constantes.SEXO_FEMININO.charAt(0)) {
 				seletor.setSexo(null);
 			}
 		}
@@ -118,7 +108,7 @@ public class ControllerPessoa {
 			seletor.setCpf(null);
 		}
 		
-		if(seletor.getTipo() == TelaGerenciamentoDePessoas.OPCAO_CATEGORIA_TODAS) {
+		if(seletor.getTipo() == Constantes.OPCAO_CATEGORIA_TODAS) {
 			seletor.setTipo(null);
 		}
 		
@@ -139,13 +129,13 @@ public class ControllerPessoa {
 	}
 	
 	public void gerarRelatorioPessoaTotalPorSexo(List<Pessoa> pessoas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
 			pessoaBO.gerarPlanilhaPessoaTotalPorSexo(pessoas, caminhoEscolhido);
 		}
 	}
 	
 	public void gerarRelatorioPessoaTotalPorSexoPorPeriodo(List<Pessoa> pessoas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
 			pessoaBO.gerarPlanilhaPessoaTotalPorSexoPorPeriodo(pessoas, caminhoEscolhido);
 		}
 	}

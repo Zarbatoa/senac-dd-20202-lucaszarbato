@@ -7,12 +7,11 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -22,14 +21,11 @@ import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
-import br.sc.senac.model.vo.Pessoa;
+import br.sc.senac.model.utilidades.Constantes;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.ImageIcon;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaRelatorioAvaliacaoVacinas extends JFrame {
-	
-	private static final int TAMANHO_PAGINA = 0; // relacionado a paginação
 
 	private JPanel contentPane;
 	private JComboBox cbRelatorioAvaliacaoVacinas;
@@ -76,7 +72,7 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 		lbbRelatorioAvaliacaoVacinas.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(lbbRelatorioAvaliacaoVacinas, "cell 3 0 3 1");
 		
-		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
+		String[] opcoesSexo = {Constantes.SEXO_MASCULINO, Constantes.SEXO_FEMININO}; 
 		
 		cbRelatorioAvaliacaoVacinas = new JComboBox(opcoesSexo);
 		cbRelatorioAvaliacaoVacinas.setModel(new DefaultComboBoxModel(new String[] {"M\u00E9dia Nota por Vacina", "M\u00E9dia Nota por Usu\u00E1rio", "M\u00E9dia Nota por Categoria", "M\u00E9dia Nota por Sexo", "", "", ""}));
@@ -100,9 +96,6 @@ public class TelaRelatorioAvaliacaoVacinas extends JFrame {
 		dateSettings.setAllowKeyboardEditing(false);
 		dataInicio = new DatePicker(dateSettings);
 		contentPane.add(dataInicio,"cell 1 6 2 1,growx");
-		
-		//TODO pensar sobre um botão cancelar ou voltar
-		final JFrame janelaAtual = this;
 		
 		JLabel lblDataFinal = new JLabel("At\u00E9:");
 		lblDataFinal.setFont(new Font("Tahoma", Font.PLAIN, 11));

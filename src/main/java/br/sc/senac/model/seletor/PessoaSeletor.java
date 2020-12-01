@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import br.sc.senac.model.vo.TipoPessoa;
 
-public class PessoaSeletor {
+public class PessoaSeletor extends AbstractSeletor {
 	
 	//Atributos que servirão de filtros
 	private String nome;
@@ -15,17 +15,9 @@ public class PessoaSeletor {
 	private String nomeInstituicao; 
 	private TipoPessoa tipo; 
 	
-	//Atributos para possível paginação dos resultados (intervalo)
-	private int limite;
-	private int pagina;
-	
 	public PessoaSeletor() {
-		//Default: traz os resultados sem limite e sem página
-		this.limite = 0;
-		this.pagina = -1;
+		super();
 	}
-	
-	//getters e setters
 	
 	public String getNome() {
 		return nome;
@@ -82,23 +74,6 @@ public class PessoaSeletor {
 	public void setTipo(TipoPessoa tipo) {
 		this.tipo = tipo;
 	}
-
-	public int getLimite() {
-		return limite;
-	}
-
-	public void setLimite(int limite) {
-		this.limite = limite;
-	}
-
-	public int getPagina() {
-		return pagina;
-	}
-
-	public void setPagina(int pagina) {
-		this.pagina = pagina;
-	}
-	
 	
 
 	public boolean temFiltro() {
@@ -144,7 +119,6 @@ public class PessoaSeletor {
 	}
 
 	public boolean temFiltroDeSexo() {
-		// (this.sexo != 0) && (this.sexo > 0);
 		return this.sexo != null;
 	}
 
@@ -154,24 +128,6 @@ public class PessoaSeletor {
 
 	public boolean temFiltroDeNome() {
 		return (this.nome != null) && (this.nome.trim().length() > 0);
-	}
-
-	/**
-	 * Verifica se os campos de paginacao estao preenchidos
-	 *
-	 * @return verdadeiro se os campos limite e pagina estao preenchidos
-	 */
-	public boolean temPaginacao() {
-		return ((this.limite > 0) && (this.pagina > -1));
-	}
-
-	/**
-	 * Calcula deslocamento (offset) a partir da pagina e do limite
-	 *
-	 * @return offset
-	 */
-	public int getOffset() {
-		return (this.limite * (this.pagina - 1));
 	}
 
 }

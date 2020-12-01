@@ -9,7 +9,6 @@ import java.util.List;
 
 import br.sc.senac.model.seletor.AvaliacaoVacinaSeletor;
 import br.sc.senac.model.vo.Nota;
-import br.sc.senac.model.vo.Vacina;
 
 public class NotaDAO implements BaseDAO<Nota>{
 

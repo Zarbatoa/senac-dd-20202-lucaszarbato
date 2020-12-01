@@ -22,6 +22,7 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.controller.ControllerVacina;
+import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.vo.Pais;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
@@ -99,12 +100,11 @@ public class TelaCadastroVacina extends JFrame {
 		cbPaisOrigem.setModel(new DefaultComboBoxModel(listaPaises));
 		contentPane.add(cbPaisOrigem, "cell 1 4 2 1,growx");
 		
-		String [] estagiosVacina = Vacina.getEstagiosDeVacina();
 		JLabel lblEstagioPesquisa = new JLabel("Est\u00E1gio da Pesquisa:");
 		lblEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblEstagioPesquisa, "cell 4 4,alignx trailing");
 		cbEstagioPesquisa = new JComboBox();
-		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(estagiosVacina));
+		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(Constantes.LISTA_ESTAGIOS_VACINA));
 		cbEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbEstagioPesquisa, "cell 5 4,growx");
 		

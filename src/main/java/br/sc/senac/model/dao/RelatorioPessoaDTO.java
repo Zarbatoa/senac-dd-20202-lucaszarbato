@@ -6,11 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.seletor.RelatorioPessoaSeletor;
-import br.sc.senac.model.vo.Instituicao;
-import br.sc.senac.model.vo.Pessoa;
-import br.sc.senac.model.dto.LancamentoPessoaDTO;;
+import br.sc.senac.model.vo.Pessoa;;
 
 public class RelatorioPessoaDTO {
 	

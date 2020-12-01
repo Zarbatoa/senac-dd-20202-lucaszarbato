@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -23,14 +24,11 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import br.sc.senac.controller.ControllerVacina;
-import br.sc.senac.model.vo.Pessoa;
+import br.sc.senac.model.utilidades.Constantes;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.ImageIcon;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaRelatorioVacinas extends JFrame {
-	
-	private static final int TAMANHO_PAGINA = 0; // relacionado a paginação
 
 	private JPanel contentPane;
 	private JComboBox cbRelatorioVacinas;
@@ -76,7 +74,7 @@ public class TelaRelatorioVacinas extends JFrame {
 		lbbRelatorioVacinas.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(lbbRelatorioVacinas, "cell 3 0 3 1");
 		
-		String[] opcoesSexo = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO}; 
+		String[] opcoesSexo = {Constantes.SEXO_MASCULINO, Constantes.SEXO_FEMININO}; 
 		
 		cbRelatorioVacinas = new JComboBox(opcoesSexo);
 		cbRelatorioVacinas.setModel(new DefaultComboBoxModel(new String[] {"Total de Vacinas por Pesquisador", "==================", "Total de Vacinas por Pa\u00EDs de origem", "Total de Vacinas por Pa\u00EDs de origem a partir de uma data", "Total de Vacinas por Est\u00E1gio de Pesquisa", "Total de Vacinas por Est\u00E1gio de Pesquisa a partir de uma data"}));
@@ -95,9 +93,6 @@ public class TelaRelatorioVacinas extends JFrame {
 		DatePickerSettings dateSettings = new DatePickerSettings();
 		dateSettings.setAllowKeyboardEditing(false);
 		
-		//TODO pensar sobre um botão cancelar ou voltar
-		final JFrame janelaAtual = this;
-		
 		DatePickerSettings dateSettings2 = new DatePickerSettings();
 		dateSettings2.setAllowKeyboardEditing(false);
 		
@@ -114,6 +109,7 @@ public class TelaRelatorioVacinas extends JFrame {
 		btnGerarRelatorio.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnGerarRelatorio, "cell 2 6,alignx right");
 		
+		//TODO tentar gerar um caminho relativo
 		JButton btnGerarXls = new JButton("Gerar xls");
 		btnGerarXls.setIcon(new ImageIcon("C:\\Users\\rosan\\git\\senac-dd-20202-lucaszarbato2\\icones\\iconeExcelmenor.png"));
 		btnGerarXls.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -127,13 +123,17 @@ public class TelaRelatorioVacinas extends JFrame {
 				int opcaoSelecionada = janelaArquivos.showSaveDialog(null);
 
 				if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
+					//TODO quando eu for ver as telas de relatorio não se esquecer dessas variáveis
+					@SuppressWarnings("unused")
 					String caminho = janelaArquivos.getSelectedFile().getAbsolutePath();
 
+					@SuppressWarnings("unused")
 					ControllerVacina controller = new ControllerVacina();
-					// Não deixar erros no código!
-//					String mensagem = controller.gerarRelatorioTotalVacinaPorPesquisador(vacinas, caminhoEscolhido, tipoRelatorio); //aqui está ligado ao método gerar relatório, que equivale a uma consulta de vacina
-//
-//					JOptionPane.showMessageDialog(null, mensagem);
+					
+					//TODO continuar implementacao proposta (onde esses argumentos serão declarados e instanciados?)
+					String mensagem = ""; //controller.gerarRelatorioTotalVacinaPorPesquisador(vacinas, caminhoEscolhido, tipoRelatorio); //aqui está ligado ao método gerar relatório, que equivale a uma consulta de vacina
+
+					JOptionPane.showMessageDialog(null, mensagem);
 				}
 			}
 		});

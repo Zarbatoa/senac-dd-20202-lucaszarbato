@@ -46,7 +46,6 @@ public class PessoaBO {
 			}
 		}
 		
-		//TODO tratar IDINSTITUICAO!!!
 		if(instituicaoDAO.jaExisteNome(pessoaAtualizada.getInstituicao())) {
 			instiutuicaoDoBanco = instituicaoDAO.pesquisarPeloNome(pessoaAtualizada.getInstituicao().getNome());
 		} else {

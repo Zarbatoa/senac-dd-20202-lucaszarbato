@@ -7,14 +7,12 @@ import br.sc.senac.model.exception.PessoaInvalidaException;
 import br.sc.senac.model.exception.VacinaInvalidaException;
 import br.sc.senac.model.exception.ValorInvalidoException;
 import br.sc.senac.model.seletor.AvaliacaoVacinaSeletor;
-import br.sc.senac.model.seletor.PessoaSeletor;
+import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.vo.Nota;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
 
 public class ControllerNota {
-	
-	public static final String TIPO_RELATORIO_XLS = "xls"; 
 
 	private NotaBO notaBO = new NotaBO();
 	
@@ -65,7 +63,7 @@ public class ControllerNota {
 	}
 	
 	public void gerarRelatorioMediaNoraPorVacina(List<Nota> notas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
 			notaBO.gerarPlanilhaMediaNotaPorVacina(notas, caminhoEscolhido);
 		}
 	}

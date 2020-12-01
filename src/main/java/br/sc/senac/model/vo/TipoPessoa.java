@@ -4,10 +4,6 @@ import br.sc.senac.model.utilidades.Utils;
 
 public class TipoPessoa {
 
-	public static final TipoPessoa TIPO_PESQUISADOR = new TipoPessoa(1, "PESQUISADOR");
-	public static final TipoPessoa TIPO_PUBLICO_GERAL = new TipoPessoa(2, "PUBLICO_GERAL");
-	public static final TipoPessoa TIPO_VOLUNTARIO = new TipoPessoa(3, "VOLUNTARIO");
-	
 	private int id;
 	private String descricao;
 	

@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import br.sc.senac.model.dto.LancamentoVacinaDTO;
 import br.sc.senac.model.seletor.RelatorioVacinaSeletor;
-import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
 
 public class RelatorioVacinaDTO {

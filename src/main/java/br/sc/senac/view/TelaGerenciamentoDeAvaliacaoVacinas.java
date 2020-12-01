@@ -2,8 +2,8 @@ package br.sc.senac.view;
 
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.util.List;
 
@@ -18,7 +18,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.MaskFormatter;
 
 import br.sc.senac.controller.ControllerNota;
 import br.sc.senac.model.seletor.AvaliacaoVacinaSeletor;
@@ -100,8 +99,6 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JFrame {
 		
 		ftfNota = new JFormattedTextField();
 		contentPane.add(ftfNota, "cell 1 4,growx");
-		//TODO pensar sobre um botão cancelar ou voltar
-		final JFrame janelaAtual = this;
 		
 		JButton btnFiltrar = new JButton("Filtrar");
 		btnFiltrar.setFont(new Font("Tahoma", Font.BOLD, 11));

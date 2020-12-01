@@ -7,20 +7,12 @@ import br.sc.senac.model.bo.VacinaBO;
 import br.sc.senac.model.exception.DataInicioPesquisaInvalidaException;
 import br.sc.senac.model.exception.NomeInvalidoException;
 import br.sc.senac.model.exception.PesquisadorInvalidoException;
-import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.seletor.VacinaSeletor;
+import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
 
 public class ControllerVacina {
-	/*2- Vacinas
-		* país de origem, estágio da pesquisa (1-inicial, 2-testes, 3-aplicação em massa), data de início da pesquisa, nome do pesquisador responsável
-		* nome do país e do pesquisador deve possuir no mínimo 3 letras
-		* converter data no formado "dd/MM/YYYY" para LocalDate
-		* todos os campos são obrigatórios
-	* */
-	
-	public static final String TIPO_RELATORIO_XLS = "xls"; 
 	
 	VacinaBO vacinaBO = new VacinaBO();
 	
@@ -78,31 +70,31 @@ public class ControllerVacina {
 	}
 	
 	public void gerarRelatorioTotalVacinaPorPesquisador(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
 			vacinaBO.gerarPlanilhaVacinaTotalPorPesquisador(vacinas, caminhoEscolhido);
 		}
 	}
 	
 	public void gerarRelatorioTotalVacinaPorPaisDeOrigem(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
 			vacinaBO.gerarPlanilhaVacinaTotalPorPaisDeOrigem(vacinas, caminhoEscolhido);
 		}
 	}
 	
 	public void gerarRelatorioTotalVacinaPorPaisDeOrigemPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
 			vacinaBO.gerarPlanilhaVacinaTotalPorPaisDeOrigemPorPeriodo(vacinas, caminhoEscolhido);
 		}
 	}
 	
 	public void gerarRelatorioTotalVacinaPorEstagioDePesquisa(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
 			vacinaBO.gerarPlanilhaVacinaTotalPorEstagioDePesquisa(vacinas, caminhoEscolhido);
 		}
 	}
 	
 	public void gerarRelatorioTotalVacinaPorEstagioDePesquisaPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
+		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
 			vacinaBO.gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(vacinas, caminhoEscolhido);
 		}
 	}

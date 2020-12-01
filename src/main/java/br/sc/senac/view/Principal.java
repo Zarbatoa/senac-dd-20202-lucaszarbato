@@ -7,46 +7,26 @@ import br.sc.senac.model.dao.InstituicaoDAO;
 import br.sc.senac.model.dao.NotaDAO;
 import br.sc.senac.model.dao.PessoaDAO;
 import br.sc.senac.model.dao.VacinaDAO;
+import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Nota;
 import br.sc.senac.model.vo.Pessoa;
-import br.sc.senac.model.vo.TipoPessoa;
 import br.sc.senac.model.vo.Vacina;
 
 public class Principal {
 
-	/*
-	 * 1- Pessoas:
-			* Nome, sobrenome (caso exista no modelo), sexo e CPF são obrigatórios       
-			* Nome deve ter pelo menos 3 letras      
-			* CPF deve ter exatamente 11 dígitos   
-			* indicar o tipo de pessoa. Caso seja pesquisador, informar o nome da instituição onde ele trabalha
-			* indicar se a pessoa é ou não voluntária
-			 
-		2- Vacinas
-			* país de origem, estágio da pesquisa (1-inicial, 2-testes, 3-aplicação em massa), data de início da pesquisa, nome do pesquisador responsável
-			* nome do país e do pesquisador deve possuir no mínimo 3 letras
-			* converter data no formado "dd/MM/YYYY" para LocalDate
-			* todos os campos são obrigatórios
-
-		3- Ao clicar em "Salvar/Cadastrar" em cada uma das telas deve:
-			* Chamar respectivo controller, passando os dados da tela em um objeto de entidade
-			* O controller deve devolver uma String contendo a mensagem de sucesso/erro/validação
-			* Mostrar a mensagem devolvida pelo controller em um JOptionPane, chamado pela tela original criada.
-	 * */
-	
 	public static void main(String[] args) {
 		Instituicao ufsc = new Instituicao(1,"Universidade Federal de Santa Catarina");
 		Instituicao senac = new Instituicao(1,"Serviço Nacional de Aprendizagem Comercial");
 		
-		Pessoa joao = new Pessoa(1,TipoPessoa.TIPO_PESQUISADOR,ufsc,"João", "Silva", LocalDate.of(1990, 2, 15), 'M', "11111111111");
-		Pessoa maria = new Pessoa(2,TipoPessoa.TIPO_PUBLICO_GERAL, null, "Maria", "Pereira", LocalDate.of(1972, 10, 5),'F', "22222222222");
-		Pessoa jose = new Pessoa(3,TipoPessoa.TIPO_VOLUNTARIO, null, "José", "Oswaldo", LocalDate.of(1988, 1, 10),'M', "33333333333");
-		Pessoa vladmir = new Pessoa(4,TipoPessoa.TIPO_PESQUISADOR,senac,"Vladmir", "Oslov", LocalDate.of(1981, 5, 24), 'M', "44444444444");
+		Pessoa joao = new Pessoa(1,Constantes.TIPO_PESQUISADOR,ufsc,"João", "Silva", LocalDate.of(1990, 2, 15), 'M', "11111111111");
+		Pessoa maria = new Pessoa(2,Constantes.TIPO_PUBLICO_GERAL, null, "Maria", "Pereira", LocalDate.of(1972, 10, 5),'F', "22222222222");
+		Pessoa jose = new Pessoa(3,Constantes.TIPO_VOLUNTARIO, null, "José", "Oswaldo", LocalDate.of(1988, 1, 10),'M', "33333333333");
+		Pessoa vladmir = new Pessoa(4,Constantes.TIPO_PESQUISADOR,senac,"Vladmir", "Oslov", LocalDate.of(1981, 5, 24), 'M', "44444444444");
 		
-		Vacina v0 = new Vacina(1,"Vacina Acreana","Brasil", Vacina.ESTAGIO_TESTES,LocalDate.of(2020, 4, 22),joao);
-		Vacina v1 = new Vacina(1,"Vacina Cata Vento","Brasil", Vacina.ESTAGIO_INICIAL,LocalDate.of(2020, 6, 1),joao);
-		Vacina v2 = new Vacina(1,"Vacina Orlova","Russia", Vacina.ESTAGIO_APLICACAO_EM_MASSA,LocalDate.of(2020, 5, 13),vladmir);
+		Vacina v0 = new Vacina(1,"Vacina Acreana","Brasil", Constantes.ESTAGIO_TESTES,LocalDate.of(2020, 4, 22),joao);
+		Vacina v1 = new Vacina(1,"Vacina Cata Vento","Brasil", Constantes.ESTAGIO_INICIAL,LocalDate.of(2020, 6, 1),joao);
+		Vacina v2 = new Vacina(1,"Vacina Orlova","Russia", Constantes.ESTAGIO_APLICACAO_EM_MASSA,LocalDate.of(2020, 5, 13),vladmir);
 		
 		InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
 		instituicaoDAO.inserir(ufsc);

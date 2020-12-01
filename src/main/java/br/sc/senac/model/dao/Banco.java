@@ -9,19 +9,13 @@ import java.sql.Statement;
 
 public class Banco {
 
-	/* https://www.it-swarm.dev/pt/java/mysql-jdbc-driver-5.1.33-problema-do-fuso-horario/1049184760/
-	 * 
-	 * jdbc:mysql://localhost/
-	 * db
-	 * ?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-	 * */
-	
+	// https://www.it-swarm.dev/pt/java/mysql-jdbc-driver-5.1.33-problema-do-fuso-horario/1049184760/	
 	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 	private static final String BANCODADOS = "DBSISTEMACOVID";
 	private static final String BUGFIX_HORABR = "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	private static final String CONEXAO = "jdbc:mysql://localhost:3306/" + BANCODADOS + BUGFIX_HORABR;
 	private static final String USER = "root";
-	private static final String PASSWORD = "admin"; // Tem que preencher aqui
+	private static final String PASSWORD = "admin"; // Alterar se necessário
 	
 	public static final int CODIGO_RETORNO_SUCESSO = 1;
 	

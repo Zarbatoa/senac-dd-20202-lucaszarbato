@@ -2,15 +2,10 @@ package br.sc.senac.model.vo;
 
 import java.time.LocalDate;
 
+import br.sc.senac.model.utilidades.Constantes;
+
 public class Vacina {
 
-	public static final int ESTAGIO_INICIAL = 1;
-	public static final int ESTAGIO_TESTES = 2;
-	public static final int ESTAGIO_APLICACAO_EM_MASSA = 3;
-	public static final String TXT_ESTAGIO_INICIAL = "Estágio Inicial";
-	public static final String TXT_ESTAGIO_TESTES = "Estágio de Testes";
-	public static final String TXT_ESTAGIO_APLICACAO_EM_MASSA = "Estágio de Aplicação em Massa";
-	
 	private int id;
 	private String nome;
 	private String paisOrigem;
@@ -99,14 +94,14 @@ public class Vacina {
 		String estagioPesquisa = null;
 		
 		switch (this.estagioPesquisa) {
-			case Vacina.ESTAGIO_INICIAL:
-				estagioPesquisa = TXT_ESTAGIO_INICIAL;
+			case Constantes.ESTAGIO_INICIAL:
+				estagioPesquisa = Constantes.TXT_ESTAGIO_INICIAL;
 				break;
-			case Vacina.ESTAGIO_TESTES:
-				estagioPesquisa = TXT_ESTAGIO_TESTES;
+			case Constantes.ESTAGIO_TESTES:
+				estagioPesquisa = Constantes.TXT_ESTAGIO_TESTES;
 				break;
-			case Vacina.ESTAGIO_APLICACAO_EM_MASSA:
-				estagioPesquisa = TXT_ESTAGIO_APLICACAO_EM_MASSA;
+			case Constantes.ESTAGIO_APLICACAO_EM_MASSA:
+				estagioPesquisa = Constantes.TXT_ESTAGIO_APLICACAO_EM_MASSA;
 				break;
 			default:
 		}
@@ -114,24 +109,21 @@ public class Vacina {
 		return estagioPesquisa;
 	}
 
+	//TODO verificar se isto deveria estar aqui ou em Constantes.
 	public static int getIntEstagioDePesquisa(String nomeEstagio) {
 		int estagioPesquisa = -1;
 		
 		if(nomeEstagio != null) {
-			if(nomeEstagio.equalsIgnoreCase(TXT_ESTAGIO_INICIAL)) {
-				estagioPesquisa = ESTAGIO_INICIAL;
-			} else if(nomeEstagio.equalsIgnoreCase(TXT_ESTAGIO_TESTES)) {
-				estagioPesquisa = ESTAGIO_TESTES;
-			}  else if(nomeEstagio.equalsIgnoreCase(TXT_ESTAGIO_APLICACAO_EM_MASSA)) {
-				estagioPesquisa = ESTAGIO_APLICACAO_EM_MASSA;
+			if(nomeEstagio.equalsIgnoreCase(Constantes.TXT_ESTAGIO_INICIAL)) {
+				estagioPesquisa = Constantes.ESTAGIO_INICIAL;
+			} else if(nomeEstagio.equalsIgnoreCase(Constantes.TXT_ESTAGIO_TESTES)) {
+				estagioPesquisa = Constantes.ESTAGIO_TESTES;
+			}  else if(nomeEstagio.equalsIgnoreCase(Constantes.TXT_ESTAGIO_APLICACAO_EM_MASSA)) {
+				estagioPesquisa = Constantes.ESTAGIO_APLICACAO_EM_MASSA;
 			}
 		}
 		
 		return estagioPesquisa;
-	}
-	
-	public static String[] getEstagiosDeVacina() {
-		return new String[] {TXT_ESTAGIO_INICIAL, TXT_ESTAGIO_TESTES, TXT_ESTAGIO_APLICACAO_EM_MASSA};
 	}
 	
 }

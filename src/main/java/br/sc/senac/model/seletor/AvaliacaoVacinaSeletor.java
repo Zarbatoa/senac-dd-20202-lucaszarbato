@@ -1,23 +1,14 @@
 package br.sc.senac.model.seletor;
 
-import br.sc.senac.model.vo.Pessoa;
-import br.sc.senac.model.vo.Vacina;
-
-public class AvaliacaoVacinaSeletor {
+public class AvaliacaoVacinaSeletor extends AbstractSeletor {
 	
 	//Atributos que servirão de filtros
 	private String nomeVacina;
 	private String nomePessoa;
 	private double nota;
 	
-	//Atributos para possível paginação dos resultados (intervalo)
-	private int limite;
-	private int pagina;
-	
 	public AvaliacaoVacinaSeletor() {
-		//Default: traz os resultados sem limite e sem página
-		this.limite = 0;
-		this.pagina = -1;
+		super();
 	}
 	
 	public boolean temFiltro() {
@@ -32,26 +23,6 @@ public class AvaliacaoVacinaSeletor {
 		}
 		return false;
 	}
-		
-	/**
-	 * Verifica se os campos de paginacao estao preenchidos
-	 *
-	 * @return verdadeiro se os campos limite e pagina estao preenchidos
-	 */
-	public boolean temPaginacao() {
-		return ((this.limite > 0) && (this.pagina > -1));
-	}
-
-	/**
-	 * Calcula deslocamento (offset) a partir da pagina e do limite
-	 *
-	 * @return offset
-	 */
-	public int getOffset() {
-		return (this.limite * (this.pagina - 1));
-	}
-
-	//getters e setters
 	
 	public String getNomeVacina() {
 		return nomeVacina;
@@ -75,22 +46,6 @@ public class AvaliacaoVacinaSeletor {
 	
 	public void setNota(double nota) {
 		this.nota = nota;
-	}
-
-	public int getLimite() {
-		return limite;
-	}
-
-	public void setLimite(int limite) {
-		this.limite = limite;
-	}
-
-	public int getPagina() {
-		return pagina;
-	}
-
-	public void setPagina(int pagina) {
-		this.pagina = pagina;
 	}
 
 }

@@ -6,9 +6,6 @@ import br.sc.senac.model.utilidades.Utils;
 
 public class Pessoa {
 	
-	public static final String SEXO_MASCULINO = "Masculino";
-	public static final String SEXO_FEMININO = "Feminino";
-	
 	private int id;
 	private TipoPessoa tipo;
 	private Instituicao instituicao;

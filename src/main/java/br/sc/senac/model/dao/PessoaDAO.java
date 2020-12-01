@@ -297,7 +297,6 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 			primeiro = false;
 		}
 		
-		//TODO consertar o sql para pegar por nome de instituicao
 		if (seletor.temFiltroDeNomeInstituicao()) {
 			if (!primeiro) {
 				sql += " AND ";
@@ -307,7 +306,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 			if(instituicaoPesquisada != null) {
 				seletor.setNomeInstituicao(instituicaoPesquisada.getId() + "");
 			}
-			sql += "p.idinstituicao = '" + seletor.getNomeInstituicao() + "'"; // dúvida pois o nome da instituição veio do DAO INSTITUIÇÃO
+			sql += "p.idinstituicao = '" + seletor.getNomeInstituicao() + "'";
 			primeiro = false;
 		}
 		
@@ -315,7 +314,7 @@ public class PessoaDAO implements BaseDAO<Pessoa>{
 			if (!primeiro) {
 				sql += " AND ";
 			}
-			sql += "p.idtipo = '" + seletor.getTipo().getId() + "'"; // dúvida pois o nome da instituição veio do DAO TIPO
+			sql += "p.idtipo = '" + seletor.getTipo().getId() + "'";
 			primeiro = false;
 		}
 		

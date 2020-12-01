@@ -29,6 +29,7 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.model.seletor.PessoaSeletor;
+import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.utilidades.StatusMensagem;
 import br.sc.senac.model.utilidades.Utils;
 import br.sc.senac.model.vo.Instituicao;
@@ -38,11 +39,6 @@ import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class TelaGerenciamentoDePessoas extends JFrame {
-
-	public static final String OPCAO_SEXO_TODOS = "Todos";
-	public static final TipoPessoa OPCAO_CATEGORIA_TODAS = new TipoPessoa(-1,"Todas");
-	
-	private static final int TAMANHO_PAGINA = 5; // relacionado a paginação
 
 	private JPanel contentPane;
 	private JTextField tfNome;
@@ -63,11 +59,6 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	private JButton btnPegarRegistro;
 	private JButton btnEditar;
 	private JButton btnLimpar;
-	
-	private final String[] opcoesSexoGeral = {OPCAO_SEXO_TODOS, Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO};
-	private final TipoPessoa[] opcoesTipoPessoaGeral = {OPCAO_CATEGORIA_TODAS ,TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
-	private final String[] opcoesSexoEdicao = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO};
-	private final TipoPessoa[] opcoesTipoPessoaEdicao = {TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
 	
 	private PessoaSeletor ultimoSeletorUsado;
 	private int paginaAtual = 1;
@@ -138,7 +129,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblSexo, "cell 5 4,alignx trailing");
 		cbSexo = new JComboBox();
-		cbSexo.setModel(new DefaultComboBoxModel(opcoesSexoGeral));
+		cbSexo.setModel(new DefaultComboBoxModel(Constantes.OPCOES_SEXO_GERAL));
 		cbSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbSexo, "cell 6 4 2 1,growx");
 		
@@ -148,7 +139,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		cbCategoria = new JComboBox();
 		cbCategoria.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		cbCategoria.setModel(new DefaultComboBoxModel(opcoesTipoPessoaGeral));
+		cbCategoria.setModel(new DefaultComboBoxModel(Constantes.OPCOES_TIPO_PESSOA_GERAL));
 		cbCategoria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				definirInstituicaoEnabled();
@@ -277,7 +268,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	protected void definirInstituicaoEnabled() {
 		TipoPessoa opcaoSelecionada = (TipoPessoa)cbCategoria.getSelectedItem();
 		
-		if(opcaoSelecionada == TipoPessoa.TIPO_PESQUISADOR) {
+		if(opcaoSelecionada == Constantes.TIPO_PESQUISADOR) {
 			tfInstituicao.setEnabled(true);
 		} else {
 			tfInstituicao.setText("");
@@ -286,9 +277,6 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	}
 	
 	protected void tentarEditar() {
-		//TODO  completar logica editar	
-		System.out.println("botao editar");
-		
 		// Preencher o Objeto com os dados da tela
 		Pessoa pessoaAlterada = new Pessoa();
 		// pegar id
@@ -353,7 +341,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	private void preencherInputsComALinhaDeEdicao(int linhaSelecionada) {
 		tfNome.setText((String) tableResultados.getModel().getValueAt(linhaSelecionada, 1));
 		tfSobrenome.setText((String) tableResultados.getModel().getValueAt(linhaSelecionada, 2));
-		if(((Character) tableResultados.getModel().getValueAt(linhaSelecionada, 3)) == Pessoa.SEXO_MASCULINO.charAt(0)) {
+		if(((Character) tableResultados.getModel().getValueAt(linhaSelecionada, 3)) == Constantes.SEXO_MASCULINO.charAt(0)) {
 			cbSexo.setSelectedIndex(0);
 		} else {
 			cbSexo.setSelectedIndex(1);
@@ -366,24 +354,24 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 
 	private int getIndexFromTipo(TipoPessoa tipoSelecionado) {
 		int indice = 0 ;
-		if(tipoSelecionado.equals(opcoesTipoPessoaGeral[1])) {
+		if(tipoSelecionado.equals(Constantes.OPCOES_TIPO_PESSOA_GERAL[1])) {
 			indice = 0;
-		} else if(tipoSelecionado.equals(opcoesTipoPessoaGeral[2])) {
+		} else if(tipoSelecionado.equals(Constantes.OPCOES_TIPO_PESSOA_GERAL[2])) {
 			indice = 1;
-		} else if(tipoSelecionado.equals(opcoesTipoPessoaGeral[3])) {
+		} else if(tipoSelecionado.equals(Constantes.OPCOES_TIPO_PESSOA_GERAL[3])) {
 			indice = 2;
 		}
 		return indice;
 	}
 
 	private void redefinirComboboxsParaGeral() {
-		cbSexo.setModel(new DefaultComboBoxModel(opcoesSexoGeral));
-		cbCategoria.setModel(new DefaultComboBoxModel(opcoesTipoPessoaGeral));
+		cbSexo.setModel(new DefaultComboBoxModel(Constantes.OPCOES_SEXO_GERAL));
+		cbCategoria.setModel(new DefaultComboBoxModel(Constantes.OPCOES_TIPO_PESSOA_GERAL));
 	}
 	
 	private void redefinirComboboxsParaEdicao() {
-		cbSexo.setModel(new DefaultComboBoxModel(opcoesSexoEdicao));
-		cbCategoria.setModel(new DefaultComboBoxModel(opcoesTipoPessoaEdicao));
+		cbSexo.setModel(new DefaultComboBoxModel(Constantes.OPCOES_SEXO_EDICAO_CADASTRO));
+		cbCategoria.setModel(new DefaultComboBoxModel(Constantes.OPCOES_TIPO_PESSOA_EDICAO_CADASTRO));
 	}
 
 	private void abilitarTabelaBotoesConsultaExclusao() {
@@ -435,7 +423,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		if(ultimoSeletorUsado != null) {
 			lblPagAtual.setText(paginaAtual + "");
 			ultimoSeletorUsado.setPagina(paginaAtual);
-			ultimoSeletorUsado.setLimite(TAMANHO_PAGINA);
+			ultimoSeletorUsado.setLimite(Constantes.TAMANHO_PAGINA);
 			ControllerPessoa controlador = new ControllerPessoa();
 			List<Pessoa> pessoas = controlador.listarPessoas(ultimoSeletorUsado);
 			atualizarTabelaPessoas(pessoas);
@@ -472,7 +460,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		PessoaSeletor seletor = new PessoaSeletor();
 
 		seletor.setPagina(paginaAtual);
-		seletor.setLimite(TAMANHO_PAGINA);
+		seletor.setLimite(Constantes.TAMANHO_PAGINA);
 		
 		// Preenche os campos de filtro da tela no seletor
 		seletor.setNome(tfNome.getText());
@@ -503,7 +491,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		for (int i = 0; i < pessoas.size(); i++) {
 			Pessoa pessoa = pessoas.get(i);
 			String dataFormatada = pessoa.getDataNascimento().format(formatter);
-			String nomeInstituicao = pessoa.getInstituicao() == null ? "-" : pessoa.getInstituicao().toString();
+			String nomeInstituicao = pessoa.getInstituicao() == null ? "" : pessoa.getInstituicao().toString();
 
 			modelo.setValueAt(pessoa.getId(), i+1, 0);
 			modelo.setValueAt(pessoa.getNome(), i+1, 1);
