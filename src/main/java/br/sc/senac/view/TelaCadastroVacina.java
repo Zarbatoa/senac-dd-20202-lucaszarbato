@@ -88,7 +88,7 @@ public class TelaCadastroVacina extends JFrame {
 		contentPane.add(lblEstagioPesquisa, "cell 4 2,alignx trailing");
 		
 		cbEstagioPesquisa = new JComboBox();
-		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(Constantes.LISTA_ESTAGIOS_VACINA));
+		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(Constantes.LISTA_ESTAGIOS_VACINA_EDICAO_CADASTRO));
 		cbEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbEstagioPesquisa, "cell 5 2,growx");
 		
@@ -96,10 +96,9 @@ public class TelaCadastroVacina extends JFrame {
 		lblPaisDeOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblPaisDeOrigem, "cell 0 4,alignx trailing");
 		
-		Pais[] listaPaises = Pais.createCountryList();
 		cbPaisOrigem = new JComboBox();
 		cbPaisOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		cbPaisOrigem.setModel(new DefaultComboBoxModel(listaPaises));
+		cbPaisOrigem.setModel(new DefaultComboBoxModel(Constantes.OPCOES_PAISES_EDICAO_CADASTRO));
 		contentPane.add(cbPaisOrigem, "cell 1 4 2 1,growx");
 		
 		JLabel lblPesquisadorResponsavel = new JLabel("Pesquisador Respons\u00E1vel:");

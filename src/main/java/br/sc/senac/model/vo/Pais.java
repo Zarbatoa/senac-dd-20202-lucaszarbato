@@ -1,7 +1,11 @@
 package br.sc.senac.model.vo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+
+import br.sc.senac.model.utilidades.Constantes;
 
 public class Pais implements Comparable<Pais> {
 
@@ -39,7 +43,26 @@ public class Pais implements Comparable<Pais> {
 		return this.nome;
 	}
 	
-	public static Pais[] createCountryList() {
+	public static List<Pais> createCountryListGeral() {
+	    String[] countryCodes = Locale.getISOCountries();
+	    List<Pais> listCountry = new ArrayList<Pais>();
+	 
+	    for (int i = 0; i < countryCodes.length; i++) {
+	        Locale locale = new Locale("", countryCodes[i]);
+	        String code = locale.getCountry();
+	        String name = locale.getDisplayCountry();
+	 
+	        listCountry.add(new Pais(code, name));
+	    }
+	 
+	    listCountry.sort(null);
+	 
+	    listCountry.add(0, Constantes.OPCAO_PAISES_TODOS);
+	    
+	    return listCountry;
+	}
+	
+	public static Pais[] createCountryListEdicaoCadastro() {
 	    String[] countryCodes = Locale.getISOCountries();
 	    Pais[] listCountry = new Pais[countryCodes.length];
 	 

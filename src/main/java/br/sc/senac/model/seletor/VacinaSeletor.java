@@ -2,44 +2,20 @@ package br.sc.senac.model.seletor;
 
 import java.time.LocalDate;
 
-import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 
 public class VacinaSeletor extends AbstractSeletor {
 	
 	//Atributos que servirão de filtros
 	private String nomeVacina;
-	private int estagioPesquisa;
+	private Integer estagioPesquisa;
 	private String paisOrigem;
 	
-	private Pessoa nomePesquisador; // dúvida - é assim ou String???
-	private Instituicao instituicao; // dúvida - é assim ou String???
-	private LocalDate dataInicioPesquisa; // dúvida - é assim ou String???
+	private Pessoa pesquisadorResponsavel;
+	private LocalDate dataInicioPesquisa;
 	
 	public VacinaSeletor() {
 		super();
-	}
-	
-	public boolean temFiltro() {
-		if ((this.nomeVacina != null) && (this.nomeVacina.trim().length() > 0)) {
-			return true;
-		}
-		if ((this.estagioPesquisa != 0) && (this.estagioPesquisa > 0)) {
-			return true;
-		}
-		if ((this.paisOrigem != null) && (this.paisOrigem.trim().length() > 0)) {
-			return true;
-		}
-		if ((this.nomePesquisador.getNomeCompleto() != null) && (this.nomePesquisador.getNomeCompleto().trim().length()>0)){
-			return true;
-		}
-		if(((this.instituicao.getNome() != null)) && (this.instituicao.getNome().trim().length()>0)){
-			return true;
-		}
-		if (this.dataInicioPesquisa != null) {
-			return true;
-		}
-		return false;
 	}
 	
 	public String getNomeVacina() {
@@ -50,11 +26,11 @@ public class VacinaSeletor extends AbstractSeletor {
 		this.nomeVacina = nomeVacina;
 	}
 
-	public int getEstagioPesquisa() {
+	public Integer getEstagioPesquisa() {
 		return estagioPesquisa;
 	}
 
-	public void setEstagioPesquisa(int estagioPesquisa) {
+	public void setEstagioPesquisa(Integer estagioPesquisa) {
 		this.estagioPesquisa = estagioPesquisa;
 	}
 
@@ -66,20 +42,12 @@ public class VacinaSeletor extends AbstractSeletor {
 		this.paisOrigem = paisOrigem;
 	}
 
-	public Pessoa getNomePesquisador() {
-		return nomePesquisador;
+	public Pessoa getPesquisadorResponsavel() {
+		return pesquisadorResponsavel;
 	}
 
-	public void setNomePesquisador(Pessoa nomePesquisador) {
-		this.nomePesquisador = nomePesquisador;
-	}
-
-	public Instituicao getInstituicao() {
-		return instituicao;
-	}
-
-	public void setInstituicao(Instituicao instituicao) {
-		this.instituicao = instituicao;
+	public void setPesquisadorResponsavel(Pessoa pesquisadorResponsavel) {
+		this.pesquisadorResponsavel = pesquisadorResponsavel;
 	}
 
 	public LocalDate getDataInicioPesquisa() {
@@ -89,5 +57,45 @@ public class VacinaSeletor extends AbstractSeletor {
 	public void setDataInicioPesquisa(LocalDate dataInicioPesquisa) {
 		this.dataInicioPesquisa = dataInicioPesquisa;
 	}
+	
+	
+	public boolean temFiltro() {
+		if (this.temFiltroDeNome()) {
+			return true;
+		}
+		if (this.temFiltroDeEstagioDePesquisa()) {
+			return true;
+		}
+		if (this.temFiltroDePaisOrigem()) {
+			return true;
+		}
+		if (this.temFiltroDePesquisadorResponsavel()){
+			return true;
+		}
+		if (this.temFiltroDeDataInicioPesquisa()) {
+			return true;
+		}
+		return false;
+	}
 
+	public boolean temFiltroDeDataInicioPesquisa() {
+		return this.dataInicioPesquisa != null;
+	}
+
+	public boolean temFiltroDePesquisadorResponsavel() {
+		return this.pesquisadorResponsavel != null;
+	}
+
+	public boolean temFiltroDePaisOrigem() {
+		return (this.paisOrigem != null) && (this.paisOrigem.trim().length() > 0);
+	}
+
+	public boolean temFiltroDeEstagioDePesquisa() {
+		return this.estagioPesquisa != null;
+	}
+
+	public boolean temFiltroDeNome() {
+		return (this.nomeVacina != null) && (this.nomeVacina.trim().length() > 0);
+	}
+	
 }

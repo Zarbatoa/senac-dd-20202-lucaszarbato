@@ -95,9 +95,21 @@ public class Pessoa {
 	}
 
 	public String getNomeCompleto() {
-		return this.nome + " " + this.getSobrenome();
+		String nomeCompleto = "";
+		if(this.sobrenome != null && this.sobrenome.trim().length() > 0) { 
+			nomeCompleto = this.nome + " " + this.getSobrenome();
+		} else {
+			nomeCompleto = this.nome;
+		}
+		
+		return nomeCompleto;
 	}
 	
+	public Pessoa fazerCopia() {
+		Pessoa copiaPessoa = new Pessoa(this.id, this.tipo, this.instituicao, this.nome, this.sobrenome, this.dataNascimento, this.sexo, this.cpf);
+		return copiaPessoa;
+	}
+
 	@Override
 	public String toString() {
 		return Utils.getNormalizedText(this.getNomeCompleto());

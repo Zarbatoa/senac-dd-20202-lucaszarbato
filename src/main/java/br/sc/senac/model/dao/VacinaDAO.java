@@ -163,14 +163,14 @@ public class VacinaDAO implements BaseDAO<Vacina>{
 		vacinaBuscada.setPaisOrigem(conjuntoResultante.getString("PAIS_ORIGEM"));
 		vacinaBuscada.setEstagioPesquisa(conjuntoResultante.getInt("ESTAGIO_PESQUISA"));
 		vacinaBuscada.setDataInicioPesquisa(conjuntoResultante.getDate("DATA_INICIO_PESQUISA").toLocalDate());
-		
+
 		return vacinaBuscada;
 	}
 	
 	// a partir daqui estão os métodos dos filtros
 	
 	public ArrayList<Vacina> listarComSeletor(VacinaSeletor seletor) {
-		String sql = " SELECT * FROM VACINA v";
+		String sql = " SELECT * FROM VACINA v ";
 
 		if (seletor.temFiltro()) {
 			sql = criarFiltros(seletor, sql);
@@ -179,6 +179,7 @@ public class VacinaDAO implements BaseDAO<Vacina>{
 		if (seletor.temPaginacao()) {
 			sql += " LIMIT " + seletor.getLimite() + " OFFSET " + seletor.getOffset();
 		}
+
 		Connection conexao = Banco.getConnection();
 		PreparedStatement prepStmt = Banco.getPreparedStatement(conexao, sql);
 		ArrayList<Vacina> vacinas = new ArrayList<Vacina>();
@@ -202,7 +203,7 @@ public class VacinaDAO implements BaseDAO<Vacina>{
 		sql += " WHERE ";
 		boolean primeiro = true;
 
-		if ((seletor.getNomeVacina() != null) && (seletor.getNomeVacina().trim().length() > 0)) {
+		if (seletor.temFiltroDeNome()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}
@@ -210,15 +211,15 @@ public class VacinaDAO implements BaseDAO<Vacina>{
 			primeiro = false;
 		}
 
-		if ((seletor.getEstagioPesquisa() != 0) && (seletor.getEstagioPesquisa() > 0)) {
+		if (seletor.temFiltroDeEstagioDePesquisa()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}
-			sql += "v.estagiopesquisa = '" + seletor.getEstagioPesquisa() + "'";
+			sql += "v.estagio_pesquisa = '" + seletor.getEstagioPesquisa() + "'";
 			primeiro = false;
 		}
 		
-		if ((seletor.getPaisOrigem() != null) && (seletor.getPaisOrigem().trim().length() > 0)) {
+		if (seletor.temFiltroDePaisOrigem()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}
@@ -226,23 +227,15 @@ public class VacinaDAO implements BaseDAO<Vacina>{
 			primeiro = false;
 		}
 		
-		if ((seletor.getNomePesquisador().getNomeCompleto() != null) && (seletor.getNomePesquisador().getNomeCompleto().trim().length() > 0)) {
+		if (seletor.temFiltroDePesquisadorResponsavel()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}
-			sql += "v.idpesquisador = '" + seletor.getNomePesquisador().getNomeCompleto() + "'";
-			primeiro = false;
-		}
-		
-		if ((seletor.getInstituicao().getNome() != null) && (seletor.getInstituicao().getNome().trim().length() > 0)) {
-			if (!primeiro) {
-				sql += " AND ";
-			}
-			sql += "v.idinstituicao = '" + seletor.getNomePesquisador().getNomeCompleto() + "'";
+			sql += "v.idpesquisador = '" + seletor.getPesquisadorResponsavel().getId() + "'";
 			primeiro = false;
 		}
 			
-		if (seletor.getDataInicioPesquisa() != null) {
+		if (seletor.temFiltroDeDataInicioPesquisa()) {
 			if (!primeiro) {
 				sql += " AND ";
 			}

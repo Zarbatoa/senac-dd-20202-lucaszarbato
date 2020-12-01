@@ -66,6 +66,24 @@ public class ControllerVacina {
 	}
 	
 	public List<Vacina> listarVacinas(VacinaSeletor seletor) {
+		//tratar paisOrigem, pesquisadorResponsavel, estagioPesquisa
+		if(seletor.getPaisOrigem() != null &&
+				seletor.getPaisOrigem().equalsIgnoreCase(Constantes.OPCAO_PAISES_TODOS.getNome())) {
+			seletor.setPaisOrigem(null);
+		}
+		
+		//TODO testar possiveis erros com constante,
+		// criar regra de negocio no BO para nao deixar cadastro com nome "Todos" ?
+		if(seletor.getPesquisadorResponsavel() != null &&
+				seletor.getPesquisadorResponsavel().getNome().equalsIgnoreCase(Constantes.OPCAO_PESQUISADOR_RESPONSAVEL_TODOS.getNome())) {
+			seletor.setPesquisadorResponsavel(null);
+		}
+		
+		if(seletor.getEstagioPesquisa() != null &&
+				Vacina.getStringEstagioDePesquisa(seletor.getEstagioPesquisa()) == null) {
+			seletor.setEstagioPesquisa(null);
+		}
+		
 		return vacinaBO.listarVacinas(seletor);
 	}
 	

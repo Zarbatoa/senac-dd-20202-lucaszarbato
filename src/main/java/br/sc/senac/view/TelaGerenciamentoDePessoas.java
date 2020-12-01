@@ -453,7 +453,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	}
 
 	protected void consultarPessoas() {
-		
+		paginaAtual = 1;
 		lblPagAtual.setText(paginaAtual + "");
 
 		ControllerPessoa controlador = new ControllerPessoa();

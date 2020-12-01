@@ -2,8 +2,11 @@ package br.sc.senac.view;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -37,6 +40,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 	private JComboBox cbEstagioPesquisa;
 	private JTable tableResultados;
 	private DatePicker dpDataInicioPesquisa;
+	private JLabel lblPagAtual;
 	
 	private JComboBox cbPaisOrigem;
 	private JComboBox cbPesquisador;
@@ -49,9 +53,9 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 	private JButton btnPagProxima;
 	private JButton btnPegarRegistro;
 	
-	private JLabel lblPagAtual;
-	
-	//variável relacionada a paginação
+	private List<Pessoa> listaDePesquisadoresGeral;
+	private List<Pessoa> listaDePesquisadoresParaEdicao;
+	private VacinaSeletor ultimoSeletorUsado;
 	private int paginaAtual = 1;
 	
 	/**
@@ -75,6 +79,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 	 * @throws ParseException 
 	 */
 	public TelaGerenciamentoDeVacinas() throws ParseException {
+		ultimoSeletorUsado = null;
 		ControllerPessoa controllerPessoa = new ControllerPessoa();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,7 +107,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(lblEstagioPesquisa, "cell 5 2,alignx trailing");
 		
 		cbEstagioPesquisa = new JComboBox();
-		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(Constantes.LISTA_ESTAGIOS_VACINA));
+		cbEstagioPesquisa.setModel(new DefaultComboBoxModel(Constantes.LISTA_ESTAGIOS_VACINA_GERAL));
 		cbEstagioPesquisa.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbEstagioPesquisa, "cell 6 2 2 1,growx");
 		
@@ -110,19 +115,19 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		lblPaisDeOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblPaisDeOrigem, "cell 0 4,alignx trailing");
 		
-		Pais[] listaPaises = Pais.createCountryList();
 		cbPaisOrigem = new JComboBox();
 		cbPaisOrigem.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		cbPaisOrigem.setModel(new DefaultComboBoxModel(listaPaises));
+		cbPaisOrigem.setModel(new DefaultComboBoxModel(Constantes.OPCOES_PAISES_GERAL.toArray()));
 		contentPane.add(cbPaisOrigem, "cell 1 4 3 1,growx");
 		
 		JLabel lblPesquisador = new JLabel("Pesquisador:");
 		lblPesquisador.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblPesquisador, "cell 5 4,alignx trailing");
-		
-		List<Pessoa> listaDePesquisadores = controllerPessoa.coletarListaDePesquisadores();
+
+		listaDePesquisadoresParaEdicao = controllerPessoa.coletarListaDePesquisadores();
+		preencherListaPesquisadoresGeral(listaDePesquisadoresParaEdicao);
 		cbPesquisador = new JComboBox();
-		cbPesquisador.setModel(new DefaultComboBoxModel(listaDePesquisadores.toArray()));
+		cbPesquisador.setModel(new DefaultComboBoxModel(listaDePesquisadoresGeral.toArray()));
 		contentPane.add(cbPesquisador, "cell 6 4 2 1,growx");
 		
 		JLabel lblInicioPesquisa = new JLabel("Início Pesquisa:");
@@ -142,6 +147,11 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(btnVoltar, "cell 4 6,alignx center");
 		
 		btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetarTodosOsCampos();
+			}
+		});
 		btnLimpar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnLimpar, "cell 5 6,alignx center");
 		
@@ -156,6 +166,12 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(btnEditar, "cell 6 6,alignx center");
 		
 		btnConsultar = new JButton("Consultar");
+		btnConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO verificar o porquê do erro do select data_inicio_pesquisa
+				consultarPessoas();
+			}
+		});
 		btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnConsultar, "cell 6 8,alignx center");
 		
@@ -165,11 +181,25 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(tableResultados, "cell 0 10 10 1,grow");
 		
 		btnPagAnterior = new JButton("< Anterior");
+		btnPagAnterior.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (paginaAtual > 1) {
+					paginaAtual--;
+				}
+				atualizarTabelaComUltimoSeletor();
+			}
+		});
 		btnPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnPagAnterior, "cell 2 11,alignx center");
 		
 		btnPagProxima = new JButton("Próximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnPagProxima.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				paginaAtual++;
+				atualizarTabelaComUltimoSeletor();
+			}
+		});
 		contentPane.add(btnPagProxima, "cell 6 11,alignx center");
 		
 		lblPagAtual = new JLabel("1");
@@ -181,12 +211,38 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		contentPane.add(btnPegarRegistro, "cell 4 12 2 1,alignx center");
 	}
 
-	protected void editarVacinas() {
-		// TODO Auto-generated method stub
-		
+	private void preencherListaPesquisadoresGeral(List<Pessoa> listaPesquisadores) {
+		listaDePesquisadoresGeral = new ArrayList<Pessoa>();
+		for (Pessoa pessoa : listaPesquisadores) {
+			listaDePesquisadoresGeral.add(pessoa.fazerCopia());
+		}
+		listaDePesquisadoresGeral.add(0, Constantes.OPCAO_PESQUISADOR_RESPONSAVEL_TODOS);
 	}
 
-	protected void consultarVacinas() {
+	protected void resetarTodosOsCampos() {
+		tfNomeVacina.setText("");
+		cbEstagioPesquisa.setSelectedIndex(0);
+		cbPaisOrigem.setSelectedIndex(0);
+		if(cbPesquisador.getItemCount() != 0) {
+			cbPesquisador.setSelectedIndex(0);
+		}
+		dpDataInicioPesquisa.clear();
+		definirModeloPadraoTabela();
+	}
+	
+	protected void atualizarTabelaComUltimoSeletor() {
+		if(ultimoSeletorUsado != null) {
+			lblPagAtual.setText(paginaAtual + "");
+			ultimoSeletorUsado.setPagina(paginaAtual);
+			ultimoSeletorUsado.setLimite(Constantes.TAMANHO_PAGINA);
+			ControllerVacina controlador = new ControllerVacina();
+			List<Vacina> vacinas = controlador.listarVacinas(ultimoSeletorUsado);
+			atualizarTabelaPessoas(vacinas);
+		}
+	}
+
+	protected void consultarPessoas() {
+		paginaAtual = 1;
 		lblPagAtual.setText(paginaAtual + "");
 
 		ControllerVacina controlador = new ControllerVacina();
@@ -197,40 +253,44 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 		
 		// Preenche os campos de filtro da tela no seletor
 		seletor.setNomeVacina(tfNomeVacina.getText());
-		//TODO seletor.setNomePesquisador((Pessoa)tfNomePesquisador.getClientProperty(tfNomePesquisador)); //não sei se está correto
-		seletor.setEstagioPesquisa(Integer.parseInt((String) cbEstagioPesquisa.getSelectedItem())); //verificar se está correto
-		//TODO seletor.setInstituicao((Instituicao)cbInstituicao.getSelectedItem());
+		seletor.setPaisOrigem(((Pais)cbPaisOrigem.getSelectedItem()).getNome());
+		seletor.setEstagioPesquisa(Vacina.getIntEstagioDePesquisa((String)cbEstagioPesquisa.getSelectedItem()));
 		seletor.setDataInicioPesquisa(dpDataInicioPesquisa.getDate());
-
+		seletor.setPesquisadorResponsavel((Pessoa)cbPesquisador.getSelectedItem());
+		
 		// aqui é feita a consulta das pessoas e atualizada a tabela
-		List<Vacina> vacinas = controlador.listarVacinas(seletor); 
-		atualizarTabelaVacinas(vacinas);
+		List<Vacina> vacinas = controlador.listarVacinas(seletor);
+		ultimoSeletorUsado = seletor;
+
+		atualizarTabelaPessoas(vacinas);
+
 	}
 	
-	protected void atualizarTabelaVacinas(List<Vacina> vacinas) {
-		// atualiza o atributo vacinas consultadas
-		//this.limparTabela();
+	private void atualizarTabelaPessoas(List<Vacina> vacinas) {
+		this.definirModeloPadraoTabela();
 		
 		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
-		for (Vacina vacina : vacinas) {
-			// Crio uma nova linha na tabela
-			// Preencher a linha com os atributos do produto
-			// na ordem do cabeçalho da tabela
+		for (int i = 0; i < vacinas.size(); i++) {
+			Vacina vacina = vacinas.get(i);
 			String dataFormatada = vacina.getDataInicioPesquisa().format(formatter);
-
-			String[] novaLinha = new String[] { vacina.getNome(),  vacina.getPaisOrigem(), vacina.getEstagioPesquisa() + "", 
-					dataFormatada, vacina.getPesquisadorResponsavel().getNomeCompleto(), vacina.getPesquisadorResponsavel().getInstituicao().getNome() }; 
-			modelo.addRow(novaLinha);
+			
+			modelo.setValueAt(vacina.getId(), i+1, 0);
+			modelo.setValueAt(vacina.getNome(), i+1, 1);
+			modelo.setValueAt(vacina.getPaisOrigem(), i+1, 2);
+			modelo.setValueAt(Vacina.getStringEstagioDePesquisa(vacina.getEstagioPesquisa()), i+1, 3);
+			modelo.setValueAt(dataFormatada, i+1, 4);
+			modelo.setValueAt(vacina.getPesquisadorResponsavel(), i+1, 5);
 		}
+		
 	}
 
 	private void definirModeloPadraoTabela() {
 		tableResultados.setModel(new DefaultTableModel(
 				new Object[][] {
-					{"#", "Nome", "Pa\u00EDs de Origem", "Est\u00E1gio da Pesquisa", "In\u00EDcio Pesquisa", "Pesquisador"},
+					{"#", "Nome da Vacina", "Pa\u00EDs de Origem", "Est\u00E1gio da Pesquisa", "In\u00EDcio Pesquisa", "Pesquisador"},
 					{null, null, null, null, null, null},
 					{null, null, null, null, null, null},
 					{null, null, null, null, null, null},
@@ -238,7 +298,7 @@ public class TelaGerenciamentoDeVacinas extends JFrame {
 					{null, null, null, null, null, null},
 				},
 				new String[] {
-					"#", "Nome", "PaisDeOrigem", "EstagioDaPesquisa", "InicioPesquisa", "Pesquisador"
+					"#", "NomeDaVacina", "PaisDeOrigem", "EstagioDaPesquisa", "InicioPesquisa", "Pesquisador"
 				}
 			) {
 				@Override

@@ -85,15 +85,15 @@ public class Vacina {
 		return "[id=" + this.getId()
 					+ ", nome=" + this.nome
 					+ ", paisOrigem=" + this.paisOrigem
-					+ ", estagioPesquisa=" + getStringEstagioDePesquisa()
+					+ ", estagioPesquisa=" + getStringEstagioDePesquisa(this.estagioPesquisa)
 					+ ", dataInicioPesquisa=" + this.dataInicioPesquisa
 					+ ", pesquisadorResponsavel=" + this.pesquisadorResponsavel + "]";
 	}
 
-	private String getStringEstagioDePesquisa() {
+	public static String getStringEstagioDePesquisa(int estagioDePesquisa) {
 		String estagioPesquisa = null;
 		
-		switch (this.estagioPesquisa) {
+		switch (estagioDePesquisa) {
 			case Constantes.ESTAGIO_INICIAL:
 				estagioPesquisa = Constantes.TXT_ESTAGIO_INICIAL;
 				break;
