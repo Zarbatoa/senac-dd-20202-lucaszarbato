@@ -2,7 +2,7 @@ package br.sc.senac.model.vo;
 
 import java.time.LocalDate;
 
-import br.sc.senac.model.Utils;
+import br.sc.senac.model.utilidades.Utils;
 
 public class Pessoa {
 	

@@ -22,7 +22,7 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import br.sc.senac.controller.ControllerPessoa;
-import br.sc.senac.model.Utils;
+import br.sc.senac.model.utilidades.Utils;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;

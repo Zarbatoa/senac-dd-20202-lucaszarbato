@@ -1,4 +1,4 @@
-package br.sc.senac.model;
+package br.sc.senac.model.utilidades;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;

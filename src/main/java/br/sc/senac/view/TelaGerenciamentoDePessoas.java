@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,10 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
 import br.sc.senac.controller.ControllerPessoa;
-import br.sc.senac.model.Utils;
 import br.sc.senac.model.seletor.PessoaSeletor;
+import br.sc.senac.model.utilidades.StatusMensagem;
+import br.sc.senac.model.utilidades.Utils;
+import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
 import net.miginfocom.swing.MigLayout;
@@ -63,8 +66,8 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	
 	private final String[] opcoesSexoGeral = {OPCAO_SEXO_TODOS, Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO};
 	private final TipoPessoa[] opcoesTipoPessoaGeral = {OPCAO_CATEGORIA_TODAS ,TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
-	private final String[] opcoesSexoEdicao = {OPCAO_SEXO_TODOS, Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO};
-	private final TipoPessoa[] opcoesTipoPessoaEdicao = {OPCAO_CATEGORIA_TODAS ,TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
+	private final String[] opcoesSexoEdicao = {Pessoa.SEXO_MASCULINO, Pessoa.SEXO_FEMININO};
+	private final TipoPessoa[] opcoesTipoPessoaEdicao = {TipoPessoa.TIPO_PESQUISADOR, TipoPessoa.TIPO_VOLUNTARIO, TipoPessoa.TIPO_PUBLICO_GERAL};
 	
 	private PessoaSeletor ultimoSeletorUsado;
 	private int paginaAtual = 1;
@@ -134,7 +137,8 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		JLabel lblSexo = new JLabel("Sexo:");
 		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblSexo, "cell 5 4,alignx trailing");
-		cbSexo = new JComboBox(opcoesSexoGeral);
+		cbSexo = new JComboBox();
+		cbSexo.setModel(new DefaultComboBoxModel(opcoesSexoGeral));
 		cbSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbSexo, "cell 6 4 2 1,growx");
 		
@@ -147,14 +151,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		cbCategoria.setModel(new DefaultComboBoxModel(opcoesTipoPessoaGeral));
 		cbCategoria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TipoPessoa opcaoSelecionada = (TipoPessoa)cbCategoria.getSelectedItem();
-				
-				if(opcaoSelecionada == TipoPessoa.TIPO_PESQUISADOR) {
-					tfInstituicao.setEnabled(true);
-				} else {
-					tfInstituicao.setText("");
-					tfInstituicao.setEnabled(false);
-				}
+				definirInstituicaoEnabled();
 			}
 		});
 		contentPane.add(cbCategoria, "cell 1 6 3 1,growx");
@@ -175,7 +172,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		tfInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(tfInstituicao, "cell 1 8 3 1,growx");
 		tfInstituicao.setColumns(10);
-		tfInstituicao.setEnabled(false);
+		definirInstituicaoEnabled();
 		
 		btnExcluir = new JButton("Excluir");
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -212,7 +209,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 				if (paginaAtual > 1) {
 					paginaAtual--;
 				}
-				consultarPessoas();
+				atualizarTabelaComUltimoSeletor();
 			}
 		});
 		
@@ -227,7 +224,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		btnPagProxima.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				paginaAtual++;
-				consultarPessoas();
+				atualizarTabelaComUltimoSeletor();
 			}
 		});
 		
@@ -258,6 +255,8 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		btnVoltar.setVisible(false);
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				abilitarTabelaBotoesConsultaExclusao();
+				redefinirComboboxsParaGeral();
 				desativarBotoesDeEdicao();
 			}
 		});
@@ -275,52 +274,83 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	}
 	
 	
+	protected void definirInstituicaoEnabled() {
+		TipoPessoa opcaoSelecionada = (TipoPessoa)cbCategoria.getSelectedItem();
+		
+		if(opcaoSelecionada == TipoPessoa.TIPO_PESQUISADOR) {
+			tfInstituicao.setEnabled(true);
+		} else {
+			tfInstituicao.setText("");
+			tfInstituicao.setEnabled(false);
+		}
+	}
+	
 	protected void tentarEditar() {
 		//TODO  completar logica editar	
-		JOptionPane.showMessageDialog(null, "teste");
-		abilitarTabelaBotoesConsultaExclusao();
-		redefinirComboboxsParaGeral();
-		desativarBotoesDeEdicao();
+		System.out.println("botao editar");
+		
+		// Preencher o Objeto com os dados da tela
+		Pessoa pessoaAlterada = new Pessoa();
+		// pegar id
+		int linhaSelecionada = tableResultados.getSelectedRow();
+		pessoaAlterada.setId((Integer) tableResultados.getModel().getValueAt(linhaSelecionada, 0));
+		pessoaAlterada.setTipo((TipoPessoa)cbCategoria.getSelectedItem());
+		pessoaAlterada.setInstituicao(new Instituicao(-1,tfInstituicao.getText()));
+		pessoaAlterada.setNome(tfNome.getText());
+		pessoaAlterada.setSobrenome(tfSobrenome.getText());
+		LocalDate novaDataNascimento = dpDataInicioPesquisa.getDate();
+		pessoaAlterada.setDataNascimento(novaDataNascimento);
+		pessoaAlterada.setSexo(((String)cbSexo.getSelectedItem()).charAt(0));
+		pessoaAlterada.setCpf(Utils.desformatarCpf(ftfCpf.getText()));
+		
+		// Instanciar um controller adequado
+		ControllerPessoa controller = new ControllerPessoa();
+		
+		// Chamar o método salvar no controller e pegar a mensagem retornada
+		StatusMensagem statusMensagem = controller.atualizar(pessoaAlterada);
+		
+		// Mostrar a mensagem devolvida pelo controller
+		JOptionPane.showMessageDialog(null, statusMensagem.getMensagem());
+		
+		//caso sucesso na edicao:
+		if(statusMensagem.getStatus()) {
+			abilitarTabelaBotoesConsultaExclusao();
+			redefinirComboboxsParaGeral();
+			desativarBotoesDeEdicao();
+			atualizarTabelaComUltimoSeletor();
+		}
 	}
 	
 	protected void coletarRegistroParaEdicao() {
 		String mensagem = "";
-		// Pegar alguma linha da tabela
 		if(tableResultados.getSelectedRowCount() == 0) {
 			mensagem = "Por favor selecione uma linha para poder continuar para a tela de edição.";
-			// Pegar uma unica linha da tabela
 		} else if(tableResultados.getSelectedRowCount() > 1){
 			mensagem = "Por favor selecione uma  única linha para poder continuar para a tela de edição.";
 		} else {
-			// Não permitir pegar a linha com os nomes dos campos
 			if(tableResultados.getSelectedRow() == 0) {
 				mensagem = "A linha com as descrições dos campos não pode ser editada. Escolha um registro válido.";
 			} else {
 				int linhaSelecionada = tableResultados.getSelectedRow();
 				Integer idSelecionado = (Integer) tableResultados.getModel().getValueAt(linhaSelecionada, 0);
-				// Essa linha precisa estar preenchida (precisa ter um id?)
 				if(idSelecionado == null) {
 					mensagem = "A linha não pode estar vazia! Para inserir uma nova pessoa, vá para a tela de cadastro de pessoas.";
 				} else {
-					// se tiver uma unica linha e ser valida:
-					//   desabilitar a tabela e os botoes (tirando o limpar)
 					desabilitarTabelaBotoesConsultaExclusao();
-					//TODO tentar marcar a linha a ser editada em negrito
-					//   redefinir temporariamente os comboboxs
 					redefinirComboboxsParaEdicao();
-					//   preencher os campos de input com os dados da linha
 					preencherInputsComALinhaDeEdicao(linhaSelecionada);
-					//   ativar o botao editar e voltar
 					ativarBotoesDeEdicao();
+					mensagem = null;
 				}
 				
 			}
 		}
-		JOptionPane.showMessageDialog(null, mensagem);
+		if (mensagem != null) {
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
 	}
 	
 	private void preencherInputsComALinhaDeEdicao(int linhaSelecionada) {
-		//TODO testar atualizacao de comboboxs
 		tfNome.setText((String) tableResultados.getModel().getValueAt(linhaSelecionada, 1));
 		tfSobrenome.setText((String) tableResultados.getModel().getValueAt(linhaSelecionada, 2));
 		if(((Character) tableResultados.getModel().getValueAt(linhaSelecionada, 3)) == Pessoa.SEXO_MASCULINO.charAt(0)) {
@@ -330,9 +360,20 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		}
 		ftfCpf.setText(Utils.desformatarCpf((String) tableResultados.getModel().getValueAt(linhaSelecionada, 4)));
 		dpDataInicioPesquisa.setDate( Utils.gerarLocalDateDeString((String) tableResultados.getModel().getValueAt(linhaSelecionada, 5)));
-		cbCategoria.setSelectedItem(tableResultados.getModel().getValueAt(linhaSelecionada, 6));
+		cbCategoria.setSelectedIndex(getIndexFromTipo((TipoPessoa)tableResultados.getModel().getValueAt(linhaSelecionada, 6)));
 		tfInstituicao.setText((String) tableResultados.getModel().getValueAt(linhaSelecionada, 7));
-		
+	}
+
+	private int getIndexFromTipo(TipoPessoa tipoSelecionado) {
+		int indice = 0 ;
+		if(tipoSelecionado.equals(opcoesTipoPessoaGeral[1])) {
+			indice = 0;
+		} else if(tipoSelecionado.equals(opcoesTipoPessoaGeral[2])) {
+			indice = 1;
+		} else if(tipoSelecionado.equals(opcoesTipoPessoaGeral[3])) {
+			indice = 2;
+		}
+		return indice;
 	}
 
 	private void redefinirComboboxsParaGeral() {
@@ -341,7 +382,6 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	}
 	
 	private void redefinirComboboxsParaEdicao() {
-		//TODO testar este metodo
 		cbSexo.setModel(new DefaultComboBoxModel(opcoesSexoEdicao));
 		cbCategoria.setModel(new DefaultComboBoxModel(opcoesTipoPessoaEdicao));
 	}
@@ -393,6 +433,9 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	
 	protected void atualizarTabelaComUltimoSeletor() {
 		if(ultimoSeletorUsado != null) {
+			lblPagAtual.setText(paginaAtual + "");
+			ultimoSeletorUsado.setPagina(paginaAtual);
+			ultimoSeletorUsado.setLimite(TAMANHO_PAGINA);
 			ControllerPessoa controlador = new ControllerPessoa();
 			List<Pessoa> pessoas = controlador.listarPessoas(ultimoSeletorUsado);
 			atualizarTabelaPessoas(pessoas);

@@ -2,11 +2,12 @@ package br.sc.senac.model.bo;
 
 import java.util.ArrayList;
 import java.util.List;
-import br.sc.senac.model.Utils;
+
 import br.sc.senac.model.dao.InstituicaoDAO;
 import br.sc.senac.model.dao.PessoaDAO;
 import br.sc.senac.model.exception.CpfJaCadastradoException;
 import br.sc.senac.model.seletor.PessoaSeletor;
+import br.sc.senac.model.utilidades.Utils;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 
@@ -34,13 +35,26 @@ public class PessoaBO {
 		return novaPessoa;
 	}
 	
-	public boolean atualizar(Pessoa pessoa) throws CpfJaCadastradoException{
-
-		if(this.pessoaDAO.cpfJaCadastrado(pessoa)) {
-			throw new CpfJaCadastradoException("O CPF informado (" + pessoa.getCpf() 
-			+ ") já foi cadastrado.");
+	public boolean atualizar(Pessoa pessoaAtualizada) throws CpfJaCadastradoException{
+		Pessoa pessoaAntiga = pessoaDAO.pesquisarPorId(pessoaAtualizada.getId());
+		Instituicao instiutuicaoDoBanco = null;
+		
+		if(!pessoaAntiga.getCpf().equals(pessoaAtualizada.getCpf())) {
+			if(this.pessoaDAO.cpfJaCadastrado(pessoaAtualizada)) {
+				throw new CpfJaCadastradoException("O CPF informado (" + pessoaAtualizada.getCpf() 
+				+ ") já foi cadastrado.");
+			}
 		}
-		return this.pessoaDAO.alterar(pessoa);
+		
+		//TODO tratar IDINSTITUICAO!!!
+		if(instituicaoDAO.jaExisteNome(pessoaAtualizada.getInstituicao())) {
+			instiutuicaoDoBanco = instituicaoDAO.pesquisarPeloNome(pessoaAtualizada.getInstituicao().getNome());
+		} else {
+			instiutuicaoDoBanco = instituicaoDAO.inserir(pessoaAtualizada.getInstituicao());
+		}
+		pessoaAtualizada.setInstituicao(instiutuicaoDoBanco);
+		
+		return this.pessoaDAO.alterar(pessoaAtualizada);
 	}
 	
 	public Pessoa consultarPorCPF(String cpf) {

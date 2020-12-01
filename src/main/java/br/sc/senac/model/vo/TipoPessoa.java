@@ -1,6 +1,6 @@
 package br.sc.senac.model.vo;
 
-import br.sc.senac.model.Utils;
+import br.sc.senac.model.utilidades.Utils;
 
 public class TipoPessoa {
 
@@ -36,6 +36,11 @@ public class TipoPessoa {
 	@Override
 	public String toString() {
 		return Utils.getNormalizedText(this.descricao);
+	}
+
+	@Override
+	public boolean equals(Object outroTipoPessoa) {
+		return this.descricao.equalsIgnoreCase(((TipoPessoa)outroTipoPessoa).getDescricao());
 	}
 
 	public String toStringVerboso() {

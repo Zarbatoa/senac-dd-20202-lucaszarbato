@@ -21,7 +21,7 @@ import javax.swing.text.MaskFormatter;
 import br.sc.senac.controller.ControllerNota;
 import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.controller.ControllerVacina;
-import br.sc.senac.model.Utils;
+import br.sc.senac.model.utilidades.Utils;
 import br.sc.senac.model.vo.Nota;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;

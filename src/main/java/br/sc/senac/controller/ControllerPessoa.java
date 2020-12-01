@@ -11,10 +11,10 @@ import br.sc.senac.model.exception.InstituicaoInvalidaException;
 import br.sc.senac.model.exception.NomeInvalidoException;
 import br.sc.senac.model.exception.SobrenomeInvalidoException;
 import br.sc.senac.model.seletor.PessoaSeletor;
+import br.sc.senac.model.utilidades.StatusMensagem;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
-import br.sc.senac.model.vo.Vacina;
 import br.sc.senac.view.TelaGerenciamentoDePessoas;
 
 
@@ -148,6 +148,30 @@ public class ControllerPessoa {
 		if(tipoRelatorio.equals(TIPO_RELATORIO_XLS)){
 			pessoaBO.gerarPlanilhaPessoaTotalPorSexoPorPeriodo(pessoas, caminhoEscolhido);
 		}
+	}
+
+	public StatusMensagem atualizar(Pessoa pessoaAlterada) {
+		StatusMensagem statusMensagem = new StatusMensagem();
+		
+		try {
+			this.validarPessoa(pessoaAlterada);
+			statusMensagem.setStatus(pessoaBO.atualizar(pessoaAlterada));
+			if (statusMensagem.getStatus()) {
+				statusMensagem.setMensagem("Pessoa atualizada com sucesso!");
+			} else {
+				statusMensagem.setMensagem("Não foi possível atualizar esta pessoa!");
+			}
+		} catch(CpfInvalidoException
+				| SobrenomeInvalidoException
+				| NomeInvalidoException
+				| CpfJaCadastradoException
+				| InstituicaoInvalidaException
+				| DataNascimentoInvalidaException e) {
+			statusMensagem.setMensagem(e.getMessage());
+			statusMensagem.setStatus(false);
+		}
+		
+		return statusMensagem;
 	}
 
 }
