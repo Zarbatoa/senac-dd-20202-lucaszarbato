@@ -10,8 +10,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import br.sc.senac.view.cadastro.TelaCadastroAvaliacaoVacina;
 import br.sc.senac.view.cadastro.TelaCadastroPessoa;
 import br.sc.senac.view.cadastro.TelaCadastroVacina;
+import br.sc.senac.view.gerencia.TelaGerenciamentoDeAvaliacaoVacinas;
 import br.sc.senac.view.gerencia.TelaGerenciamentoDePessoas;
 import br.sc.senac.view.gerencia.TelaGerenciamentoDeVacinas;
 
@@ -46,7 +48,7 @@ public class TelaPrincipal extends JFrame {
 	 */
 	private void initialize() {
 		setTitle("VacinApp");
-		setBounds(100, 100, 609, 448);
+		setBounds(100, 100, 700, 450);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -139,9 +141,35 @@ public class TelaPrincipal extends JFrame {
 		menuBar.add(mnAvaliaoVacina);
 		
 		JMenuItem mntmNovaAvaliacaoVacina = new JMenuItem("Novo (Cadastro)");
+		mntmNovaAvaliacaoVacina.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				TelaCadastroAvaliacaoVacina painelCadastroAvaliacaoVacina;
+				try {
+					painelCadastroAvaliacaoVacina = new TelaCadastroAvaliacaoVacina();
+					setContentPane(painelCadastroAvaliacaoVacina);
+					revalidate();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		mnAvaliaoVacina.add(mntmNovaAvaliacaoVacina);
 		
 		JMenuItem mntmGerenciarAvaliacaoVacina = new JMenuItem("Gerenciar");
+		mntmGerenciarAvaliacaoVacina.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				TelaGerenciamentoDeAvaliacaoVacinas paintelGerenciamentoDeAvaliacaoVacinas;
+				try {
+					paintelGerenciamentoDeAvaliacaoVacinas = new TelaGerenciamentoDeAvaliacaoVacinas();
+					setContentPane(paintelGerenciamentoDeAvaliacaoVacinas);
+					revalidate();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		mnAvaliaoVacina.add(mntmGerenciarAvaliacaoVacina);
 		
 		JMenu mnRelatrio = new JMenu("Relat\u00F3rio");

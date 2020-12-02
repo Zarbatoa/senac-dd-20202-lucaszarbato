@@ -11,7 +11,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -31,12 +30,11 @@ import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaGerenciamentoDeAvaliacaoVacinas extends JFrame {
+public class TelaGerenciamentoDeAvaliacaoVacinas extends JPanel {
 	
 	//TODO tamanho pagina volta pra cá?
 	//private static final int TAMANHO_PAGINA = 0;
 
-	private JPanel contentPane;
 	private JComboBox cbPessoas;
 	private JTable tableResultados;
 	private JFormattedTextField ftfNotaInicial;
@@ -46,7 +44,6 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JFrame {
 	private JButton btnConsultar;
 	private JButton btnPagAnterior;
 	private JButton btnPagProxima;
-	private JButton btnVoltar;
 	
 	
 	private NotaSeletor ultimoSeletorUsado;
@@ -80,56 +77,53 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JFrame {
 		ControllerPessoa controllerPessoa = new ControllerPessoa();
 		ControllerVacina controllerVacina = new ControllerVacina();
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 655, 380);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][105.00,grow][47.00][96.00,grow][42.00]", "[][][][][][][99.00][][]"));
+		setBorder(new EmptyBorder(5, 5, 5, 5));
+		this.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][105.00,grow][47.00][96.00,grow][42.00]", "[][][][][][][99.00][][]"));
 		
 		JLabel lblGerenciamentoDeVacina = new JLabel("Gerenciamento de Avalia\u00E7\u00E3o de Vacinas");
 		lblGerenciamentoDeVacina.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblGerenciamentoDeVacina, "cell 2 0 4 1");
+		this.add(lblGerenciamentoDeVacina, "cell 2 0 4 1");
 		
 		JLabel lblNomeVacina = new JLabel("Nome Vacina:");
 		lblNomeVacina.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblNomeVacina, "cell 0 2,alignx trailing");
+		this.add(lblNomeVacina, "cell 0 2,alignx trailing");
 		
 		List<Vacina> listaDeVacinas = controllerVacina.coletarTodasVacinas();
 		listaDeVacinas.add(0, Constantes.OPCAO_VACINA_TODAS);
 		cbVacina = new JComboBox();
 		cbVacina.setModel(new DefaultComboBoxModel(listaDeVacinas.toArray()));
-		contentPane.add(cbVacina, "cell 1 2 2 1,growx");
+		this.add(cbVacina, "cell 1 2 2 1,growx");
 		
 		JLabel lblPessoa = new JLabel("Pessoa testada:");
 		lblPessoa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblPessoa, "cell 5 2,alignx trailing");
+		this.add(lblPessoa, "cell 5 2,alignx trailing");
 		
 		List<Pessoa> listaDePessoas = controllerPessoa.coletarTodasPessoas();
 		listaDePessoas.add(0, Constantes.OPCAO_PESSOA_TESTADA_TODAS);
 		cbPessoas = new JComboBox();
 		cbPessoas.setModel(new DefaultComboBoxModel(listaDePessoas.toArray()));
 		cbPessoas.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbPessoas, "cell 6 2 2 1,growx");
+		this.add(cbPessoas, "cell 6 2 2 1,growx");
 		
 		JLabel lblNotaInicial = new JLabel("<html>Nota<br />Inicial:</html>");
 		lblNotaInicial.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblNotaInicial, "cell 0 4,alignx center");
+		this.add(lblNotaInicial, "cell 0 4,alignx center");
 		
 		MaskFormatter mascaraNotaInicial = new MaskFormatter("#.#");
 		ftfNotaInicial = new JFormattedTextField(mascaraNotaInicial);
-		contentPane.add(ftfNotaInicial, "cell 1 4,growx");
+		this.add(ftfNotaInicial, "cell 1 4,growx");
 		
 		lblNotaFinal = new JLabel("<html>Nota<br />Final:</html>");
-		contentPane.add(lblNotaFinal, "cell 3 4,alignx trailing");
+		this.add(lblNotaFinal, "cell 3 4,alignx trailing");
 		
 		MaskFormatter mascaraNotaFinal = new MaskFormatter("#.#");
 		ftfNotaFinal = new JFormattedTextField(mascaraNotaFinal);
-		contentPane.add(ftfNotaFinal, "cell 4 4,growx");
+		this.add(ftfNotaFinal, "cell 4 4,growx");
 		
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnConsultar, "cell 6 4,alignx center");
+		this.add(btnConsultar, "cell 6 4,alignx center");
 		
 		btnConsultar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
@@ -148,12 +142,12 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JFrame {
 			}
 		});
 		btnLimpar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnLimpar, "cell 4 5,alignx center");
-		contentPane.add(tableResultados, "cell 0 6 8 1,grow");
+		this.add(btnLimpar, "cell 4 5,alignx center");
+		this.add(tableResultados, "cell 0 6 8 1,grow");
 		
 		btnPagAnterior = new JButton("< Anterior");
 		btnPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagAnterior, "cell 1 7");
+		this.add(btnPagAnterior, "cell 1 7");
 		
 		btnPagAnterior.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -166,7 +160,7 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JFrame {
 		
 		btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagProxima, "cell 6 7");
+		this.add(btnPagProxima, "cell 6 7");
 		
 		btnPagProxima.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -177,11 +171,7 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JFrame {
 		
 		lblPagAtual = new JLabel("1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 2 7 4 1,alignx center");
-		
-		btnVoltar = new JButton("Voltar");
-		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnVoltar, "cell 4 8,alignx center,aligny baseline");
+		this.add(lblPagAtual, "cell 2 7 4 1,alignx center");
 	}
 
 	protected void resetarTodosOsCampos() {

@@ -11,7 +11,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,9 +28,8 @@ import net.miginfocom.swing.MigLayout;
 
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaCadastroAvaliacaoVacina extends JFrame {
+public class TelaCadastroAvaliacaoVacina extends JPanel {
 
-	private JPanel contentPane;
 	private JComboBox cbPessoaTestada;
 	private JFormattedTextField ftfNota;
 	private JComboBox cbNomeVacina;
@@ -61,46 +59,42 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 		ControllerPessoa controllerPessoa = new ControllerPessoa();
 		ControllerVacina controllerVacina = new ControllerVacina();
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 650, 280);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[][grow][grow][][161.00][grow][63.00][]", "[][][][][][][][]"));
+		setBorder(new EmptyBorder(5, 5, 5, 5));
+		this.setLayout(new MigLayout("", "[][grow][grow][][161.00][grow][63.00][]", "[][][][][][][][]"));
 		
 		JLabel lblCadastroDePessoa = new JLabel("Cadastro Avalia\u00E7\u00E3o Vacina");
 		lblCadastroDePessoa.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblCadastroDePessoa, "cell 3 0 2 1");
+		this.add(lblCadastroDePessoa, "cell 3 0 2 1");
 		
 		JLabel lblNomeVacina = new JLabel("Nome Vacina:");
 		lblNomeVacina.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblNomeVacina, "cell 0 2,alignx trailing");
+		this.add(lblNomeVacina, "cell 0 2,alignx trailing");
 		
 		MaskFormatter mascaraNota = new MaskFormatter("#.#");
 		
 		List<Vacina> listaDeVacinas = controllerVacina.coletarTodasVacinas();
 		cbNomeVacina = new JComboBox();
 		cbNomeVacina.setModel(new DefaultComboBoxModel(listaDeVacinas.toArray()));
-		contentPane.add(cbNomeVacina, "cell 1 2 2 1,growx");
+		this.add(cbNomeVacina, "cell 1 2 2 1,growx");
 		
 		JLabel lblPessoaTestada = new JLabel("Pessoa Testada:");
 		lblPessoaTestada.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblPessoaTestada, "cell 4 2,alignx trailing");
+		this.add(lblPessoaTestada, "cell 4 2,alignx trailing");
 		
 		List<Pessoa> listaDePessoas = controllerPessoa.coletarTodasPessoas();
 		cbPessoaTestada = new JComboBox();
 		cbPessoaTestada.setModel(new DefaultComboBoxModel(listaDePessoas.toArray()));
 		cbPessoaTestada.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbPessoaTestada, "cell 5 2 2 1,growx");
+		this.add(cbPessoaTestada, "cell 5 2 2 1,growx");
 		
 		JLabel lbNota = new JLabel("Nota (1 a 5):");
 		lbNota.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lbNota, "cell 0 4,alignx trailing");
+		this.add(lbNota, "cell 0 4,alignx trailing");
 		
 		ftfNota = new JFormattedTextField(mascaraNota);
 		ftfNota.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(ftfNota, "cell 1 4,growx");
-		final JFrame janelaAtual = this;
+		this.add(ftfNota, "cell 1 4,growx");
 		
 				
 		JButton btnSalvar = new JButton("Salvar");
@@ -123,16 +117,26 @@ public class TelaCadastroAvaliacaoVacina extends JFrame {
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		});
-		contentPane.add(btnSalvar, "cell 2 6");
+		this.add(btnSalvar, "cell 2 6");
 		
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnCancelar.addActionListener(new ActionListener() {
+		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				janelaAtual.dispose();
+				resetarTodosOsCampos();
 			}
 		});
-		contentPane.add(btnCancelar, "cell 5 6");
+		this.add(btnLimpar, "cell 5 6");
 	}
 
+	protected void resetarTodosOsCampos() {
+		if(cbPessoaTestada.getItemCount() != 0) {
+			cbPessoaTestada.setSelectedIndex(0);
+		};
+		ftfNota.setText("");
+		if(cbNomeVacina.getItemCount() != 0){
+			cbNomeVacina.setSelectedIndex(0);
+		};
+	}
+	
 }
