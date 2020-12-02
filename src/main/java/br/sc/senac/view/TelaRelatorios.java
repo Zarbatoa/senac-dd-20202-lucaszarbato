@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -16,25 +17,26 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
+import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.controller.ControllerVacina;
 import br.sc.senac.model.utilidades.Constantes;
+import br.sc.senac.model.vo.Pessoa;
+import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaRelatorioVacinas extends JFrame {
+public class TelaRelatorios extends JFrame {
 
 	private JPanel contentPane;
 	private JComboBox cbRelatorioVacinas;
 	private JTable tableResultados;
-	private JTextField txtUsuario;
-	private DatePicker dpDataFiltro;
+	private DatePicker dpDataInicioPesquisa;
 	
 	private JLabel lblPagAtual;
 	
@@ -48,7 +50,7 @@ public class TelaRelatorioVacinas extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaRelatorioVacinas frame = new TelaRelatorioVacinas();
+					TelaRelatorios frame = new TelaRelatorios();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,7 +63,8 @@ public class TelaRelatorioVacinas extends JFrame {
 	 * Create the frame.
 	 * @throws ParseException 
 	 */
-	public TelaRelatorioVacinas() throws ParseException {
+	public TelaRelatorios() throws ParseException {
+		ControllerPessoa controllerPessoa = new ControllerPessoa();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 654, 452);
@@ -74,44 +77,39 @@ public class TelaRelatorioVacinas extends JFrame {
 		lbbRelatorioVacinas.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(lbbRelatorioVacinas, "cell 3 0 3 1");
 		
-		String[] opcoesSexo = {Constantes.SEXO_MASCULINO, Constantes.SEXO_FEMININO}; 
-		
-		cbRelatorioVacinas = new JComboBox(opcoesSexo);
-		cbRelatorioVacinas.setModel(new DefaultComboBoxModel(new String[] {"Total de Vacinas por Pesquisador", "==================", "Total de Vacinas por Pa\u00EDs de origem", "Total de Vacinas por Pa\u00EDs de origem a partir de uma data", "Total de Vacinas por Est\u00E1gio de Pesquisa", "Total de Vacinas por Est\u00E1gio de Pesquisa a partir de uma data"}));
+		cbRelatorioVacinas = new JComboBox();
+		cbRelatorioVacinas.setModel(new DefaultComboBoxModel(Constantes.RELATORIO_VACINA_OPCOES));
 		cbRelatorioVacinas.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(cbRelatorioVacinas, "cell 0 2 8 1,growx");
 		
-		JLabel lblPesquisador = new JLabel("Pesquisador:");
-		lblPesquisador.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblPesquisador, "cell 0 4,alignx trailing");
-		
-		txtUsuario = new JTextField();
-		txtUsuario.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(txtUsuario, "cell 1 4 2 1,growx");
-		txtUsuario.setColumns(10);
+		JLabel lblSexo = new JLabel("Sexo:");
+		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(lblSexo, "cell 0 4,alignx trailing");
 		
 		DatePickerSettings dateSettings = new DatePickerSettings();
 		dateSettings.setAllowKeyboardEditing(false);
 		
-		DatePickerSettings dateSettings2 = new DatePickerSettings();
-		dateSettings2.setAllowKeyboardEditing(false);
+		List<Pessoa> listaDePesquisadores = controllerPessoa.coletarListaDePesquisadores();
+		JComboBox cbSexo = new JComboBox();
+		cbSexo.setModel(new DefaultComboBoxModel(listaDePesquisadores.toArray()));
+		contentPane.add(cbSexo, "cell 1 4 2 1,growx");
 		
-		JLabel lblData = new JLabel("Data:");
+		JLabel lblData = new JLabel("<html>Data<br /> In\u00EDcio Pesquisa</html>");
 		lblData.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(lblData, "cell 5 4,alignx trailing");
-		dpDataFiltro = new DatePicker(dateSettings2);
-		contentPane.add(dpDataFiltro,"cell 6 4 2 1,growx");
-		
-		//JFormattedTextField ftfDataFinal = new JFormattedTextField();
-		//contentPane.add(ftfDataFinal, "cell 6 6 2 1,growx");
+		dpDataInicioPesquisa = new DatePicker(dateSettings);
+		contentPane.add(dpDataInicioPesquisa,"cell 6 4 2 1,growx");
 		
 		JButton btnGerarRelatorio = new JButton("Gerar Relat\u00F3rio");
 		btnGerarRelatorio.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnGerarRelatorio, "cell 2 6,alignx right");
 		
-		//TODO tentar gerar um caminho relativo
+		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnLimpar, "cell 4 6,alignx right");
+		
 		JButton btnGerarXls = new JButton("Gerar xls");
-		btnGerarXls.setIcon(new ImageIcon("C:\\Users\\rosan\\git\\senac-dd-20202-lucaszarbato2\\icones\\iconeExcelmenor.png"));
+		btnGerarXls.setIcon(new ImageIcon("icones/iconeExcelmenor.png"));
 		btnGerarXls.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnGerarXls, "cell 6 6");
 		
@@ -165,7 +163,7 @@ public class TelaRelatorioVacinas extends JFrame {
 				if (paginaAtual > 1) {
 					paginaAtual--;
 				}
-				gerarRelatorio();
+				atualizarTabelaComUltimoSeletor();
 			}
 		});
 		
@@ -181,17 +179,25 @@ public class TelaRelatorioVacinas extends JFrame {
 		btnPagProxima.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				paginaAtual++;
-				gerarRelatorio();
+				atualizarTabelaComUltimoSeletor();
 			}
 		});
-		
-		JButton btnVoltar = new JButton("Voltar");
-		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnVoltar, "cell 4 11,alignx center");
 	}
 
 	protected void gerarRelatorio() {
 		// TODO Auto-generated method stub
 	}
 
+	protected void atualizarTabelaComUltimoSeletor() {
+		//TODO
+//		if(ultimoSeletorUsado != null) {
+//			lblPagAtual.setText(paginaAtual + "");
+//			ultimoSeletorUsado.setPagina(paginaAtual);
+//			ultimoSeletorUsado.setLimite(Constantes.TAMANHO_PAGINA);
+//			ControllerVacina controlador = new ControllerVacina();
+//			List<Vacina> vacinas = controlador.listarVacinas(ultimoSeletorUsado);
+//			atualizarTabelaVacinas(vacinas);
+//		}
+	}
+	
 }

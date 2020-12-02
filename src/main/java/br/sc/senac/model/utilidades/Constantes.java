@@ -56,4 +56,15 @@ public class Constantes {
 	public static final Pessoa OPCAO_PESSOA_TESTADA_TODAS = new Pessoa(-1, null, null, OPCAO_TODAS, null, null, ' ', null);
 	public static final Vacina OPCAO_VACINA_TODAS = new Vacina(-1, OPCAO_TODAS, null, -1, null, null);
 	
+	//relatorios
+	public static final String TOTAL_VACINAS_POR_PESQUISADOR = "Total de Vacinas por Pesquisador";
+	public static final String TOTAL_VACINAS_POR_PAIS_ORIGEM = "Total de Vacinas por Pa\u00EDs de origem";
+	public static final String TOTAL_VACINAS_POR_ESTAGIO_PESQUISA = "Total de Vacinas por Est\u00E1gio de Pesquisa";
+	public static final String NUMERO_DE_AVALIACOES_POR_VACINA = "Número de Avaliações por Vacina";
+	public static final String MEDIA_DE_AVALIACOES_POR_VACINA = "Média de Avaliações por Vacina";
+	public static final String TODAL_DE_PESSOAS_POR_TIPO = "Todal de Pessoas por Categoria";
+	public static final String NUMERO_DE_PESSOAS_E_MEDIA_DA_NOTA_POR_IDADE_DE_UMA_VACINA = "Número de pessoas e Média de nota de UMA Vacina por faixa de idade";
+	public static final String[] RELATORIO_VACINA_OPCOES = {TOTAL_VACINAS_POR_PESQUISADOR, TOTAL_VACINAS_POR_PAIS_ORIGEM, TOTAL_VACINAS_POR_ESTAGIO_PESQUISA,
+			NUMERO_DE_AVALIACOES_POR_VACINA, MEDIA_DE_AVALIACOES_POR_VACINA, TODAL_DE_PESSOAS_POR_TIPO,
+			NUMERO_DE_PESSOAS_E_MEDIA_DA_NOTA_POR_IDADE_DE_UMA_VACINA};
 }

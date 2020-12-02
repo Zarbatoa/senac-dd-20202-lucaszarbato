@@ -3,21 +3,36 @@ package br.sc.senac.model.dto;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class LancamentoVacinaDTO {
+import br.sc.senac.model.vo.Vacina;
+
+/*
+ * RELATORIO / OUTPUT DAS CONSULTAS:
+    P.NOME,
+    P.SOBRENOME,
+    NUMERO_DE_VACINAS,
+    V.PAIS_ORIGEM,
+    V.ESTAGIO_PESQUISA
+   
+   FILTROS / INPUT DAS CONSULTAS
+    P.SEXO,
+    V.DATA_INICIO_PESQUISA
+ * */
+
+public class PesquisadorVacinaDTO {
 	
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
-	private String nomeVacina;
+	private Vacina vacina;
 	private String paisDeOrigem;
 	private String nomePesquisador;
 	private String instituicao;
 	private LocalDate periodoPesquisa;
 	private int valor;
 	
-	public LancamentoVacinaDTO(String nomeVacina, String paisDeOrigem, String nomePesquisador, String instituicao,
+	public PesquisadorVacinaDTO(Vacina vacina, String paisDeOrigem, String nomePesquisador, String instituicao,
 			LocalDate periodoPesquisa, int valor) {
 		super();
-		this.nomeVacina = nomeVacina;
+		this.vacina = vacina;
 		this.paisDeOrigem = paisDeOrigem;
 		this.nomePesquisador = nomePesquisador;
 		this.instituicao = instituicao;
@@ -25,16 +40,16 @@ public class LancamentoVacinaDTO {
 		this.valor = valor;
 	}
 
-	public LancamentoVacinaDTO() {
+	public PesquisadorVacinaDTO() {
 		super();
 	}
 
-	public String getNomeVacina() {
-		return nomeVacina;
+	public Vacina getVacina() {
+		return vacina;
 	}
 
-	public void setNomeVacina(String nomeVacina) {
-		this.nomeVacina = nomeVacina;
+	public void setVacina(Vacina vacina) {
+		this.vacina = vacina;
 	}
 
 	public String getPaisDeOrigem() {
