@@ -1,25 +1,23 @@
-package br.sc.senac.view;
+package br.sc.senac.view.tempTelasMenu;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.awt.event.ActionEvent;
+
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
 public class TelaPrincipal {
 
 	private JFrame frame;
 	private JDesktopPane desktopPane; //do JInternalPane mas não deu certo --> se não usar o JInternalPane, retirar essa variável
 	TelaSobreComMigLayoutEJInternalJFrame telaInternalJFrame = null; //do JInternalPane mas não deu certo --> se não usar o JInternalPane, retirar essa variável
-	private JPanel contentPane; // variável acrescentada para passar o JPanel.
+	//private JPanel contentPane; // variável acrescentada para passar o JPanel.
 	//TelaSobreComMigLayoutEJPanel telaPanel = null;
 
 	/**
@@ -96,15 +94,22 @@ public class TelaPrincipal {
 
 		});
 		mnHome.add(mntmSobrejinternalframe);
-		
+
 		//teste Jpanel -> fiz igual ao professor. Não entendi porque não funciona o setContentPane. 
 		// no código do professor funcionava, talvez seja a versão da JVM diferente :/
 		JMenuItem mntmSobrejpanel = new JMenuItem("Sobre(JPanel)");
 		mntmSobrejpanel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				TelaSobreComMigLayoutEJPanel painelSobre = new TelaSobreComMigLayoutEJPanel();
-				setContentPane(painelSobre); // no do professor roda, aqui não :/
+				try {
+					//TODO já vejo isso
+					TelaSobreComMigLayoutEJPanel painelSobre = new TelaSobreComMigLayoutEJPanel();
+					frame.setContentPane(painelSobre);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				//setContentPane(painelSobre); // no do professor roda, aqui não :/
 			}
 		});
 		mnHome.add(mntmSobrejpanel);

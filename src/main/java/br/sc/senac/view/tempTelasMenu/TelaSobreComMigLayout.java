@@ -1,4 +1,4 @@
-package br.sc.senac.view;
+package br.sc.senac.view.tempTelasMenu;
 
 import java.awt.EventQueue;
 import java.awt.Font;

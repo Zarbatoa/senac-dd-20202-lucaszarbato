@@ -1,4 +1,4 @@
-package br.sc.senac.view;
+package br.sc.senac.view.tempTelasMenu;
 
 import javax.swing.JPanel;
 

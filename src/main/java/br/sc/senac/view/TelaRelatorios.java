@@ -23,10 +23,8 @@ import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
-import br.sc.senac.controller.ControllerPessoa;
 import br.sc.senac.controller.ControllerVacina;
 import br.sc.senac.model.utilidades.Constantes;
-import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
 
@@ -64,14 +62,14 @@ public class TelaRelatorios extends JFrame {
 	 * @throws ParseException 
 	 */
 	public TelaRelatorios() throws ParseException {
-		ControllerPessoa controllerPessoa = new ControllerPessoa();
+		ControllerVacina controllerVacina = new ControllerVacina();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 654, 452);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][91.00][41.00][142.00,grow][42.00]", "[][][][][][][][][][][][]"));
+		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][91.00][41.00][142.00,grow][42.00]", "[][][][][][][][][][]"));
 		
 		JLabel lbbRelatorioVacinas = new JLabel("Relat\u00F3rio de Vacinas");
 		lbbRelatorioVacinas.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -89,9 +87,8 @@ public class TelaRelatorios extends JFrame {
 		DatePickerSettings dateSettings = new DatePickerSettings();
 		dateSettings.setAllowKeyboardEditing(false);
 		
-		List<Pessoa> listaDePesquisadores = controllerPessoa.coletarListaDePesquisadores();
 		JComboBox cbSexo = new JComboBox();
-		cbSexo.setModel(new DefaultComboBoxModel(listaDePesquisadores.toArray()));
+		cbSexo.setModel(new DefaultComboBoxModel(Constantes.OPCOES_SEXO_EDICAO_CADASTRO));
 		contentPane.add(cbSexo, "cell 1 4 2 1,growx");
 		
 		JLabel lblData = new JLabel("<html>Data<br /> In\u00EDcio Pesquisa</html>");
@@ -99,6 +96,14 @@ public class TelaRelatorios extends JFrame {
 		contentPane.add(lblData, "cell 5 4,alignx trailing");
 		dpDataInicioPesquisa = new DatePicker(dateSettings);
 		contentPane.add(dpDataInicioPesquisa,"cell 6 4 2 1,growx");
+		
+		JLabel lblVacina = new JLabel("Vacina:");
+		contentPane.add(lblVacina, "cell 0 5,alignx trailing");
+		
+		List<Vacina> listaDeVacinas = controllerVacina.coletarTodasVacinas();
+		JComboBox cbVacinas = new JComboBox();
+		cbVacinas.setModel(new DefaultComboBoxModel(listaDeVacinas.toArray()));
+		contentPane.add(cbVacinas, "cell 1 5 2 1,growx");
 		
 		JButton btnGerarRelatorio = new JButton("Gerar Relat\u00F3rio");
 		btnGerarRelatorio.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -155,7 +160,7 @@ public class TelaRelatorios extends JFrame {
 		
 		JButton buttonPagAnterior = new JButton("< Anterior");
 		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(buttonPagAnterior, "cell 2 10");
+		contentPane.add(buttonPagAnterior, "cell 2 9");
 		
 		//evento de passar pág anterior
 		buttonPagAnterior.addActionListener(new ActionListener() {
@@ -169,11 +174,11 @@ public class TelaRelatorios extends JFrame {
 		
 		lblPagAtual = new JLabel("1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 4 10,alignx center");
+		contentPane.add(lblPagAtual, "cell 4 9,alignx center");
 		
 		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagProxima, "cell 6 10");
+		contentPane.add(btnPagProxima, "cell 6 9");
 		
 		//evento para passar a próxima página
 		btnPagProxima.addActionListener(new ActionListener() {

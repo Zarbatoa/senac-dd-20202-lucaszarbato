@@ -1,4 +1,4 @@
-package br.sc.senac.view;
+package br.sc.senac.view.tempTelasMenu;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -19,7 +19,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
@@ -32,7 +32,7 @@ import java.awt.Color;
 import java.awt.SystemColor;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaSobreComMigLayoutEJInternalJFrame extends JInternalFrame {
+public class TelaSobreComMigLayoutEJPanel extends JPanel {
 
 	private JPanel contentPane;
 
@@ -47,7 +47,7 @@ public class TelaSobreComMigLayoutEJInternalJFrame extends JInternalFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaSobreComMigLayoutEJInternalJFrame frame = new TelaSobreComMigLayoutEJInternalJFrame();
+					TelaSobreComMigLayoutEJPanel frame = new TelaSobreComMigLayoutEJPanel();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -60,14 +60,11 @@ public class TelaSobreComMigLayoutEJInternalJFrame extends JInternalFrame {
 	 * Create the frame.
 	 * @throws ParseException 
 	 */
-	public TelaSobreComMigLayoutEJInternalJFrame() throws ParseException {
+	public TelaSobreComMigLayoutEJPanel() throws ParseException {
 		
-		setTitle("Sobre o Sistema");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // aqui antes estava como Exit on close. Precisa mudar para o que está ali. 
 		setBounds(100, 100, 541, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[grow][113.00,grow][35.00][134.00,grow][142.00,grow][][42.00]", "[][][][][][grow][][][][][][][][]"));
 		
 		JLabel lblSobre = new JLabel("Sobre o Sistema");
@@ -75,7 +72,7 @@ public class TelaSobreComMigLayoutEJInternalJFrame extends JInternalFrame {
 		contentPane.add(lblSobre, "cell 3 1,alignx center,aligny bottom");
 		
 		JLabel lblFiguraPrograma = new JLabel("");
-		lblFiguraPrograma.setIcon(new ImageIcon("C:\\Users\\rosan\\git\\senac-dd-20202-lucaszarbato2\\icones\\seringa_2.png"));
+		lblFiguraPrograma.setIcon(new ImageIcon("icones/seringa_2.png"));
 		contentPane.add(lblFiguraPrograma, "cell 1 5");
 		
 		JTextPane txtpnTextoPrograma = new JTextPane();

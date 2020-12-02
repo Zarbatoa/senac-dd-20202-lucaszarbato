@@ -1,4 +1,4 @@
-package br.sc.senac.view;
+package br.sc.senac.view.tempTelasMenu;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -19,7 +19,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JPanel;
+import javax.swing.JInternalFrame;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
@@ -32,7 +32,7 @@ import java.awt.Color;
 import java.awt.SystemColor;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaSobreComMigLayoutEJPanel extends JPanel {
+public class TelaSobreComMigLayoutEJInternalJFrame extends JInternalFrame {
 
 	private JPanel contentPane;
 
@@ -47,7 +47,7 @@ public class TelaSobreComMigLayoutEJPanel extends JPanel {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaSobreComMigLayoutEJPanel frame = new TelaSobreComMigLayoutEJPanel();
+					TelaSobreComMigLayoutEJInternalJFrame frame = new TelaSobreComMigLayoutEJInternalJFrame();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -60,11 +60,14 @@ public class TelaSobreComMigLayoutEJPanel extends JPanel {
 	 * Create the frame.
 	 * @throws ParseException 
 	 */
-	public TelaSobreComMigLayoutEJPanel() throws ParseException {
+	public TelaSobreComMigLayoutEJInternalJFrame() throws ParseException {
 		
+		setTitle("Sobre o Sistema");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // aqui antes estava como Exit on close. Precisa mudar para o que está ali. 
 		setBounds(100, 100, 541, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[grow][113.00,grow][35.00][134.00,grow][142.00,grow][][42.00]", "[][][][][][grow][][][][][][][][]"));
 		
 		JLabel lblSobre = new JLabel("Sobre o Sistema");
