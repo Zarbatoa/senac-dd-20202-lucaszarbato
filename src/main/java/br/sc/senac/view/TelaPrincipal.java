@@ -11,7 +11,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import br.sc.senac.view.cadastro.TelaCadastroPessoa;
+import br.sc.senac.view.cadastro.TelaCadastroVacina;
 import br.sc.senac.view.gerencia.TelaGerenciamentoDePessoas;
+import br.sc.senac.view.gerencia.TelaGerenciamentoDeVacinas;
 
 @SuppressWarnings({"serial"})
 public class TelaPrincipal extends JFrame {
@@ -102,9 +104,35 @@ public class TelaPrincipal extends JFrame {
 		menuBar.add(mnVacina);
 		
 		JMenuItem mntmNovoCadastroVacina = new JMenuItem("Novo (Cadastro)");
+		mntmNovoCadastroVacina.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				TelaCadastroVacina painelCadastroVacina;
+				try {
+					painelCadastroVacina = new TelaCadastroVacina();
+					setContentPane(painelCadastroVacina);
+					revalidate();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		mnVacina.add(mntmNovoCadastroVacina);
 		
 		JMenuItem mntmGerenciarVacina = new JMenuItem("Gerenciar");
+		mntmGerenciarVacina.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				TelaGerenciamentoDeVacinas paintelGerenciamentoVacinas;
+				try {
+					paintelGerenciamentoVacinas = new TelaGerenciamentoDeVacinas();
+					setContentPane(paintelGerenciamentoVacinas);
+					revalidate();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		mnVacina.add(mntmGerenciarVacina);
 		
 		JMenu mnAvaliaoVacina = new JMenu("Avalia\u00E7\u00E3o Vacina");
