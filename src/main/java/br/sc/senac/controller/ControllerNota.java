@@ -6,7 +6,7 @@ import br.sc.senac.model.bo.NotaBO;
 import br.sc.senac.model.exception.PessoaInvalidaException;
 import br.sc.senac.model.exception.VacinaInvalidaException;
 import br.sc.senac.model.exception.ValorInvalidoException;
-import br.sc.senac.model.seletor.AvaliacaoVacinaSeletor;
+import br.sc.senac.model.seletor.NotaSeletor;
 import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.vo.Nota;
 import br.sc.senac.model.vo.Pessoa;
@@ -58,7 +58,16 @@ public class ControllerNota {
 		}
 	}
 	
-	public List<Nota> listarNotas(AvaliacaoVacinaSeletor seletor) {
+	public List<Nota> listarNotas(NotaSeletor seletor) {
+		//tratar vacina, pessoa
+		if(seletor.getVacina() != null && seletor.getVacina() == Constantes.OPCAO_VACINA_TODAS) {
+			seletor.setVacina(null);
+		}
+		
+		if(seletor.getPessoa() != null && seletor.getPessoa() == Constantes.OPCAO_PESSOA_TESTADA_TODAS) {
+			seletor.setPessoa(null);
+		}
+		
 		return notaBO.listarNotas(seletor);
 	}
 	

@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.sc.senac.model.dao.NotaDAO;
 import br.sc.senac.model.exception.ValorInvalidoException;
-import br.sc.senac.model.seletor.AvaliacaoVacinaSeletor;
+import br.sc.senac.model.seletor.NotaSeletor;
 import br.sc.senac.model.vo.Nota;
 
 public class NotaBO {
@@ -21,7 +21,7 @@ public class NotaBO {
 		return novaNota;
 	}
 	
-	public List<Nota> listarNotas(AvaliacaoVacinaSeletor seletor) {
+	public List<Nota> listarNotas(NotaSeletor seletor) {
 		return notaDAO.listarComSeletor(seletor);
 	}
 	

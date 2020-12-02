@@ -5,6 +5,7 @@ import java.util.List;
 import br.sc.senac.model.vo.Pais;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
+import br.sc.senac.model.vo.Vacina;
 
 /**
  * classe repositório de constantes do sistema
@@ -34,21 +35,25 @@ public class Constantes {
 	// view
 	public static final int TAMANHO_PAGINA = 5;
 	
-	public static final String OPCAO_SEXO_TODOS = "Todos";
-	public static final String[] OPCOES_SEXO_GERAL = {Constantes.OPCAO_SEXO_TODOS, Constantes.SEXO_MASCULINO, Constantes.SEXO_FEMININO};
+	public static final String OPCAO_TODOS = "Todos";
+	public static final String OPCAO_TODAS = "Todas";
+	public static final String[] OPCOES_SEXO_GERAL = {Constantes.OPCAO_TODOS, Constantes.SEXO_MASCULINO, Constantes.SEXO_FEMININO};
 	public static final String[] OPCOES_SEXO_EDICAO_CADASTRO = {Constantes.SEXO_MASCULINO, Constantes.SEXO_FEMININO};
 	
-	public static final TipoPessoa OPCAO_CATEGORIA_TODAS = new TipoPessoa(-1,"Todas");
+	public static final TipoPessoa OPCAO_CATEGORIA_TODAS = new TipoPessoa(-1, OPCAO_TODAS);
 	public static final TipoPessoa[] OPCOES_TIPO_PESSOA_GERAL = {Constantes.OPCAO_CATEGORIA_TODAS ,Constantes.TIPO_PESQUISADOR, Constantes.TIPO_VOLUNTARIO, Constantes.TIPO_PUBLICO_GERAL};
 	public static final TipoPessoa[] OPCOES_TIPO_PESSOA_EDICAO_CADASTRO = {Constantes.TIPO_PESQUISADOR, Constantes.TIPO_VOLUNTARIO, Constantes.TIPO_PUBLICO_GERAL};
 	
-	public static final Pais OPCAO_PAISES_TODOS = new Pais(null,"Todos");
+	public static final Pais OPCAO_PAISES_TODOS = new Pais(null, OPCAO_TODOS);
 	public static final List<Pais> OPCOES_PAISES_GERAL = Pais.createCountryListGeral();
 	public static final Pais[] OPCOES_PAISES_EDICAO_CADASTRO = Pais.createCountryListEdicaoCadastro();
 	
-	public static final String OPCAO_ESTAGIO_VACINA_TODAS = "Todas";
+	public static final String OPCAO_ESTAGIO_VACINA_TODAS = OPCAO_TODAS;
 	public static final String[] LISTA_ESTAGIOS_VACINA_GERAL = {OPCAO_ESTAGIO_VACINA_TODAS, TXT_ESTAGIO_INICIAL, TXT_ESTAGIO_TESTES, TXT_ESTAGIO_APLICACAO_EM_MASSA};
 	public static final String[] LISTA_ESTAGIOS_VACINA_EDICAO_CADASTRO = {TXT_ESTAGIO_INICIAL, TXT_ESTAGIO_TESTES, TXT_ESTAGIO_APLICACAO_EM_MASSA};
 	
-	public static final Pessoa OPCAO_PESQUISADOR_RESPONSAVEL_TODOS = new Pessoa(-1, null, null, "Todos", null, null, ' ', null);
+	public static final Pessoa OPCAO_PESQUISADOR_RESPONSAVEL_TODOS = new Pessoa(-1, null, null, OPCAO_TODOS, null, null, ' ', null);
+	public static final Pessoa OPCAO_PESSOA_TESTADA_TODAS = new Pessoa(-1, null, null, OPCAO_TODAS, null, null, ' ', null);
+	public static final Vacina OPCAO_VACINA_TODAS = new Vacina(-1, OPCAO_TODAS, null, -1, null, null);
+	
 }

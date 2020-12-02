@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.sc.senac.model.seletor.AvaliacaoVacinaSeletor;
+import br.sc.senac.model.seletor.NotaSeletor;
 import br.sc.senac.model.vo.Nota;
 
 public class NotaDAO implements BaseDAO<Nota>{
@@ -164,7 +164,7 @@ public class NotaDAO implements BaseDAO<Nota>{
 	
 	// a partir daqui estão os métodos dos filtros
 	
-		public ArrayList<Nota> listarComSeletor(AvaliacaoVacinaSeletor seletor) {
+		public ArrayList<Nota> listarComSeletor(NotaSeletor seletor) {
 			String sql = " SELECT * FROM NOTA n";
 
 			if (seletor.temFiltro()) {
@@ -191,33 +191,41 @@ public class NotaDAO implements BaseDAO<Nota>{
 			return notas;
 		}
 		
-		private String criarFiltros(AvaliacaoVacinaSeletor seletor, String sql) {
+		private String criarFiltros(NotaSeletor seletor, String sql) {
 			
 			// Tem pelo menos UM filtro
 			sql += " WHERE ";
 			boolean primeiro = true;
 
-			if ((seletor.getNomeVacina() != null) && (seletor.getNomeVacina().trim().length() > 0)) {
+			if (seletor.temFiltroDeVacina()) {
 				if (!primeiro) {
 					sql += " AND ";
 				}
-				sql += "n.idvacina = '" + seletor.getNomeVacina() + "'";
+				sql += "n.idvacina = '" + seletor.getVacina().getId() + "'";
 				primeiro = false;
 			}
 
-			if ((seletor.getNomePessoa() !=  null) && (seletor.getNomePessoa().trim().length() > 0)) {
+			if (seletor.temFiltroDePessoa()) {
 				if (!primeiro) {
 					sql += " AND ";
 				}
-				sql += "n.idpessoa = '" + seletor.getNomePessoa() + "'";
+				sql += "n.idpessoa = '" + seletor.getPessoa().getId() + "'";
 				primeiro = false;
 			}
 			
-			if ((seletor.getNota() != 0) && (seletor.getNota() > 0)) {
+			if (seletor.temFiltroDeValorInicial()) {
 				if (!primeiro) {
 					sql += " AND ";
 				}
-				sql += "n.valor = '" + seletor.getNota() + "'";
+				sql += "n.valor >= " + seletor.getValorInicial() + " ";
+				primeiro = false;
+			}
+			
+			if (seletor.temFiltroDeValorFinal()) {
+				if (!primeiro) {
+					sql += " AND ";
+				}
+				sql += "n.valor <= " + seletor.getValorFinal() + " ";
 				primeiro = false;
 			}
 			return sql;
