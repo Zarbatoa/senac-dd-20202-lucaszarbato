@@ -55,12 +55,14 @@ public class PessoaBO {
 			}
 		}
 		
-		if(instituicaoDAO.jaExisteNome(pessoaAtualizada.getInstituicao())) {
-			instiutuicaoDoBanco = instituicaoDAO.pesquisarPeloNome(pessoaAtualizada.getInstituicao().getNome());
-		} else {
-			instiutuicaoDoBanco = instituicaoDAO.inserir(pessoaAtualizada.getInstituicao());
+		if(pessoaAtualizada.getInstituicao() != null) {
+			if(instituicaoDAO.jaExisteNome(pessoaAtualizada.getInstituicao())) {
+				instiutuicaoDoBanco = instituicaoDAO.pesquisarPeloNome(pessoaAtualizada.getInstituicao().getNome());
+			} else {
+				instiutuicaoDoBanco = instituicaoDAO.inserir(pessoaAtualizada.getInstituicao());
+			}
+			pessoaAtualizada.setInstituicao(instiutuicaoDoBanco);
 		}
-		pessoaAtualizada.setInstituicao(instiutuicaoDoBanco);
 		
 		return this.pessoaDAO.alterar(pessoaAtualizada);
 	}

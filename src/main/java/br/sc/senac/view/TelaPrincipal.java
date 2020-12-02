@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import br.sc.senac.view.cadastro.TelaCadastroPessoa;
+import br.sc.senac.view.gerencia.TelaGerenciamentoDePessoas;
 
 @SuppressWarnings({"serial"})
 public class TelaPrincipal extends JFrame {
@@ -69,10 +70,10 @@ public class TelaPrincipal extends JFrame {
 		mntmNovoCadastroPessoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				TelaCadastroPessoa painelSobre;
+				TelaCadastroPessoa painelCadastroPessoa;
 				try {
-					painelSobre = new TelaCadastroPessoa();
-					setContentPane(painelSobre);
+					painelCadastroPessoa = new TelaCadastroPessoa();
+					setContentPane(painelCadastroPessoa);
 					revalidate();
 				} catch (ParseException e1) {
 					e1.printStackTrace();
@@ -82,6 +83,19 @@ public class TelaPrincipal extends JFrame {
 		mnPessoa.add(mntmNovoCadastroPessoa);
 		
 		JMenuItem mntmGerenciarPessoa = new JMenuItem("Gerenciar");
+		mntmGerenciarPessoa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				TelaGerenciamentoDePessoas paintelGerenciamentoPessoas;
+				try {
+					paintelGerenciamentoPessoas = new TelaGerenciamentoDePessoas();
+					setContentPane(paintelGerenciamentoPessoas);
+					revalidate();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		mnPessoa.add(mntmGerenciarPessoa);
 		
 		JMenu mnVacina = new JMenu("Vacina");

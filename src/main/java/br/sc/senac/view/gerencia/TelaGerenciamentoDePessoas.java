@@ -14,7 +14,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,9 +37,8 @@ import br.sc.senac.model.vo.TipoPessoa;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaGerenciamentoDePessoas extends JFrame {
+public class TelaGerenciamentoDePessoas extends JPanel {
 
-	private JPanel contentPane;
 	private JTextField tfNome;
 	private JTextField tfInstituicao;
 	private JComboBox cbSexo;
@@ -87,55 +85,52 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 	public TelaGerenciamentoDePessoas() throws ParseException {
 		ultimoSeletorUsado = null;
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 490);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow][][grow][24.00][105.00][47.00][grow][][]", "[][][][][][][][][][][][][96.00][][]"));
+		setBorder(new EmptyBorder(5, 5, 5, 5));
+		this.setLayout(new MigLayout("", "[grow][][grow][24.00][105.00][47.00][grow][][]", "[][][][][][][][][][][][][96.00][][]"));
 		
 		JLabel lblGerenciamentoDePessoa = new JLabel("Gerenciamento de Pessoas");
 		lblGerenciamentoDePessoa.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblGerenciamentoDePessoa, "cell 3 0 3 1,alignx center");
+		this.add(lblGerenciamentoDePessoa, "cell 3 0 3 1,alignx center");
 		
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblNome, "cell 0 2,alignx trailing");
+		this.add(lblNome, "cell 0 2,alignx trailing");
 		
 		tfNome = new JTextField();
 		tfNome.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(tfNome, "cell 1 2 3 1,growx");
+		this.add(tfNome, "cell 1 2 3 1,growx");
 		tfNome.setColumns(10);
 		
 		MaskFormatter mascaraCpf = new MaskFormatter("###.###.###-##");
 		
 		JLabel lblSobrenome = new JLabel("Sobrenome:");
 		lblSobrenome.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblSobrenome, "cell 5 2,alignx trailing");
+		this.add(lblSobrenome, "cell 5 2,alignx trailing");
 		
 		tfSobrenome = new JTextField();
 		tfSobrenome.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(tfSobrenome, "cell 6 2 2 1,growx");
+		this.add(tfSobrenome, "cell 6 2 2 1,growx");
 		tfSobrenome.setColumns(10);
 		
 		JLabel lblCpf = new JLabel("Cpf:");
 		lblCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblCpf, "cell 0 4,alignx trailing");
+		this.add(lblCpf, "cell 0 4,alignx trailing");
 		ftfCpf = new JFormattedTextField(mascaraCpf);
 		ftfCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(ftfCpf, "cell 1 4 3 1,growx");
+		this.add(ftfCpf, "cell 1 4 3 1,growx");
 		
 		JLabel lblSexo = new JLabel("Sexo:");
 		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblSexo, "cell 5 4,alignx trailing");
+		this.add(lblSexo, "cell 5 4,alignx trailing");
 		cbSexo = new JComboBox();
 		cbSexo.setModel(new DefaultComboBoxModel(Constantes.OPCOES_SEXO_GERAL));
 		cbSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbSexo, "cell 6 4 2 1,growx");
+		this.add(cbSexo, "cell 6 4 2 1,growx");
 		
 		JLabel lblCategoria = new JLabel("Categoria:");
 		lblCategoria.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblCategoria, "cell 0 6,alignx trailing");
+		this.add(lblCategoria, "cell 0 6,alignx trailing");
 		
 		cbCategoria = new JComboBox();
 		cbCategoria.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -145,29 +140,29 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 				definirInstituicaoEnabled();
 			}
 		});
-		contentPane.add(cbCategoria, "cell 1 6 3 1,growx");
+		this.add(cbCategoria, "cell 1 6 3 1,growx");
 		
 		JLabel lblDataDeNascimento = new JLabel("Data de Nascimento:");
 		lblDataDeNascimento.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblDataDeNascimento, "cell 5 6,alignx trailing");
+		this.add(lblDataDeNascimento, "cell 5 6,alignx trailing");
 		DatePickerSettings dateSettings = new DatePickerSettings();
 		dateSettings.setAllowKeyboardEditing(false);
 		dpDataNascimento = new DatePicker(dateSettings);
-		contentPane.add(dpDataNascimento,"cell 6 6 2 1,growx");
+		this.add(dpDataNascimento,"cell 6 6 2 1,growx");
 		
 		JLabel lblInstituicao = new JLabel("Institui\u00E7\u00E3o:");
 		lblInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblInstituicao, "cell 0 8,alignx trailing");
+		this.add(lblInstituicao, "cell 0 8,alignx trailing");
 		
 		tfInstituicao = new JTextField();
 		tfInstituicao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(tfInstituicao, "cell 1 8 3 1,growx");
+		this.add(tfInstituicao, "cell 1 8 3 1,growx");
 		tfInstituicao.setColumns(10);
 		definirInstituicaoEnabled();
 		
 		btnExcluir = new JButton("Excluir");
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnExcluir, "cell 2 10,alignx center");
+		this.add(btnExcluir, "cell 2 10,alignx center");
 		
 		btnExcluir.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
@@ -182,18 +177,18 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnConsultar, "cell 6 10,alignx center");
+		this.add(btnConsultar, "cell 6 10,alignx center");
 		
 		btnConsultar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				consultarPessoas();
 			}
 		});
-		contentPane.add(tableResultados, "cell 0 12 9 1,grow");
+		this.add(tableResultados, "cell 0 12 9 1,grow");
 		
 		btnPagAnterior = new JButton("< Anterior");
 		btnPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagAnterior, "cell 2 13,alignx center");
+		this.add(btnPagAnterior, "cell 2 13,alignx center");
 		
 		btnPagAnterior.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -206,11 +201,11 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 		
 		lblPagAtual = new JLabel(paginaAtual+"");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 4 13 2 1,alignx center");
+		this.add(lblPagAtual, "cell 4 13 2 1,alignx center");
 		
 		btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagProxima, "cell 6 13,alignx center");
+		this.add(btnPagProxima, "cell 6 13,alignx center");
 		
 		btnPagProxima.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -229,7 +224,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 				tentarEditar();
 			}
 		});
-		contentPane.add(btnEditar, "cell 6 8,alignx center");
+		this.add(btnEditar, "cell 6 8,alignx center");
 		
 		
 		btnPegarRegistro = new JButton("<html>Pegar Registro<br />para Edi\u00E7\u00E3o</html>");
@@ -239,7 +234,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 				coletarRegistroParaEdicao();
 			}
 		});
-		contentPane.add(btnPegarRegistro, "cell 4 14 2 1,alignx center");
+		this.add(btnPegarRegistro, "cell 4 14 2 1,alignx center");
 		
 		btnVoltar = new JButton("Voltar");
 		btnVoltar.setEnabled(false);
@@ -252,7 +247,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			}
 		});
 		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnVoltar, "cell 4 8,alignx center,aligny top");
+		this.add(btnVoltar, "cell 4 8,alignx center,aligny top");
 		
 		btnLimpar = new JButton("Limpar");
 		btnLimpar.addActionListener(new ActionListener() {
@@ -261,7 +256,7 @@ public class TelaGerenciamentoDePessoas extends JFrame {
 			}
 		});
 		btnLimpar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnLimpar, "cell 5 8,alignx center");
+		this.add(btnLimpar, "cell 5 8,alignx center");
 	}
 	
 	
