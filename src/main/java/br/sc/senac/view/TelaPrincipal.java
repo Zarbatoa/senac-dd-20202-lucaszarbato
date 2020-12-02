@@ -1,15 +1,26 @@
 package br.sc.senac.view;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.awt.event.ActionEvent;
 
 public class TelaPrincipal {
 
 	private JFrame frame;
+	private JDesktopPane desktopPane; //do JInternalPane mas não deu certo --> se não usar o JInternalPane, retirar essa variável
+	TelaSobreComMigLayoutEJInternalJFrame telaInternalJFrame = null; //do JInternalPane mas não deu certo --> se não usar o JInternalPane, retirar essa variável
+	private JPanel contentPane; // variável acrescentada para passar o JPanel.
+	//TelaSobreComMigLayoutEJPanel telaPanel = null;
 
 	/**
 	 * Launch the application.
@@ -19,6 +30,8 @@ public class TelaPrincipal {
 			public void run() {
 				try {
 					TelaPrincipal window = new TelaPrincipal();
+					// Inicializa a tela principal MAXIMIZADA
+					//frame.setExtendedState(JFrame.MAXIMIZED_BOTH); //--> só que se for assim o frame vira static
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -31,7 +44,7 @@ public class TelaPrincipal {
 	 * Create the application.
 	 */
 	public TelaPrincipal() {
-		initialize();
+		initialize();		
 	}
 
 	/**
@@ -45,6 +58,56 @@ public class TelaPrincipal {
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
+		
+		JMenu mnHome = new JMenu("Home");
+		menuBar.add(mnHome);
+
+		//aqui que coloca o evento para trocar de tela -> como JFrame
+		//No visual: apertar com botão direito do mouse -> add event handler -> action -> action performed
+		//No código dá um erro e sugere a correção por try/catch. Fiz isso e funcionou.
+		JMenuItem mntmSobre = new JMenuItem("Sobre");
+		mntmSobre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaSobreComMigLayout tela = null;
+				try {
+					tela = new TelaSobreComMigLayout();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				tela.setVisible(true);
+			}
+		});
+		mnHome.add(mntmSobre);
+		
+		//aqui que coloca o evento para trocar de tela -> como JInternalFrame --> não está rodando, está com erro.
+		JMenuItem mntmSobrejinternalframe = new JMenuItem("Sobre(JInternalFrame)");
+		mntmSobrejinternalframe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					telaInternalJFrame = new TelaSobreComMigLayoutEJInternalJFrame();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				desktopPane.add(telaInternalJFrame);
+				telaInternalJFrame.show();
+			}
+
+		});
+		mnHome.add(mntmSobrejinternalframe);
+		
+		//teste Jpanel -> fiz igual ao professor. Não entendi porque não funciona o setContentPane. 
+		// no código do professor funcionava, talvez seja a versão da JVM diferente :/
+		JMenuItem mntmSobrejpanel = new JMenuItem("Sobre(JPanel)");
+		mntmSobrejpanel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				TelaSobreComMigLayoutEJPanel painelSobre = new TelaSobreComMigLayoutEJPanel();
+				setContentPane(painelSobre); // no do professor roda, aqui não :/
+			}
+		});
+		mnHome.add(mntmSobrejpanel);
 		
 		JMenu mnPessoa = new JMenu("Pessoa");
 		menuBar.add(mnPessoa);
