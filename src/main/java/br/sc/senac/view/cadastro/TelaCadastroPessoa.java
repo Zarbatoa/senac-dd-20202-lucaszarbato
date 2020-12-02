@@ -1,4 +1,4 @@
-package br.sc.senac.view;
+package br.sc.senac.view.cadastro;
 
 import java.awt.EventQueue;
 import java.awt.Font;

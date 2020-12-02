@@ -1,4 +1,4 @@
-package br.sc.senac.view.tempTelasMenu;
+package br.sc.senac.view;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -13,12 +13,9 @@ import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
 
-@SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaSobreComMigLayout extends JPanel {
-	
-	//variável relacionada a paginação
-	private int paginaAtual = 1;
-	
+@SuppressWarnings({"serial"})
+public class TelaSobre extends JPanel {
+
 	/**
 	 * Launch the application.
 	 */
@@ -26,7 +23,7 @@ public class TelaSobreComMigLayout extends JPanel {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaSobreComMigLayout frame = new TelaSobreComMigLayout();
+					TelaSobre frame = new TelaSobre();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -39,7 +36,7 @@ public class TelaSobreComMigLayout extends JPanel {
 	 * Create the frame.
 	 * @throws ParseException 
 	 */
-	public TelaSobreComMigLayout() {
+	public TelaSobre() {
 		setBounds(100, 100, 541, 300);
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(new MigLayout("", "[grow][113.00,grow][35.00][134.00,grow][142.00,grow][][42.00]", "[][][][][grow][][][][][][][][]"));
