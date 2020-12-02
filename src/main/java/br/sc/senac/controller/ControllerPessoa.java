@@ -63,6 +63,8 @@ public class ControllerPessoa {
 			if(instituicao.getNome() == null || instituicao.getNome().isEmpty()) {
 				throw new InstituicaoInvalidaException("O campo instituição deve ser preenchido para pessoas do tipo pesquisador.");
 			}
+		} else {
+			novaPessoa.setInstituicao(null);
 		}
 	}
 

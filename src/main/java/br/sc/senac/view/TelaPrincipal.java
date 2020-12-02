@@ -3,11 +3,14 @@ package br.sc.senac.view;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import br.sc.senac.view.cadastro.TelaCadastroPessoa;
 
 @SuppressWarnings({"serial"})
 public class TelaPrincipal extends JFrame {
@@ -63,6 +66,19 @@ public class TelaPrincipal extends JFrame {
 		menuBar.add(mnPessoa);
 		
 		JMenuItem mntmNovoCadastroPessoa = new JMenuItem("Novo (Cadastro)");
+		mntmNovoCadastroPessoa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				TelaCadastroPessoa painelSobre;
+				try {
+					painelSobre = new TelaCadastroPessoa();
+					setContentPane(painelSobre);
+					revalidate();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		mnPessoa.add(mntmNovoCadastroPessoa);
 		
 		JMenuItem mntmGerenciarPessoa = new JMenuItem("Gerenciar");

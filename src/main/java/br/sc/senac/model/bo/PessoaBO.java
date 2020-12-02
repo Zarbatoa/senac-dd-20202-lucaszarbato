@@ -1,11 +1,13 @@
 package br.sc.senac.model.bo;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.sc.senac.model.dao.InstituicaoDAO;
 import br.sc.senac.model.dao.PessoaDAO;
 import br.sc.senac.model.exception.CpfJaCadastradoException;
+import br.sc.senac.model.exception.DataNascimentoInvalidaException;
 import br.sc.senac.model.seletor.PessoaSeletor;
 import br.sc.senac.model.utilidades.Utils;
 import br.sc.senac.model.vo.Instituicao;
@@ -17,19 +19,26 @@ public class PessoaBO {
 	private PessoaDAO pessoaDAO = new PessoaDAO();
 	private InstituicaoDAO instituicaoDAO = new InstituicaoDAO();
 	
-	public Pessoa salvar(Pessoa novaPessoa) throws CpfJaCadastradoException{
+	public Pessoa salvar(Pessoa novaPessoa) throws CpfJaCadastradoException, DataNascimentoInvalidaException{
 		Instituicao instiutuicaoDoBanco = null;
-		if(instituicaoDAO.jaExisteNome(novaPessoa.getInstituicao())) {
-			instiutuicaoDoBanco = instituicaoDAO.pesquisarPeloNome(novaPessoa.getInstituicao().getNome());
-		} else {
-			instiutuicaoDoBanco = instituicaoDAO.inserir(novaPessoa.getInstituicao());
+		if(novaPessoa.getInstituicao() != null) {
+			if(instituicaoDAO.jaExisteNome(novaPessoa.getInstituicao())) {
+				instiutuicaoDoBanco = instituicaoDAO.pesquisarPeloNome(novaPessoa.getInstituicao().getNome());
+			} else {
+				instiutuicaoDoBanco = instituicaoDAO.inserir(novaPessoa.getInstituicao());
+			}
+			novaPessoa.setInstituicao(instiutuicaoDoBanco);
 		}
-		novaPessoa.setInstituicao(instiutuicaoDoBanco);
 		
 		if(this.pessoaDAO.cpfJaCadastrado(novaPessoa)) {
 			throw new CpfJaCadastradoException("O CPF informado (" + Utils.formatarCpf(novaPessoa.getCpf()) 
 			+ ") já foi cadastrado.");
 		}
+		
+		if(novaPessoa.getDataNascimento().isAfter(LocalDate.now())) {
+			throw new DataNascimentoInvalidaException("Data nascimento deve ser antes da data atual.");
+		}
+		
 		this.pessoaDAO.inserir(novaPessoa);
 		
 		return novaPessoa;
