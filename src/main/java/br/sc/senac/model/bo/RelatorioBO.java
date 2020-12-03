@@ -6,6 +6,7 @@ import br.sc.senac.model.dao.RelatorioDAO;
 import br.sc.senac.model.dto.VacinaNotaPessoaDTO;
 import br.sc.senac.model.exception.FiltroObrigatorioException;
 import br.sc.senac.model.seletor.RelatorioSeletor;
+import br.sc.senac.model.vo.Vacina;
 
 public class RelatorioBO {
 
@@ -41,5 +42,11 @@ public class RelatorioBO {
 		}
 		return relatorioDAO.gerarRelatorioFaixasDeIdadeVacinaDAO(seletor);
 	}
+	
+//	public void gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido) {
+//		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
+//		gerador.gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(vacinas, caminhoEscolhido);
+//	}
+
 
 }

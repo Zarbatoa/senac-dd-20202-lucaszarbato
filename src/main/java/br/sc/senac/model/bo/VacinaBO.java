@@ -30,31 +30,6 @@ public class VacinaBO {
 	public List<Vacina> listarVacinas(VacinaSeletor seletor) {
 		return vacinaDAO.listarComSeletor(seletor);
 	}
-	
-	public void gerarPlanilhaVacinaTotalPorPesquisador(List<Vacina> vacinas, String caminhoEscolhido) {
-		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
-		gerador.gerarPlanilhaVacinaTotalPorPesquisador(vacinas, caminhoEscolhido);
-	}
-	
-	public void gerarPlanilhaVacinaTotalPorPaisDeOrigem(List<Vacina> vacinas, String caminhoEscolhido) {
-		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
-		gerador.gerarPlanilhaVacinaTotalPorPaisOrigem(vacinas, caminhoEscolhido);
-	}
-	
-	public void gerarPlanilhaVacinaTotalPorPaisDeOrigemPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido) {
-		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
-		gerador.gerarPlanilhaVacinaTotalPorPaisDeOrigemPorPeriodo(vacinas, caminhoEscolhido);
-	}
-	
-	public void gerarPlanilhaVacinaTotalPorEstagioDePesquisa(List<Vacina> vacinas, String caminhoEscolhido) {
-		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
-		gerador.gerarPlanilhaVacinaTotalPorEstagioDePesquisa(vacinas, caminhoEscolhido);
-	}
-	
-	public void gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido) {
-		GeradorPlanilhaVacina gerador = new GeradorPlanilhaVacina();
-		gerador.gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(vacinas, caminhoEscolhido);
-	}
 
 	public String excluirVacinas(List<Integer> idsASeremExcluidos) {
 		StringBuffer mensagem = new StringBuffer();

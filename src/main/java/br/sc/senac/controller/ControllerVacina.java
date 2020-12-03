@@ -91,36 +91,6 @@ public class ControllerVacina {
 	public String excluir(List<Integer> idsASeremExcluidos) {
 		return vacinaBO.excluirVacinas(idsASeremExcluidos);
 	}
-	
-	public void gerarRelatorioTotalVacinaPorPesquisador(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
-			vacinaBO.gerarPlanilhaVacinaTotalPorPesquisador(vacinas, caminhoEscolhido);
-		}
-	}
-	
-	public void gerarRelatorioTotalVacinaPorPaisDeOrigem(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
-			vacinaBO.gerarPlanilhaVacinaTotalPorPaisDeOrigem(vacinas, caminhoEscolhido);
-		}
-	}
-	
-	public void gerarRelatorioTotalVacinaPorPaisDeOrigemPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
-			vacinaBO.gerarPlanilhaVacinaTotalPorPaisDeOrigemPorPeriodo(vacinas, caminhoEscolhido);
-		}
-	}
-	
-	public void gerarRelatorioTotalVacinaPorEstagioDePesquisa(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
-			vacinaBO.gerarPlanilhaVacinaTotalPorEstagioDePesquisa(vacinas, caminhoEscolhido);
-		}
-	}
-	
-	public void gerarRelatorioTotalVacinaPorEstagioDePesquisaPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
-			vacinaBO.gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(vacinas, caminhoEscolhido);
-		}
-	}
 
 	public StatusMensagem atualizar(Vacina vacinaAlterada) {
 		StatusMensagem statusMensagem = new StatusMensagem();

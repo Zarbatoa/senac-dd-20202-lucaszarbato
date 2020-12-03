@@ -70,11 +70,5 @@ public class ControllerNota {
 		
 		return notaBO.listarNotas(seletor);
 	}
-	
-	public void gerarRelatorioMediaNoraPorVacina(List<Nota> notas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
-			notaBO.gerarPlanilhaMediaNotaPorVacina(notas, caminhoEscolhido);
-		}
-	}
 
 }

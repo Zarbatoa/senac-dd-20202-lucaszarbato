@@ -129,18 +129,6 @@ public class ControllerPessoa {
 	public String excluir(List<Integer> idsASeremExcluidos) {
 		return pessoaBO.excluirPessoas(idsASeremExcluidos);
 	}
-	
-	public void gerarRelatorioPessoaTotalPorSexo(List<Pessoa> pessoas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
-			pessoaBO.gerarPlanilhaPessoaTotalPorSexo(pessoas, caminhoEscolhido);
-		}
-	}
-	
-	public void gerarRelatorioPessoaTotalPorSexoPorPeriodo(List<Pessoa> pessoas, String caminhoEscolhido, String tipoRelatorio) {
-		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
-			pessoaBO.gerarPlanilhaPessoaTotalPorSexoPorPeriodo(pessoas, caminhoEscolhido);
-		}
-	}
 
 	public StatusMensagem atualizar(Pessoa pessoaAlterada) {
 		StatusMensagem statusMensagem = new StatusMensagem();

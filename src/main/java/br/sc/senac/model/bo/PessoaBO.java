@@ -142,16 +142,6 @@ public class PessoaBO {
 		
 		return mensagem.toString();
 	}
-	
-	public void gerarPlanilhaPessoaTotalPorSexoPorPeriodo(List<Pessoa> pessoas, String caminhoEscolhido) {
-		GeradorPlanilhaPessoa gerador = new GeradorPlanilhaPessoa();
-		gerador.gerarPlanilhaPessoaTotalPorSexoPorPeriodo(pessoas, caminhoEscolhido);
-	}
-	
-	public void gerarPlanilhaPessoaTotalPorSexo(List<Pessoa> pessoas, String caminhoEscolhido) {
-		GeradorPlanilhaPessoa gerador = new GeradorPlanilhaPessoa();
-		gerador.gerarPlanilhaPessoaTotalPorSexo(pessoas, caminhoEscolhido);
-	}
-	
+
 	
 }

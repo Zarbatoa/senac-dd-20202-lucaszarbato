@@ -24,10 +24,5 @@ public class NotaBO {
 	public List<Nota> listarNotas(NotaSeletor seletor) {
 		return notaDAO.listarComSeletor(seletor);
 	}
-	
-	public void gerarPlanilhaMediaNotaPorVacina(List<Nota> notas, String caminhoEscolhido) {
-		GeradorPlanilhaAvaliacaoVacina gerador = new GeradorPlanilhaAvaliacaoVacina();
-		gerador.gerarPlanilhaMediaNotaPorVacina(notas, caminhoEscolhido);
-	}
 
 }
