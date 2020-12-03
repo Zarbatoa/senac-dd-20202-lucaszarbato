@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -17,6 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import com.github.lgooddatepicker.components.DatePicker;
@@ -146,22 +150,38 @@ public class TelaRelatorios extends JPanel {
 		//método chamar xls no botão. Falta fazer o método de gerar relatório.
 		btnGerarXls.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				FileFilter filter = new FileNameExtensionFilter("Exel 97-2003 (*.xls)","xls");
 				JFileChooser janelaArquivos = new JFileChooser();
+				janelaArquivos.setFileFilter(filter);
 
 				int opcaoSelecionada = janelaArquivos.showSaveDialog(null);
 
 				if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
-					//TODO quando eu for ver as telas de relatorio não se esquecer dessas variáveis
-					@SuppressWarnings("unused")
-					String caminho = janelaArquivos.getSelectedFile().getAbsolutePath();
-
-					@SuppressWarnings("unused")
-					ControllerVacina controller = new ControllerVacina();
+					//TODO em testes
+					File arquivoEscolhido = janelaArquivos.getSelectedFile();
+					if (arquivoEscolhido.exists()) {
+						System.out.println("Existe");
+						int resultadoConfirm = JOptionPane.showConfirmDialog(null, "Tens certeza que queres sobrescrever esse arquivo? \n" + arquivoEscolhido.getAbsolutePath(),
+								"Tela de Confirmação", JOptionPane.OK_CANCEL_OPTION);
+						if (resultadoConfirm == JOptionPane.OK_OPTION) {
+							JOptionPane.showMessageDialog(null, "Confirmado");
+						} else {
+							JOptionPane.showMessageDialog(null, "Não Confirmado");
+						}
+					} else {
+						System.out.println("Não existe");
+						try {
+							arquivoEscolhido.createNewFile();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
 					
 					//TODO continuar implementacao proposta (onde esses argumentos serão declarados e instanciados?)
 					String mensagem = ""; //controller.gerarRelatorioTotalVacinaPorPesquisador(vacinas, caminhoEscolhido, tipoRelatorio); //aqui está ligado ao método gerar relatório, que equivale a uma consulta de vacina
 
-					JOptionPane.showMessageDialog(null, mensagem);
+					//JOptionPane.showMessageDialog(null, caminho);
 				}
 			}
 		});
