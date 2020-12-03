@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import br.sc.senac.model.vo.Vacina;
 
 public class RelatorioSeletor extends AbstractSeletor{
+	private String tipoDeRelatorio;
 	private Character sexo;
 	private LocalDate dataInicioPesquisa;
 	private Vacina vacina;
@@ -35,6 +36,14 @@ public class RelatorioSeletor extends AbstractSeletor{
 
 	public void setVacina(Vacina vacina) {
 		this.vacina = vacina;
+	}
+
+	public String getTipoDeRelatorio() {
+		return tipoDeRelatorio;
+	}
+
+	public void setTipoDeRelatorio(String tipoDeRelatorio) {
+		this.tipoDeRelatorio = tipoDeRelatorio;
 	}
 
 	

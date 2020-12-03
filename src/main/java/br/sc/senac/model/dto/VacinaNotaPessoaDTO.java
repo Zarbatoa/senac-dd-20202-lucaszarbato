@@ -30,17 +30,17 @@ public class VacinaNotaPessoaDTO {
 
 	private Integer estagioPesquisa;
 
-	private Integer nomeVacina;
+	private String nomeVacina;
 	private Integer numeroDeAvaliacoes;
 	
-	private Integer mediaDeAvaliacoes;
+	private Double  mediaDeAvaliacoes;
 	
 	private String descricaoTipoPessoa;
 	private Integer numeroDePessoas;
 	
 	private String faixas;
-	private String total;
-	private String media_nota;
+	private Integer total;
+	private Double media_nota;
 	
 	public VacinaNotaPessoaDTO() {
 	}
@@ -86,11 +86,11 @@ public class VacinaNotaPessoaDTO {
 		this.estagioPesquisa = estagioPesquisa;
 	}
 
-	public Integer getNomeVacina() {
+	public String getNomeVacina() {
 		return nomeVacina;
 	}
 
-	public void setNomeVacina(Integer nomeVacina) {
+	public void setNomeVacina(String nomeVacina) {
 		this.nomeVacina = nomeVacina;
 	}
 
@@ -102,11 +102,11 @@ public class VacinaNotaPessoaDTO {
 		this.numeroDeAvaliacoes = numeroDeAvaliacoes;
 	}
 
-	public Integer getMediaDeAvaliacoes() {
+	public Double getMediaDeAvaliacoes() {
 		return mediaDeAvaliacoes;
 	}
 
-	public void setMediaDeAvaliacoes(Integer mediaDeAvaliacoes) {
+	public void setMediaDeAvaliacoes(Double mediaDeAvaliacoes) {
 		this.mediaDeAvaliacoes = mediaDeAvaliacoes;
 	}
 
@@ -134,19 +134,19 @@ public class VacinaNotaPessoaDTO {
 		this.faixas = faixas;
 	}
 
-	public String getTotal() {
+	public Integer getTotal() {
 		return total;
 	}
 
-	public void setTotal(String total) {
+	public void setTotal(Integer total) {
 		this.total = total;
 	}
 
-	public String getMedia_nota() {
+	public Double getMedia_nota() {
 		return media_nota;
 	}
 
-	public void setMedia_nota(String media_nota) {
+	public void setMedia_nota(Double media_nota) {
 		this.media_nota = media_nota;
 	}
 }

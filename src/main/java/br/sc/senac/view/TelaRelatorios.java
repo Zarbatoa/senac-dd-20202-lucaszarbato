@@ -23,7 +23,10 @@ import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
+import br.sc.senac.controller.ControllerRelatorio;
 import br.sc.senac.controller.ControllerVacina;
+import br.sc.senac.model.dto.VacinaNotaPessoaDTO;
+import br.sc.senac.model.seletor.RelatorioSeletor;
 import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
@@ -32,13 +35,15 @@ import net.miginfocom.swing.MigLayout;
 public class TelaRelatorios extends JFrame {
 
 	private JPanel contentPane;
-	private JComboBox cbRelatorioVacinas;
+	private JComboBox cbRelatorios;
 	private JTable tableResultados;
 	private DatePicker dpDataInicioPesquisa;
+	private JComboBox cbVacinas;
+	private JComboBox cbSexo;
 	
 	private JLabel lblPagAtual;
 	
-	//variável relacionada a paginação
+	private RelatorioSeletor ultimoSeletorUsado;
 	private int paginaAtual = 1;
 	
 	/**
@@ -71,14 +76,24 @@ public class TelaRelatorios extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][91.00][41.00][142.00,grow][42.00]", "[][][][][][][][][][]"));
 		
-		JLabel lbbRelatorioVacinas = new JLabel("Relat\u00F3rio de Vacinas");
-		lbbRelatorioVacinas.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lbbRelatorioVacinas, "cell 3 0 3 1");
+		JLabel lbbRelatorios = new JLabel("Tela Relat\u00F3rios");
+		lbbRelatorios.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(lbbRelatorios, "cell 3 0 3 1");
 		
-		cbRelatorioVacinas = new JComboBox();
-		cbRelatorioVacinas.setModel(new DefaultComboBoxModel(Constantes.RELATORIO_VACINA_OPCOES));
-		cbRelatorioVacinas.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbRelatorioVacinas, "cell 0 2 8 1,growx");
+		cbRelatorios = new JComboBox();
+		cbRelatorios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(cbRelatorios.getSelectedItem() == Constantes.NUMERO_DE_PESSOAS_E_MEDIA_DA_NOTA_POR_IDADE_DE_UMA_VACINA) {
+					cbVacinas.setEnabled(true);
+				} else {
+					cbVacinas.setEnabled(false);
+				}
+					
+			}
+		});
+		cbRelatorios.setModel(new DefaultComboBoxModel(Constantes.RELATORIO_VACINA_OPCOES));
+		cbRelatorios.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		contentPane.add(cbRelatorios, "cell 0 2 8 1,growx");
 		
 		JLabel lblSexo = new JLabel("Sexo:");
 		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -87,8 +102,8 @@ public class TelaRelatorios extends JFrame {
 		DatePickerSettings dateSettings = new DatePickerSettings();
 		dateSettings.setAllowKeyboardEditing(false);
 		
-		JComboBox cbSexo = new JComboBox();
-		cbSexo.setModel(new DefaultComboBoxModel(Constantes.OPCOES_SEXO_EDICAO_CADASTRO));
+		cbSexo = new JComboBox();
+		cbSexo.setModel(new DefaultComboBoxModel(Constantes.OPCOES_SEXO_GERAL));
 		contentPane.add(cbSexo, "cell 1 4 2 1,growx");
 		
 		JLabel lblData = new JLabel("<html>Data<br /> In\u00EDcio Pesquisa</html>");
@@ -101,15 +116,26 @@ public class TelaRelatorios extends JFrame {
 		contentPane.add(lblVacina, "cell 0 5,alignx trailing");
 		
 		List<Vacina> listaDeVacinas = controllerVacina.coletarTodasVacinas();
-		JComboBox cbVacinas = new JComboBox();
+		cbVacinas = new JComboBox();
+		cbVacinas.setEnabled(false);
 		cbVacinas.setModel(new DefaultComboBoxModel(listaDeVacinas.toArray()));
 		contentPane.add(cbVacinas, "cell 1 5 2 1,growx");
 		
-		JButton btnGerarRelatorio = new JButton("Gerar Relat\u00F3rio");
-		btnGerarRelatorio.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnGerarRelatorio, "cell 2 6,alignx right");
+		JButton btnConsultarRelatorio = new JButton("Consultar Relat\u00F3rio");
+		btnConsultarRelatorio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				consultarRelatorio();
+			}
+		});
+		btnConsultarRelatorio.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnConsultarRelatorio, "cell 2 6,alignx right");
 		
 		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetarTodosOsCampos();
+			}
+		});
 		btnLimpar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnLimpar, "cell 4 6,alignx right");
 		
@@ -143,27 +169,14 @@ public class TelaRelatorios extends JFrame {
 		
 		tableResultados = new JTable();
 		tableResultados.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		tableResultados.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Usu\u00E1rio", "Data Inicial", "Data Final", "País de Origem", "Instituição", "Total de Vacinas"},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column", "New column", "New column"
-			}
-		));
+		definirModeloPadraoTabela();
 		contentPane.add(tableResultados, "cell 0 8 8 1,grow");
 		
-		JButton buttonPagAnterior = new JButton("< Anterior");
-		buttonPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(buttonPagAnterior, "cell 2 9");
+		JButton btnPagAnterior = new JButton("< Anterior");
+		btnPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
+		contentPane.add(btnPagAnterior, "cell 2 9");
 		
-		//evento de passar pág anterior
-		buttonPagAnterior.addActionListener(new ActionListener() {
+		btnPagAnterior.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (paginaAtual > 1) {
 					paginaAtual--;
@@ -180,7 +193,6 @@ public class TelaRelatorios extends JFrame {
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
 		contentPane.add(btnPagProxima, "cell 6 9");
 		
-		//evento para passar a próxima página
 		btnPagProxima.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				paginaAtual++;
@@ -188,21 +200,328 @@ public class TelaRelatorios extends JFrame {
 			}
 		});
 	}
+	
+	protected void consultarRelatorio() {
+		paginaAtual = 1;
+		lblPagAtual.setText(paginaAtual + "");
 
-	protected void gerarRelatorio() {
-		// TODO Auto-generated method stub
+		ControllerRelatorio controlador = new ControllerRelatorio();
+		RelatorioSeletor seletor = new RelatorioSeletor();
+
+		seletor.setPagina(paginaAtual);
+		seletor.setLimite(Constantes.TAMANHO_PAGINA);
+		
+		// Preenche os campos de filtro da tela no seletor
+		seletor.setTipoDeRelatorio((String)cbRelatorios.getSelectedItem());
+		seletor.setSexo(cbSexo.getSelectedItem().toString().charAt(0));
+		seletor.setDataInicioPesquisa(dpDataInicioPesquisa.getDate());
+		if (seletor.getTipoDeRelatorio().equalsIgnoreCase(Constantes.NUMERO_DE_PESSOAS_E_MEDIA_DA_NOTA_POR_IDADE_DE_UMA_VACINA)) {
+			seletor.setVacina((Vacina)cbVacinas.getSelectedItem());
+		}
+		
+		// aqui é feita a consulta das pessoas e atualizada a tabela
+		List<VacinaNotaPessoaDTO> dtos = controlador.consultarRelatorio(seletor);
+		ultimoSeletorUsado = seletor;
+
+		atualizarTabelaDtos(dtos);
+
+	}
+
+	protected void resetarTodosOsCampos() {
+		cbSexo.setSelectedIndex(0);
+		dpDataInicioPesquisa.clear();
+		if(cbVacinas.getItemCount() != 0) {
+			cbVacinas.setSelectedIndex(0);
+		}
+		definirModeloPadraoTabela();
+		
 	}
 
 	protected void atualizarTabelaComUltimoSeletor() {
-		//TODO
-//		if(ultimoSeletorUsado != null) {
-//			lblPagAtual.setText(paginaAtual + "");
-//			ultimoSeletorUsado.setPagina(paginaAtual);
-//			ultimoSeletorUsado.setLimite(Constantes.TAMANHO_PAGINA);
-//			ControllerVacina controlador = new ControllerVacina();
-//			List<Vacina> vacinas = controlador.listarVacinas(ultimoSeletorUsado);
-//			atualizarTabelaVacinas(vacinas);
-//		}
+		if(ultimoSeletorUsado != null) {
+			lblPagAtual.setText(paginaAtual + "");
+			ultimoSeletorUsado.setPagina(paginaAtual);
+			ultimoSeletorUsado.setLimite(Constantes.TAMANHO_PAGINA);
+			ControllerRelatorio controlador = new ControllerRelatorio();
+			List<VacinaNotaPessoaDTO> dtos = controlador.gerarUltimoRelatorio(ultimoSeletorUsado);
+			atualizarTabelaDtos(dtos);
+		}
+	}
+	
+	private void atualizarTabelaDtos(List<VacinaNotaPessoaDTO> dtos) {
+		String ultimoRelatorio = ultimoSeletorUsado.getTipoDeRelatorio();
+		if(ultimoRelatorio.equalsIgnoreCase(Constantes.TOTAL_VACINAS_POR_PESQUISADOR)) {
+			atualizarTabelaTotalVacinasPorPesquisador(dtos);
+		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.TOTAL_VACINAS_POR_PAIS_ORIGEM)) {
+			atualizarTabelaTotalVacinasPaisOrigem(dtos);
+		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.TOTAL_VACINAS_POR_ESTAGIO_PESQUISA)) {
+			atualizarTabelaTotalVacinasEstagioPesquisa(dtos);
+		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.NUMERO_DE_AVALIACOES_POR_VACINA)) {
+			atualizarTabelaNumeroAvaliacoesPorVacina(dtos);
+		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.MEDIA_DE_AVALIACOES_POR_VACINA)) {
+			atualizarTabelaMediaAvaliacoesPorVacina(dtos);
+		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.TOTAL_DE_PESSOAS_POR_TIPO)) {
+			atualizarTabelaTotalPessoasPorTipo(dtos);
+		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.NUMERO_DE_PESSOAS_E_MEDIA_DA_NOTA_POR_IDADE_DE_UMA_VACINA)) {
+			atualizarTabelaFaixasDeIdadeVacina(dtos);
+		} else {
+			System.out.println("atualizarTabelaDtos(List<VacinaNotaPessoaDTO>) -> Tipo de relatório não encontrado");
+		}
+	}
+
+	private void atualizarTabelaFaixasDeIdadeVacina(List<VacinaNotaPessoaDTO> dtos) {
+		this.definirModeloFaixasDeIdadeVacina();
+		
+		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
+		
+		for (int i = 0; i < dtos.size(); i++) {
+			VacinaNotaPessoaDTO dto = dtos.get(i);			
+			modelo.setValueAt(dto.getFaixas(), i+1, 0);
+			modelo.setValueAt(dto.getTotal(), i+1, 1);
+			modelo.setValueAt(dto.getMedia_nota(), i+1, 2);
+		}
+	}
+
+	private void definirModeloFaixasDeIdadeVacina() {
+		tableResultados.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"Faixas de Idade", "Número de Pessoas", "Média das Notas"},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+				},
+				new String[] {
+					"Faixas de Idade", "Número de Pessoas", "Média das Notas"
+				}
+			)  {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		});
+	}
+
+	private void atualizarTabelaTotalPessoasPorTipo(List<VacinaNotaPessoaDTO> dtos) {
+		this.definirModeloTotalPessoasPorTipo();
+		
+		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
+		
+		for (int i = 0; i < dtos.size(); i++) {
+			VacinaNotaPessoaDTO dto = dtos.get(i);			
+			modelo.setValueAt(dto.getDescricaoTipoPessoa(), i+1, 0);
+			modelo.setValueAt(dto.getNumeroDePessoas(), i+1, 1);
+		}
+	}
+
+	private void definirModeloTotalPessoasPorTipo() {
+		tableResultados.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"Categoria Pessoa", "Número de Pessoas"},
+					{null, null},
+					{null, null},
+					{null, null},
+					{null, null},
+					{null, null},
+				},
+				new String[] {
+					"categoriaPessoa", "numeroPessoas"
+				}
+			)  {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		});
+	}
+
+	private void atualizarTabelaMediaAvaliacoesPorVacina(List<VacinaNotaPessoaDTO> dtos) {
+		this.definirModeloMediaAvaliacoesPorVacina();
+		
+		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
+		
+		for (int i = 0; i < dtos.size(); i++) {
+			VacinaNotaPessoaDTO dto = dtos.get(i);			
+			modelo.setValueAt(dto.getNomeVacina(), i+1, 0);
+			modelo.setValueAt(dto.getMediaDeAvaliacoes(), i+1, 1);
+		}
+	}
+
+	private void definirModeloMediaAvaliacoesPorVacina() {
+		tableResultados.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"Nome Vacina", "Média de Avaliações"},
+					{null, null},
+					{null, null},
+					{null, null},
+					{null, null},
+					{null, null},
+				},
+				new String[] {
+					"nomeVacina", "Média de Avaliações"
+				}
+			)  {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		});
+	}
+
+	private void atualizarTabelaNumeroAvaliacoesPorVacina(List<VacinaNotaPessoaDTO> dtos) {
+		this.definirModeloNumeroAvaliacoesPorVacina();
+		
+		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
+		
+		for (int i = 0; i < dtos.size(); i++) {
+			VacinaNotaPessoaDTO dto = dtos.get(i);			
+			modelo.setValueAt(dto.getNomeVacina(), i+1, 0);
+			modelo.setValueAt(dto.getNumeroDeAvaliacoes(), i+1, 1);
+		}
+	}
+
+	private void definirModeloNumeroAvaliacoesPorVacina() {
+		tableResultados.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"Nome Vacina", "Número de Avaliações"},
+					{null, null},
+					{null, null},
+					{null, null},
+					{null, null},
+					{null, null},
+				},
+				new String[] {
+					"nomeVacina", "Número de Avaliações"
+				}
+			)  {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		});
+	}
+
+	private void atualizarTabelaTotalVacinasEstagioPesquisa(List<VacinaNotaPessoaDTO> dtos) {
+		this.definirModeloTotalVacinasEstagioPesquisa();
+		
+		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
+		
+		for (int i = 0; i < dtos.size(); i++) {
+			VacinaNotaPessoaDTO dto = dtos.get(i);			
+			modelo.setValueAt(Vacina.getStringEstagioDePesquisa(dto.getEstagioPesquisa()), i+1, 0);
+			modelo.setValueAt(dto.getNumeroDeVacinas(), i+1, 1);
+		}
+	}
+
+	private void definirModeloTotalVacinasEstagioPesquisa() {
+		tableResultados.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"Estágio Pesquisa", "Número de Vacinas"},
+					{null, null},
+					{null, null},
+					{null, null},
+					{null, null},
+					{null, null},
+				},
+				new String[] {
+					"EstagioPesquisa", "Número de Vacinas"
+				}
+			)  {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		});
+	}
+
+	private void atualizarTabelaTotalVacinasPaisOrigem(List<VacinaNotaPessoaDTO> dtos) {
+		this.definirModeloTotalVacinasPaisOrigem();
+		
+		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
+		
+		for (int i = 0; i < dtos.size(); i++) {
+			VacinaNotaPessoaDTO dto = dtos.get(i);			
+			modelo.setValueAt(dto.getPaisOrigem(), i+1, 0);
+			modelo.setValueAt(dto.getNumeroDeVacinas(), i+1, 1);
+		}
+	}
+	
+	private void definirModeloTotalVacinasPaisOrigem() {
+		tableResultados.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"País Origem", "Número de Vacinas"},
+					{null, null},
+					{null, null},
+					{null, null},
+					{null, null},
+					{null, null},
+				},
+				new String[] {
+					"PaisOrigem", "Número de Vacinas"
+				}
+			)  {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		});
+	}
+
+	private void atualizarTabelaTotalVacinasPorPesquisador(List<VacinaNotaPessoaDTO> dtos) {
+		this.definirModeloTotalVacinasPorPesquisadorTabela();
+		
+		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
+		
+		for (int i = 0; i < dtos.size(); i++) {
+			VacinaNotaPessoaDTO dto = dtos.get(i);			
+			modelo.setValueAt(dto.getNomePesquisador(), i+1, 0);
+			modelo.setValueAt(dto.getSobrenomePesquisador(), i+1, 1);
+			modelo.setValueAt(dto.getNumeroDeVacinas(), i+1, 2);
+		}
+	}
+
+	private void definirModeloTotalVacinasPorPesquisadorTabela() {
+		// nome, sobrenome, numero de vacinas
+		tableResultados.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"Nome", "Sobrenome", "Número de Vacinas"},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+				},
+				new String[] {
+					"Nome", "Sobrenome", "Número de Vacinas"
+				}
+			)  {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		});
+	}
+
+	private void definirModeloPadraoTabela() {
+		tableResultados.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"Consulte um Retório para gerar a tabela"},
+					{null},
+					{null},
+					{null},
+					{null},
+					{null},
+				},
+				new String[] {
+					"ColunaDescricao"
+				}
+			)  {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		});
 	}
 	
 }
