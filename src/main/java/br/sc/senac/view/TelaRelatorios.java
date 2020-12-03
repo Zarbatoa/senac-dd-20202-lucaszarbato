@@ -12,7 +12,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,9 +31,8 @@ import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaRelatorios extends JFrame {
+public class TelaRelatorios extends JPanel {
 
-	private JPanel contentPane;
 	private JComboBox cbRelatorios;
 	private JTable tableResultados;
 	private DatePicker dpDataInicioPesquisa;
@@ -68,58 +66,59 @@ public class TelaRelatorios extends JFrame {
 	 */
 	public TelaRelatorios() throws ParseException {
 		ControllerVacina controllerVacina = new ControllerVacina();
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		setBounds(100, 100, 654, 452);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][91.00][41.00][142.00,grow][42.00]", "[][][][][][][][][][]"));
+		setBorder(new EmptyBorder(5, 5, 5, 5));
+		this.setLayout(new MigLayout("", "[grow][27.00,grow][grow][][91.00][41.00][142.00,grow][42.00]", "[][][][][][][][][][]"));
 		
 		JLabel lbbRelatorios = new JLabel("Tela Relat\u00F3rios");
 		lbbRelatorios.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lbbRelatorios, "cell 3 0 3 1");
+		this.add(lbbRelatorios, "cell 3 0 3 1");
 		
 		cbRelatorios = new JComboBox();
 		cbRelatorios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(cbRelatorios.getSelectedItem() == Constantes.NUMERO_DE_PESSOAS_E_MEDIA_DA_NOTA_POR_IDADE_DE_UMA_VACINA) {
 					cbVacinas.setEnabled(true);
+					cbSexo.setEnabled(false);
+					dpDataInicioPesquisa.setEnabled(false);
 				} else {
 					cbVacinas.setEnabled(false);
+					cbSexo.setEnabled(true);
+					dpDataInicioPesquisa.setEnabled(true);
 				}
 					
 			}
 		});
 		cbRelatorios.setModel(new DefaultComboBoxModel(Constantes.RELATORIO_VACINA_OPCOES));
 		cbRelatorios.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(cbRelatorios, "cell 0 2 8 1,growx");
+		this.add(cbRelatorios, "cell 0 2 8 1,growx");
 		
 		JLabel lblSexo = new JLabel("Sexo:");
 		lblSexo.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblSexo, "cell 0 4,alignx trailing");
+		this.add(lblSexo, "cell 0 4,alignx trailing");
 		
 		DatePickerSettings dateSettings = new DatePickerSettings();
 		dateSettings.setAllowKeyboardEditing(false);
 		
 		cbSexo = new JComboBox();
 		cbSexo.setModel(new DefaultComboBoxModel(Constantes.OPCOES_SEXO_GERAL));
-		contentPane.add(cbSexo, "cell 1 4 2 1,growx");
+		this.add(cbSexo, "cell 1 4 2 1,growx");
 		
 		JLabel lblData = new JLabel("<html>Data<br /> In\u00EDcio Pesquisa</html>");
 		lblData.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		contentPane.add(lblData, "cell 5 4,alignx trailing");
+		this.add(lblData, "cell 5 4,alignx trailing");
 		dpDataInicioPesquisa = new DatePicker(dateSettings);
-		contentPane.add(dpDataInicioPesquisa,"cell 6 4 2 1,growx");
+		this.add(dpDataInicioPesquisa,"cell 6 4 2 1,growx");
 		
 		JLabel lblVacina = new JLabel("Vacina:");
-		contentPane.add(lblVacina, "cell 0 5,alignx trailing");
+		this.add(lblVacina, "cell 0 5,alignx trailing");
 		
 		List<Vacina> listaDeVacinas = controllerVacina.coletarTodasVacinas();
 		cbVacinas = new JComboBox();
 		cbVacinas.setEnabled(false);
 		cbVacinas.setModel(new DefaultComboBoxModel(listaDeVacinas.toArray()));
-		contentPane.add(cbVacinas, "cell 1 5 2 1,growx");
+		this.add(cbVacinas, "cell 1 5 2 1,growx");
 		
 		JButton btnConsultarRelatorio = new JButton("Consultar Relat\u00F3rio");
 		btnConsultarRelatorio.addActionListener(new ActionListener() {
@@ -128,7 +127,7 @@ public class TelaRelatorios extends JFrame {
 			}
 		});
 		btnConsultarRelatorio.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnConsultarRelatorio, "cell 2 6,alignx right");
+		this.add(btnConsultarRelatorio, "cell 2 6,alignx right");
 		
 		JButton btnLimpar = new JButton("Limpar");
 		btnLimpar.addActionListener(new ActionListener() {
@@ -137,12 +136,12 @@ public class TelaRelatorios extends JFrame {
 			}
 		});
 		btnLimpar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnLimpar, "cell 4 6,alignx right");
+		this.add(btnLimpar, "cell 4 6,alignx right");
 		
 		JButton btnGerarXls = new JButton("Gerar xls");
 		btnGerarXls.setIcon(new ImageIcon("icones/iconeExcelmenor.png"));
 		btnGerarXls.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnGerarXls, "cell 6 6");
+		this.add(btnGerarXls, "cell 6 6");
 		
 		//método chamar xls no botão. Falta fazer o método de gerar relatório.
 		btnGerarXls.addActionListener(new ActionListener() {
@@ -170,11 +169,11 @@ public class TelaRelatorios extends JFrame {
 		tableResultados = new JTable();
 		tableResultados.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		definirModeloPadraoTabela();
-		contentPane.add(tableResultados, "cell 0 8 8 1,grow");
+		this.add(tableResultados, "cell 0 8 8 1,grow");
 		
 		JButton btnPagAnterior = new JButton("< Anterior");
 		btnPagAnterior.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagAnterior, "cell 2 9");
+		this.add(btnPagAnterior, "cell 2 9");
 		
 		btnPagAnterior.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -187,11 +186,11 @@ public class TelaRelatorios extends JFrame {
 		
 		lblPagAtual = new JLabel("1");
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(lblPagAtual, "cell 4 9,alignx center");
+		this.add(lblPagAtual, "cell 4 9,alignx center");
 		
 		JButton btnPagProxima = new JButton("Pr\u00F3ximo >");
 		btnPagProxima.setFont(new Font("Tahoma", Font.BOLD, 11));
-		contentPane.add(btnPagProxima, "cell 6 9");
+		this.add(btnPagProxima, "cell 6 9");
 		
 		btnPagProxima.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

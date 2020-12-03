@@ -176,6 +176,19 @@ public class TelaPrincipal extends JFrame {
 		menuBar.add(mnRelatrio);
 		
 		JMenuItem mntmRelatorio = new JMenuItem("Consultar Relat\u00F3rios");
+		mntmRelatorio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				TelaRelatorios paintelRelatorios;
+				try {
+					paintelRelatorios = new TelaRelatorios();
+					setContentPane(paintelRelatorios);
+					revalidate();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		mnRelatrio.add(mntmRelatorio);
 	}
 

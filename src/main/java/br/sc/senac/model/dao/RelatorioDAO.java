@@ -510,7 +510,7 @@ public class RelatorioDAO {
 			if (!primeiro) {
 				sql += " AND ";
 			}
-			sql += "v.data_inicio_pesquisa = '" + seletor.getDataInicioPesquisa() + "'";
+			sql += "v.data_inicio_pesquisa >= '" + seletor.getDataInicioPesquisa() + "'";
 			primeiro = false;
 		}
 		
