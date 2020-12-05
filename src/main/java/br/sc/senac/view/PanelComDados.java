@@ -7,24 +7,11 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public abstract class PanelComDados extends JPanel {
 	
-	// acho que este atributo vai ser util, somentente p relatorios
-	protected boolean dadosPreenchidos;
-	
-	public boolean getDadosPreenchidos() {
-		return dadosPreenchidos;
-	}
-
-	public void setDadosPreenchidos(boolean dadosPreenchidos) {
-		this.dadosPreenchidos = dadosPreenchidos;
-	}
-
 	/**
 	 * @return retorna se este Panel já preencheu os dados alguma vez
 	 *   (no nosso caso seria se as JTables estão preenchidas e não foram limpas)
 	 * */
-	public boolean hasDados() {
-		return dadosPreenchidos;
-	}
+	public abstract boolean hasDados();
 	
 	/**
 	 * @return retorna um array de nomes da tabela de dados

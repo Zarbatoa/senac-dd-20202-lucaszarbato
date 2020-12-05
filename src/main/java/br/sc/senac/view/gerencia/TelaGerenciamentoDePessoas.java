@@ -85,7 +85,6 @@ public class TelaGerenciamentoDePessoas extends PanelComDados {
 	 */
 	public TelaGerenciamentoDePessoas() throws ParseException {
 		ultimasPessoasConsultadas = new ArrayList<Pessoa>();
-		dadosPreenchidos = true;
 		ultimoSeletorUsado = null;
 		
 		setBounds(100, 100, 700, 490);
@@ -534,7 +533,6 @@ public class TelaGerenciamentoDePessoas extends PanelComDados {
 
 	@Override
 	public List<String[]> getDadosVisiveis() {
-		//this.ultimasPessoasConsultadas;
 		List<String[]> dadosVisiveis = new ArrayList<String[]>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
@@ -560,8 +558,38 @@ public class TelaGerenciamentoDePessoas extends PanelComDados {
 
 	@Override
 	public List<String[]> getDadosCompletos() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String[]> dadosCompletos = new ArrayList<String[]>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		ControllerPessoa controller = new ControllerPessoa();
+
+		int ultimaPagUsada = ultimoSeletorUsado.getPagina();
+		ultimoSeletorUsado.setPagina(-1);
+		List<Pessoa> listaCompleta = controller.listarPessoas(ultimoSeletorUsado);
+		ultimoSeletorUsado.setPagina(ultimaPagUsada);
+		
+		for (int i = 0; i < listaCompleta.size(); i++) {
+			String[] dadoAtual = new String[8];
+			Pessoa pessoa = listaCompleta.get(i);
+			String dataFormatada = pessoa.getDataNascimento().format(formatter);
+			String nomeInstituicao = pessoa.getInstituicao() == null ? "" : pessoa.getInstituicao().toString();
+
+			dadoAtual[0] = pessoa.getId() + "";
+			dadoAtual[1] = pessoa.getNome();
+			dadoAtual[2] = pessoa.getSobrenome();
+			dadoAtual[3] = pessoa.getSexo() + "";
+			dadoAtual[4] = Utils.formatarCpf(pessoa.getCpf());
+			dadoAtual[5] = dataFormatada;
+			dadoAtual[6] = pessoa.getTipo().toString();
+			dadoAtual[7] = nomeInstituicao;
+			
+			dadosCompletos.add(dadoAtual);
+		}
+		return dadosCompletos;
+	}
+
+	@Override
+	public boolean hasDados() {
+		return (ultimoSeletorUsado != null);
 	}
 
 }

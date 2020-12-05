@@ -24,7 +24,7 @@ import br.sc.senac.view.gerencia.TelaGerenciamentoDeAvaliacaoVacinas;
 import br.sc.senac.view.gerencia.TelaGerenciamentoDePessoas;
 import br.sc.senac.view.gerencia.TelaGerenciamentoDeVacinas;
 
-@SuppressWarnings({"serial", "rawtypes"})
+@SuppressWarnings({"serial"})
 public class TelaPrincipal extends JFrame {
 
 	/**
@@ -201,8 +201,8 @@ public class TelaPrincipal extends JFrame {
 		JMenu mnBaixarDados = new JMenu("Baixar dados");
 		menuBar.add(mnBaixarDados);
 		
-		JMenuItem mntmExpXLS = new JMenuItem("Exportar XLS");
-		mntmExpXLS.addActionListener(new ActionListener() {
+		JMenuItem mntmExpVisivelXLS = new JMenuItem("Exportar Tabela Vis\u00EDvel XLS");
+		mntmExpVisivelXLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(getContentPane() instanceof PanelComDados) {
 					ControllerExportacao controller = new ControllerExportacao();
@@ -216,27 +216,71 @@ public class TelaPrincipal extends JFrame {
 					int opcaoSelecionada = janelaArquivos.showSaveDialog(null);
 
 					if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
-						controller.exportarParaXLS(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
+						if(janelaArquivos.getSelectedFile().exists()) {
+							
+							int resultadoConfirm = JOptionPane.showConfirmDialog(null, "Tens certeza que queres sobrescrever esse arquivo?\n" + janelaArquivos.getSelectedFile().getAbsolutePath(),
+									"Tela de Confirmação", JOptionPane.OK_CANCEL_OPTION);
+							if (resultadoConfirm == JOptionPane.OK_OPTION) {
+								controller.exportarVisivelParaXLS(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
+							} else {
+								JOptionPane.showMessageDialog(null, "Operação cancelada!");
+							}
+							
+						} else {
+							controller.exportarVisivelParaXLS(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
+						}
 					}
-					
-					//Teste:
-//					JOptionPane.showMessageDialog(null, panelSelecionado.getNomesColunas());
-//					String tmp_msg = "";
-//					for(String[] linha : panelSelecionado.getDadosVisiveis()) {
-//						for(String col : linha) {
-//							tmp_msg += col + " ";
-//						}
-//						tmp_msg += "\n";
-//					}
-//					JOptionPane.showMessageDialog(null, tmp_msg);
 					
 				} else {
 					JOptionPane.showMessageDialog(null, "A tela atual não tem dados para exportar.");
 				}
 			}
 		});
-		mntmExpXLS.setIcon(new ImageIcon("icones/iconeExcelmenor.png"));
-		mnBaixarDados.add(mntmExpXLS);
+		mntmExpVisivelXLS.setIcon(new ImageIcon("icones/iconeExcelmenor.png"));
+		mnBaixarDados.add(mntmExpVisivelXLS);
+		
+		
+		JMenuItem mntmExportarTabelaCompleta = new JMenuItem("Exportar Tabela Completa XLS");
+		mntmExportarTabelaCompleta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getContentPane() instanceof PanelComDados && ((PanelComDados) getContentPane()).hasDados()) {
+					ControllerExportacao controller = new ControllerExportacao();
+					PanelComDados panelSelecionado = (PanelComDados) getContentPane();
+					
+					FileFilter filter = new FileNameExtensionFilter("Exel 97-2003 (*.xls)","xls");
+					JFileChooser janelaArquivos = new JFileChooser();
+					janelaArquivos.setFileFilter(filter);
+					janelaArquivos.setSelectedFile(new File("relatoio_para_salvar"));
+					
+					int opcaoSelecionada = janelaArquivos.showSaveDialog(null);
+
+					if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
+						if(janelaArquivos.getSelectedFile().exists()) {
+							
+							int resultadoConfirm = JOptionPane.showConfirmDialog(null, "Tens certeza que queres sobrescrever esse arquivo?\n" + janelaArquivos.getSelectedFile().getAbsolutePath(),
+									"Tela de Confirmação", JOptionPane.OK_CANCEL_OPTION);
+							if (resultadoConfirm == JOptionPane.OK_OPTION) {
+								controller.exportarCompletoParaXLS(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
+							} else {
+								JOptionPane.showMessageDialog(null, "Operação cancelada!");
+							}
+							
+						} else {
+							controller.exportarCompletoParaXLS(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "Operação cancelada!");
+					}
+					
+				} else {
+					JOptionPane.showMessageDialog(null, "A tela atual não tem dados para exportar.");
+				}
+			}
+		});
+		mntmExportarTabelaCompleta.setIcon(new ImageIcon("icones/iconeExcelmenor.png"));
+		mnBaixarDados.add(mntmExportarTabelaCompleta);
 	}
 
 }
+
+	
