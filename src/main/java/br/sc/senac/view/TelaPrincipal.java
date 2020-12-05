@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -190,6 +191,13 @@ public class TelaPrincipal extends JFrame {
 			}
 		});
 		mnRelatrio.add(mntmRelatorio);
+		
+		JMenu mnBaixarDados = new JMenu("Baixar dados");
+		menuBar.add(mnBaixarDados);
+		
+		JMenuItem mntmExpXLS = new JMenuItem("Exportar XLS");
+		mntmExpXLS.setIcon(new ImageIcon("icones/iconeExcelmenor.png"));
+		mnBaixarDados.add(mntmExpXLS);
 	}
 
 }

@@ -150,32 +150,35 @@ public class TelaRelatorios extends JPanel {
 		//método chamar xls no botão. Falta fazer o método de gerar relatório.
 		btnGerarXls.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ControllerRelatorio controller = new ControllerRelatorio();
 				FileFilter filter = new FileNameExtensionFilter("Exel 97-2003 (*.xls)","xls");
 				JFileChooser janelaArquivos = new JFileChooser();
 				janelaArquivos.setFileFilter(filter);
+				janelaArquivos.setSelectedFile(new File("relatoio_para_salvar.xls"));
 
 				int opcaoSelecionada = janelaArquivos.showSaveDialog(null);
 
 				if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
 					//TODO em testes
 					File arquivoEscolhido = janelaArquivos.getSelectedFile();
+					String mensagemConfirmacao = "";
 					if (arquivoEscolhido.exists()) {
 						System.out.println("Existe");
-						int resultadoConfirm = JOptionPane.showConfirmDialog(null, "Tens certeza que queres sobrescrever esse arquivo? \n" + arquivoEscolhido.getAbsolutePath(),
-								"Tela de Confirmação", JOptionPane.OK_CANCEL_OPTION);
-						if (resultadoConfirm == JOptionPane.OK_OPTION) {
-							JOptionPane.showMessageDialog(null, "Confirmado");
-						} else {
-							JOptionPane.showMessageDialog(null, "Não Confirmado");
-						}
+						mensagemConfirmacao = "Tens certeza que queres sobrescrever esse arquivo? \n" + arquivoEscolhido.getAbsolutePath();
+						
 					} else {
 						System.out.println("Não existe");
-						try {
-							arquivoEscolhido.createNewFile();
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+						mensagemConfirmacao = "Tens certeza que queres criar esse arquivo? \n" + arquivoEscolhido.getAbsolutePath();
+					}
+					
+					String mensagemResposta = "";
+					int resultadoConfirm = JOptionPane.showConfirmDialog(null, mensagemConfirmacao,
+							"Tela de Confirmação", JOptionPane.OK_CANCEL_OPTION);
+					if (resultadoConfirm == JOptionPane.OK_OPTION) {
+						JOptionPane.showMessageDialog(null, "Confirmado");
+						//mensagemResposta = controller.gerarRelatorio(dtos?);
+					} else {
+						JOptionPane.showMessageDialog(null, "Ger");
 					}
 					
 					//TODO continuar implementacao proposta (onde esses argumentos serão declarados e instanciados?)
@@ -287,6 +290,24 @@ public class TelaRelatorios extends JPanel {
 			System.out.println("atualizarTabelaDtos(List<VacinaNotaPessoaDTO>) -> Tipo de relatório não encontrado");
 		}
 	}
+	
+	// INICIO TESTE
+//	private void atualizarTabelaRelatorio(AbstractInformacaoRelatorio info) {
+//		this.atualizarModeloTabela(info);
+//	}
+//	
+//	private void atualizarModeloTabela(AbstractInformacaoRelatorio info) {
+//		tableResultados.setModel(new DefaultTableModel(
+//				info.getDadosCampos(),
+//				info.getCampos()
+//			)  {
+//			@Override
+//		    public boolean isCellEditable(int row, int column) {
+//		       return false;
+//		    }
+//		});
+//	}
+	// FIM TESTE
 
 	private void atualizarTabelaFaixasDeIdadeVacina(List<VacinaNotaPessoaDTO> dtos) {
 		this.definirModeloFaixasDeIdadeVacina();
