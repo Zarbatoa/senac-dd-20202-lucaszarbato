@@ -523,6 +523,10 @@ public class TelaGerenciamentoDePessoas extends PanelComDados {
 			});
 	}
 
+	@Override
+	public boolean hasDados() {
+		return (ultimoSeletorUsado != null);
+	}
 	
 	@Override
 	public String[] getNomesColunas() {
@@ -585,11 +589,6 @@ public class TelaGerenciamentoDePessoas extends PanelComDados {
 			dadosCompletos.add(dadoAtual);
 		}
 		return dadosCompletos;
-	}
-
-	@Override
-	public boolean hasDados() {
-		return (ultimoSeletorUsado != null);
 	}
 
 }

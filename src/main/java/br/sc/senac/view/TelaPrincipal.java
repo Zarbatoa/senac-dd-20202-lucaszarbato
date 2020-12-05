@@ -204,7 +204,7 @@ public class TelaPrincipal extends JFrame {
 		JMenuItem mntmExpVisivelXLS = new JMenuItem("Exportar Tabela Vis\u00EDvel XLS");
 		mntmExpVisivelXLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(getContentPane() instanceof PanelComDados) {
+				if(getContentPane() instanceof PanelComDados && ((PanelComDados) getContentPane()).hasDados()) {
 					ControllerExportacao controller = new ControllerExportacao();
 					PanelComDados panelSelecionado = (PanelComDados) getContentPane();
 					
@@ -229,6 +229,8 @@ public class TelaPrincipal extends JFrame {
 						} else {
 							controller.exportarVisivelParaXLS(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
 						}
+					}  else {
+						JOptionPane.showMessageDialog(null, "Operação cancelada!");
 					}
 					
 				} else {

@@ -16,7 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -34,10 +33,11 @@ import br.sc.senac.model.utilidades.Utils;
 import br.sc.senac.model.vo.Pais;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
+import br.sc.senac.view.PanelComDados;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaGerenciamentoDeVacinas extends JPanel {
+public class TelaGerenciamentoDeVacinas extends PanelComDados {
 
 	private JTextField tfNomeVacina;
 	private JComboBox cbEstagioPesquisa;
@@ -62,6 +62,8 @@ public class TelaGerenciamentoDeVacinas extends JPanel {
 	private VacinaSeletor ultimoSeletorUsado;
 	private int paginaAtual = 1;
 	
+	private List<Vacina> ultimasVacinasConsultadas;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -83,6 +85,7 @@ public class TelaGerenciamentoDeVacinas extends JPanel {
 	 * @throws ParseException 
 	 */
 	public TelaGerenciamentoDeVacinas() throws ParseException {
+		ultimasVacinasConsultadas = new ArrayList<Vacina>();
 		ultimoSeletorUsado = null;
 		ControllerPessoa controllerPessoa = new ControllerPessoa();
 		mapaPaisesParaIndicesEdicao = new HashMap<String, Integer>();
@@ -189,7 +192,7 @@ public class TelaGerenciamentoDeVacinas extends JPanel {
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				consultarPessoas();
+				consultarVacinas();
 			}
 		});
 		btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -394,6 +397,7 @@ public class TelaGerenciamentoDeVacinas extends JPanel {
 			ultimoSeletorUsado.setLimite(Constantes.TAMANHO_PAGINA);
 			ControllerVacina controlador = new ControllerVacina();
 			List<Vacina> vacinas = controlador.listarVacinas(ultimoSeletorUsado);
+			ultimasVacinasConsultadas = vacinas;
 			atualizarTabelaVacinas(vacinas);
 		}
 	}
@@ -420,7 +424,7 @@ public class TelaGerenciamentoDeVacinas extends JPanel {
 		JOptionPane.showMessageDialog(null, mensagem);
 	}
 
-	protected void consultarPessoas() {
+	protected void consultarVacinas() {
 		paginaAtual = 1;
 		lblPagAtual.setText(paginaAtual + "");
 
@@ -440,6 +444,7 @@ public class TelaGerenciamentoDeVacinas extends JPanel {
 		// aqui é feita a consulta das pessoas e atualizada a tabela
 		List<Vacina> vacinas = controlador.listarVacinas(seletor);
 		ultimoSeletorUsado = seletor;
+		ultimasVacinasConsultadas = vacinas;
 
 		atualizarTabelaVacinas(vacinas);
 
@@ -478,7 +483,7 @@ public class TelaGerenciamentoDeVacinas extends JPanel {
 					{null, null, null, null, null, null},
 				},
 				new String[] {
-					"#", "NomeDaVacina", "PaisDeOrigem", "EstagioDaPesquisa", "InicioPesquisa", "Pesquisador"
+					"#", "Nome da Vacina", "Pa\u00EDs de Origem", "Est\u00E1gio da Pesquisa", "In\u00EDcio Pesquisa", "Pesquisador"
 				}
 			) {
 				@Override
@@ -501,6 +506,68 @@ public class TelaGerenciamentoDeVacinas extends JPanel {
 		for (Pais pais : Constantes.OPCOES_PAISES_EDICAO_CADASTRO) {
 			 mapaPaisesParaIndicesEdicao.put(pais.getNome().toUpperCase(), i++);
 		}
+	}
+
+	@Override
+	public boolean hasDados() {
+		return (ultimoSeletorUsado != null);
+	}
+
+	@Override
+	public String[] getNomesColunas() {
+		return new String[] {
+				"#", "Nome da Vacina", "Pa\u00EDs de Origem", "Est\u00E1gio da Pesquisa", "In\u00EDcio Pesquisa", "Pesquisador"
+			};
+	}
+
+	@Override
+	public List<String[]> getDadosVisiveis() {
+		List<String[]> dadosVisiveis = new ArrayList<String[]>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
+		for (int i = 0; i < ultimasVacinasConsultadas.size(); i++) {
+			String[] dadoAtual = new String[8];
+			Vacina vacina = ultimasVacinasConsultadas.get(i);
+			String dataFormatada = vacina.getDataInicioPesquisa().format(formatter);
+			
+			dadoAtual[0] = vacina.getId() + "";
+			dadoAtual[1] = vacina.getNome();
+			dadoAtual[2] = vacina.getPaisOrigem();
+			dadoAtual[3] = Vacina.getStringEstagioDePesquisa(vacina.getEstagioPesquisa());
+			dadoAtual[4] = dataFormatada;
+			dadoAtual[5] = vacina.getPesquisadorResponsavel().toString();
+			
+			dadosVisiveis.add(dadoAtual);
+		}
+		return dadosVisiveis;
+	}
+
+	@Override
+	public List<String[]> getDadosCompletos() {
+		List<String[]> dadosVisiveis = new ArrayList<String[]>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		ControllerVacina controller = new ControllerVacina();
+		
+		int ultimaPagUsada = ultimoSeletorUsado.getPagina();
+		ultimoSeletorUsado.setPagina(-1);
+		List<Vacina> listaCompleta = controller.listarVacinas(ultimoSeletorUsado);
+		ultimoSeletorUsado.setPagina(ultimaPagUsada);
+		
+		for (int i = 0; i < listaCompleta.size(); i++) {
+			String[] dadoAtual = new String[8];
+			Vacina vacina = listaCompleta.get(i);
+			String dataFormatada = vacina.getDataInicioPesquisa().format(formatter);
+			
+			dadoAtual[0] = vacina.getId() + "";
+			dadoAtual[1] = vacina.getNome();
+			dadoAtual[2] = vacina.getPaisOrigem();
+			dadoAtual[3] = Vacina.getStringEstagioDePesquisa(vacina.getEstagioPesquisa());
+			dadoAtual[4] = dataFormatada;
+			dadoAtual[5] = vacina.getPesquisadorResponsavel().toString();
+			
+			dadosVisiveis.add(dadoAtual);
+		}
+		return dadosVisiveis;
 	}
 
 }
