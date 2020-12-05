@@ -3,14 +3,20 @@ package br.sc.senac.view;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.text.ParseException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import br.sc.senac.controller.ControllerExportacao;
 import br.sc.senac.view.cadastro.TelaCadastroAvaliacaoVacina;
 import br.sc.senac.view.cadastro.TelaCadastroPessoa;
 import br.sc.senac.view.cadastro.TelaCadastroVacina;
@@ -18,7 +24,7 @@ import br.sc.senac.view.gerencia.TelaGerenciamentoDeAvaliacaoVacinas;
 import br.sc.senac.view.gerencia.TelaGerenciamentoDePessoas;
 import br.sc.senac.view.gerencia.TelaGerenciamentoDeVacinas;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({"serial", "rawtypes"})
 public class TelaPrincipal extends JFrame {
 
 	/**
@@ -196,6 +202,39 @@ public class TelaPrincipal extends JFrame {
 		menuBar.add(mnBaixarDados);
 		
 		JMenuItem mntmExpXLS = new JMenuItem("Exportar XLS");
+		mntmExpXLS.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getContentPane() instanceof PanelComDados) {
+					ControllerExportacao controller = new ControllerExportacao();
+					PanelComDados panelSelecionado = (PanelComDados) getContentPane();
+					
+					FileFilter filter = new FileNameExtensionFilter("Exel 97-2003 (*.xls)","xls");
+					JFileChooser janelaArquivos = new JFileChooser();
+					janelaArquivos.setFileFilter(filter);
+					janelaArquivos.setSelectedFile(new File("relatoio_para_salvar"));
+					
+					int opcaoSelecionada = janelaArquivos.showSaveDialog(null);
+
+					if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
+						controller.exportarParaXLS(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
+					}
+					
+					//Teste:
+//					JOptionPane.showMessageDialog(null, panelSelecionado.getNomesColunas());
+//					String tmp_msg = "";
+//					for(String[] linha : panelSelecionado.getDadosVisiveis()) {
+//						for(String col : linha) {
+//							tmp_msg += col + " ";
+//						}
+//						tmp_msg += "\n";
+//					}
+//					JOptionPane.showMessageDialog(null, tmp_msg);
+					
+				} else {
+					JOptionPane.showMessageDialog(null, "A tela atual não tem dados para exportar.");
+				}
+			}
+		});
 		mntmExpXLS.setIcon(new ImageIcon("icones/iconeExcelmenor.png"));
 		mnBaixarDados.add(mntmExpXLS);
 	}

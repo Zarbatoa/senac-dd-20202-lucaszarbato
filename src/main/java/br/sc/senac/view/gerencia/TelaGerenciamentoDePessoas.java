@@ -16,7 +16,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -34,10 +33,11 @@ import br.sc.senac.model.utilidades.Utils;
 import br.sc.senac.model.vo.Instituicao;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.TipoPessoa;
+import br.sc.senac.view.PanelComDados;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaGerenciamentoDePessoas extends JPanel {
+public class TelaGerenciamentoDePessoas extends PanelComDados {
 
 	private JTextField tfNome;
 	private JTextField tfInstituicao;
@@ -61,6 +61,7 @@ public class TelaGerenciamentoDePessoas extends JPanel {
 	private PessoaSeletor ultimoSeletorUsado;
 	private int paginaAtual = 1;
 	
+	private List<Pessoa> ultimasPessoasConsultadas;
 	
 	/**
 	 * Launch the application.
@@ -83,6 +84,8 @@ public class TelaGerenciamentoDePessoas extends JPanel {
 	 * @throws ParseException 
 	 */
 	public TelaGerenciamentoDePessoas() throws ParseException {
+		ultimasPessoasConsultadas = new ArrayList<Pessoa>();
+		dadosPreenchidos = true;
 		ultimoSeletorUsado = null;
 		
 		setBounds(100, 100, 700, 490);
@@ -421,6 +424,7 @@ public class TelaGerenciamentoDePessoas extends JPanel {
 			ultimoSeletorUsado.setLimite(Constantes.TAMANHO_PAGINA);
 			ControllerPessoa controlador = new ControllerPessoa();
 			List<Pessoa> pessoas = controlador.listarPessoas(ultimoSeletorUsado);
+			ultimasPessoasConsultadas = pessoas;
 			atualizarTabelaPessoas(pessoas);
 		}
 	}
@@ -471,6 +475,7 @@ public class TelaGerenciamentoDePessoas extends JPanel {
 		// aqui é feita a consulta das pessoas e atualizada a tabela
 		List<Pessoa> pessoas = controlador.listarPessoas(seletor);
 		ultimoSeletorUsado = seletor;
+		ultimasPessoasConsultadas = pessoas;
 
 		atualizarTabelaPessoas(pessoas);
 
@@ -503,22 +508,60 @@ public class TelaGerenciamentoDePessoas extends JPanel {
 	private void definirModeloPadraoTabela() {
 		tableResultados.setModel(new DefaultTableModel(
 				new Object[][] {
-					{"#", "Nome", "Sobrenome", "Sexo", "CPF ", "Dt.  Nascimento", "Categoria", "Institui\u00E7\u00E3o"},
+					getNomesColunas(),
 					{null, null, null, null, null, null, null, null},
 					{null, null, null, null, null, null, null, null},
 					{null, null, null, null, null, null, null, null},
 					{null, null, null, null, null, null, null, null},
 					{null, null, null, null, null, null, null, null},
 				},
-				new String[] {
-					"#", "Nome", "Sobrenome", "Sexo", "CPF", "DataNascimento", "Categoria", "Instituicao"
-				}
+				getNomesColunas()
 			) {
 				@Override
 			    public boolean isCellEditable(int row, int column) {
 			       return false;
 			    }
 			});
+	}
+
+	
+	@Override
+	public String[] getNomesColunas() {
+		return new String[] {
+				"#", "Nome", "Sobrenome", "Sexo", "CPF ", "Dt.  Nascimento", "Categoria", "Institui\u00E7\u00E3o"
+			};
+	}
+
+	@Override
+	public List<String[]> getDadosVisiveis() {
+		//this.ultimasPessoasConsultadas;
+		List<String[]> dadosVisiveis = new ArrayList<String[]>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
+		for (int i = 0; i < ultimasPessoasConsultadas.size(); i++) {
+			String[] dadoAtual = new String[8];
+			Pessoa pessoa = ultimasPessoasConsultadas.get(i);
+			String dataFormatada = pessoa.getDataNascimento().format(formatter);
+			String nomeInstituicao = pessoa.getInstituicao() == null ? "" : pessoa.getInstituicao().toString();
+
+			dadoAtual[0] = pessoa.getId() + "";
+			dadoAtual[1] = pessoa.getNome();
+			dadoAtual[2] = pessoa.getSobrenome();
+			dadoAtual[3] = pessoa.getSexo() + "";
+			dadoAtual[4] = Utils.formatarCpf(pessoa.getCpf());
+			dadoAtual[5] = dataFormatada;
+			dadoAtual[6] = pessoa.getTipo().toString();
+			dadoAtual[7] = nomeInstituicao;
+			
+			dadosVisiveis.add(dadoAtual);
+		}
+		return dadosVisiveis;
+	}
+
+	@Override
+	public List<String[]> getDadosCompletos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
