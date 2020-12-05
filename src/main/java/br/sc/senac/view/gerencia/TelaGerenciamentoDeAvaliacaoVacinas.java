@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -12,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -27,10 +27,11 @@ import br.sc.senac.model.utilidades.Utils;
 import br.sc.senac.model.vo.Nota;
 import br.sc.senac.model.vo.Pessoa;
 import br.sc.senac.model.vo.Vacina;
+import br.sc.senac.view.PanelComDados;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaGerenciamentoDeAvaliacaoVacinas extends JPanel {
+public class TelaGerenciamentoDeAvaliacaoVacinas extends PanelComDados {
 	
 	//TODO tamanho pagina volta pra cá?
 	//private static final int TAMANHO_PAGINA = 0;
@@ -51,6 +52,8 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JPanel {
 	private JButton btnLimpar;
 	private JLabel lblNotaFinal;
 	private JFormattedTextField ftfNotaFinal;
+	
+	private List<Nota> ultimasNotasConsultadas;
 	
 	/**
 	 * Launch the application.
@@ -73,6 +76,7 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JPanel {
 	 * @throws ParseException 
 	 */
 	public TelaGerenciamentoDeAvaliacaoVacinas() throws ParseException {
+		ultimasNotasConsultadas = new ArrayList<Nota>();
 		ultimoSeletorUsado = null;
 		ControllerPessoa controllerPessoa = new ControllerPessoa();
 		ControllerVacina controllerVacina = new ControllerVacina();
@@ -189,6 +193,7 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JPanel {
 			ultimoSeletorUsado.setLimite(Constantes.TAMANHO_PAGINA);
 			ControllerNota controlador = new ControllerNota();
 			List<Nota> notas = controlador.listarNotas(ultimoSeletorUsado);
+			ultimasNotasConsultadas = notas;
 			atualizarTabelaNotas(notas);
 		}
 	}
@@ -212,6 +217,7 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JPanel {
 		// aqui é feita a consulta das pessoas e atualizada a tabela
 		List<Nota> notas = controlador.listarNotas(seletor);
 		ultimoSeletorUsado = seletor;
+		ultimasNotasConsultadas = notas;
 
 		atualizarTabelaNotas(notas);
 	}
@@ -234,22 +240,74 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends JPanel {
 	private void definirModeloPadraoTabela() {
 		tableResultados.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"#", "Nome Vacina", "Pessoa Testada", "Nota"},
+				getNomesColunas(),
 				{null, null, null, null},
 				{null, null, null, null},
 				{null, null, null, null},
 				{null, null, null, null},
 				{null, null, null, null},
 			},
-			new String[] {
-				"#", "Nome Vacina", "Pessoa Testada", "Nota"
-			}
+			getNomesColunas()
 		) {
 			@Override
 		    public boolean isCellEditable(int row, int column) {
 		       return false;
 		    }
 		});
+	}
+
+	@Override
+	public boolean hasDados() {
+		return (ultimoSeletorUsado != null);
+	}
+
+	@Override
+	public String[] getNomesColunas() {
+		return new String[] {
+				"#", "Nome Vacina", "Pessoa Testada", "Nota"
+			};
+	}
+
+	@Override
+	public List<String[]> getDadosVisiveis() {
+		List<String[]> dadosVisiveis = new ArrayList<String[]>();
+		
+		for (int i = 0; i < ultimasNotasConsultadas.size(); i++) {
+			String[] dadoAtual = new String[8];
+			Nota nota = ultimasNotasConsultadas.get(i);
+			
+			dadoAtual[0] = nota.getId() + "";
+			dadoAtual[1] = nota.getVacina().toString();
+			dadoAtual[2] = nota.getPessoa().toString();
+			dadoAtual[3] = nota.getValor() + "";
+			
+			dadosVisiveis.add(dadoAtual);
+		}
+		return dadosVisiveis;
+	}
+
+	@Override
+	public List<String[]> getDadosCompletos() {
+		List<String[]> dadosVisiveis = new ArrayList<String[]>();
+		ControllerNota controller = new ControllerNota();
+		
+		int ultimaPagUsada = ultimoSeletorUsado.getPagina();
+		ultimoSeletorUsado.setPagina(-1);
+		List<Nota> listaCompleta = controller.listarNotas(ultimoSeletorUsado);
+		ultimoSeletorUsado.setPagina(ultimaPagUsada);
+		
+		for (int i = 0; i < listaCompleta.size(); i++) {
+			String[] dadoAtual = new String[8];
+			Nota nota = listaCompleta.get(i);
+			
+			dadoAtual[0] = nota.getId() + "";
+			dadoAtual[1] = nota.getVacina().toString();
+			dadoAtual[2] = nota.getPessoa().toString();
+			dadoAtual[3] = nota.getValor() + "";
+			
+			dadosVisiveis.add(dadoAtual);
+		}
+		return dadosVisiveis;
 	}
 
 }

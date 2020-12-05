@@ -475,16 +475,14 @@ public class TelaGerenciamentoDeVacinas extends PanelComDados {
 	private void definirModeloPadraoTabela() {
 		tableResultados.setModel(new DefaultTableModel(
 				new Object[][] {
-					{"#", "Nome da Vacina", "Pa\u00EDs de Origem", "Est\u00E1gio da Pesquisa", "In\u00EDcio Pesquisa", "Pesquisador"},
+					getNomesColunas(),
 					{null, null, null, null, null, null},
 					{null, null, null, null, null, null},
 					{null, null, null, null, null, null},
 					{null, null, null, null, null, null},
 					{null, null, null, null, null, null},
 				},
-				new String[] {
-					"#", "Nome da Vacina", "Pa\u00EDs de Origem", "Est\u00E1gio da Pesquisa", "In\u00EDcio Pesquisa", "Pesquisador"
-				}
+				getNomesColunas()
 			) {
 				@Override
 			    public boolean isCellEditable(int row, int column) {
