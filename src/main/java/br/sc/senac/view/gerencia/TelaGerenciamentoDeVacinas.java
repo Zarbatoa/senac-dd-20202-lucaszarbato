@@ -524,7 +524,7 @@ public class TelaGerenciamentoDeVacinas extends PanelComDados {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
 		for (int i = 0; i < ultimasVacinasConsultadas.size(); i++) {
-			String[] dadoAtual = new String[8];
+			String[] dadoAtual = new String[6];
 			Vacina vacina = ultimasVacinasConsultadas.get(i);
 			String dataFormatada = vacina.getDataInicioPesquisa().format(formatter);
 			
@@ -552,7 +552,7 @@ public class TelaGerenciamentoDeVacinas extends PanelComDados {
 		ultimoSeletorUsado.setPagina(ultimaPagUsada);
 		
 		for (int i = 0; i < listaCompleta.size(); i++) {
-			String[] dadoAtual = new String[8];
+			String[] dadoAtual = new String[6];
 			Vacina vacina = listaCompleta.get(i);
 			String dataFormatada = vacina.getDataInicioPesquisa().format(formatter);
 			

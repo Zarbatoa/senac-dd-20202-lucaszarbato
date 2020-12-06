@@ -273,7 +273,7 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends PanelComDados {
 		List<String[]> dadosVisiveis = new ArrayList<String[]>();
 		
 		for (int i = 0; i < ultimasNotasConsultadas.size(); i++) {
-			String[] dadoAtual = new String[8];
+			String[] dadoAtual = new String[4];
 			Nota nota = ultimasNotasConsultadas.get(i);
 			
 			dadoAtual[0] = nota.getId() + "";

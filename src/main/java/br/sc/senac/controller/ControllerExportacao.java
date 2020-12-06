@@ -31,4 +31,26 @@ public class ControllerExportacao {
 		JOptionPane.showMessageDialog(null, message);
 	}
 
+	public void exportarVisivelParaPDF(String selectedFilePath, PanelComDados panelSelecionado) {
+		String message = "";
+		if(geradorPlanilhas.gerarPDFDadosVisiveis(selectedFilePath, panelSelecionado)) {
+			message = "Pdf gerado com sucesso";
+		} else {
+			message = "Não foi possível gerar o pdf";
+		}
+		
+		JOptionPane.showMessageDialog(null, message);
+	}
+
+	public void exportarCompletoParaPDF(String selectedFilePath, PanelComDados panelSelecionado) {
+		String message = "";
+		if(geradorPlanilhas.gerarPDFDadosCompletos(selectedFilePath, panelSelecionado)) {
+			message = "Pdf gerado com sucesso";
+		} else {
+			message = "Não foi possível gerar o pdf";
+		}
+		
+		JOptionPane.showMessageDialog(null, message);
+	}
+
 }

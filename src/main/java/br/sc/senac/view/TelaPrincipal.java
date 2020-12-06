@@ -242,8 +242,8 @@ public class TelaPrincipal extends JFrame {
 		mnBaixarDados.add(mntmExpVisivelXLS);
 		
 		
-		JMenuItem mntmExportarTabelaCompleta = new JMenuItem("Exportar Tabela Completa XLS");
-		mntmExportarTabelaCompleta.addActionListener(new ActionListener() {
+		JMenuItem mntmExpCompletaXLS = new JMenuItem("Exportar Tabela Completa XLS");
+		mntmExpCompletaXLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(getContentPane() instanceof PanelComDados && ((PanelComDados) getContentPane()).hasDados()) {
 					ControllerExportacao controller = new ControllerExportacao();
@@ -279,8 +279,88 @@ public class TelaPrincipal extends JFrame {
 				}
 			}
 		});
-		mntmExportarTabelaCompleta.setIcon(new ImageIcon("icones/iconeExcelmenor.png"));
-		mnBaixarDados.add(mntmExportarTabelaCompleta);
+		mntmExpCompletaXLS.setIcon(new ImageIcon("icones/iconeExcelmenor.png"));
+		mnBaixarDados.add(mntmExpCompletaXLS);
+		
+		JMenuItem mntmExpVisivelPDF = new JMenuItem("Exportar Tabela Vis\u00EDvel PDF");
+		mntmExpVisivelPDF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getContentPane() instanceof PanelComDados && ((PanelComDados) getContentPane()).hasDados()) {
+					ControllerExportacao controller = new ControllerExportacao();
+					PanelComDados panelSelecionado = (PanelComDados) getContentPane();
+					
+					FileFilter filter = new FileNameExtensionFilter("Portable Document Format (*.pdf)","pdf");
+					JFileChooser janelaArquivos = new JFileChooser();
+					janelaArquivos.setFileFilter(filter);
+					janelaArquivos.setSelectedFile(new File("relatoio_para_salvar"));
+					
+					int opcaoSelecionada = janelaArquivos.showSaveDialog(null);
+
+					if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
+						if(janelaArquivos.getSelectedFile().exists()) {
+							
+							int resultadoConfirm = JOptionPane.showConfirmDialog(null, "Tens certeza que queres sobrescrever esse arquivo?\n" + janelaArquivos.getSelectedFile().getAbsolutePath(),
+									"Tela de Confirmação", JOptionPane.OK_CANCEL_OPTION);
+							if (resultadoConfirm == JOptionPane.OK_OPTION) {
+								controller.exportarVisivelParaPDF(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
+							} else {
+								JOptionPane.showMessageDialog(null, "Operação cancelada!");
+							}
+							
+						} else {
+							controller.exportarVisivelParaPDF(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
+						}
+					}  else {
+						JOptionPane.showMessageDialog(null, "Operação cancelada!");
+					}
+					
+				} else {
+					JOptionPane.showMessageDialog(null, "A tela atual não tem dados para exportar.");
+				}
+			}
+		});
+		mntmExpVisivelPDF.setIcon(new ImageIcon("icones/export-pdf.png"));
+		mnBaixarDados.add(mntmExpVisivelPDF);
+		
+		JMenuItem mntmExpCompletaPDF = new JMenuItem("Exportar Tabela Completa PDF");
+		mntmExpCompletaPDF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getContentPane() instanceof PanelComDados && ((PanelComDados) getContentPane()).hasDados()) {
+					ControllerExportacao controller = new ControllerExportacao();
+					PanelComDados panelSelecionado = (PanelComDados) getContentPane();
+					
+					FileFilter filter = new FileNameExtensionFilter("Portable Document Format (*.pdf)","pdf");
+					JFileChooser janelaArquivos = new JFileChooser();
+					janelaArquivos.setFileFilter(filter);
+					janelaArquivos.setSelectedFile(new File("relatoio_para_salvar"));
+					
+					int opcaoSelecionada = janelaArquivos.showSaveDialog(null);
+
+					if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
+						if(janelaArquivos.getSelectedFile().exists()) {
+							
+							int resultadoConfirm = JOptionPane.showConfirmDialog(null, "Tens certeza que queres sobrescrever esse arquivo?\n" + janelaArquivos.getSelectedFile().getAbsolutePath(),
+									"Tela de Confirmação", JOptionPane.OK_CANCEL_OPTION);
+							if (resultadoConfirm == JOptionPane.OK_OPTION) {
+								controller.exportarCompletoParaPDF(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
+							} else {
+								JOptionPane.showMessageDialog(null, "Operação cancelada!");
+							}
+							
+						} else {
+							controller.exportarCompletoParaPDF(janelaArquivos.getSelectedFile().getAbsolutePath(), panelSelecionado);
+						}
+					}  else {
+						JOptionPane.showMessageDialog(null, "Operação cancelada!");
+					}
+					
+				} else {
+					JOptionPane.showMessageDialog(null, "A tela atual não tem dados para exportar.");
+				}
+			}
+		});
+		mntmExpCompletaPDF.setIcon(new ImageIcon("icones/export-pdf.png"));
+		mnBaixarDados.add(mntmExpCompletaPDF);
 	}
 
 }
