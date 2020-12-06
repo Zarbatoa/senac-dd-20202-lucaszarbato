@@ -80,7 +80,7 @@ public class InfoRelatorioFaixasDeIdadeVacina extends AbstractInfoRelatorio {
 			
 			dado[0] = dtoAtual.getFaixas();
 			dado[1] = dtoAtual.getTotal();
-			dado[1] = dtoAtual.getMedia_nota();
+			dado[2] = dtoAtual.getMedia_nota();
 			
 			dados.add(dado);
 		}

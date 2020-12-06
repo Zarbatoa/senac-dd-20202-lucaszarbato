@@ -302,28 +302,23 @@ public class TelaRelatorios extends PanelComDados {
 
 	@Override
 	public boolean hasDados() {
-		return (ultimoSeletorUsado != null);
+		return (ultimoSeletorUsado != null || 
+				!(ultimoRelatorioConsultado instanceof InfoModeloPadraoRelatorio));
 	}
 
 	@Override
 	public String[] getNomesColunas() {
-		// TODO Auto-generated method stub
-		// infoRelatorio.getNomesColunas
-		return null;
+		return ultimoRelatorioConsultado.getNomesColunas();
 	}
 
 	@Override
 	public List<String[]> getDadosVisiveis() {
-		// TODO Auto-generated method stub
-		// infoRelatorio.getUltimosDadosConsultadosVisiveis()
-		return null;
+		return ultimoRelatorioConsultado.getUltimosDadosConsultadosVisiveis(ultimoSeletorUsado);
 	}
 
 	@Override
 	public List<String[]> getDadosCompletos() {
-		// TODO Auto-generated method stub
-		// infoRelatorio.getUltimosDadosConsultadosCompletos(seletor)
-		return null;
+		return ultimoRelatorioConsultado.getUltimosDadosConsultadosCompletos(ultimoSeletorUsado);
 	}
 	
 }
