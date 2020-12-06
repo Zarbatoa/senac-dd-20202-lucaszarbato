@@ -10,7 +10,6 @@ import br.sc.senac.model.dto.VacinaNotaPessoaDTO;
 import br.sc.senac.model.exception.FiltroObrigatorioException;
 import br.sc.senac.model.seletor.RelatorioSeletor;
 import br.sc.senac.model.utilidades.Constantes;
-import br.sc.senac.model.vo.Vacina;
 
 public class ControllerRelatorio {
 	
@@ -56,11 +55,5 @@ public class ControllerRelatorio {
 		
 		return dtos;
 	}
-	
-//	public void gerarRelatorioTotalVacinaPorEstagioDePesquisaPorPeriodo(List<Vacina> vacinas, String caminhoEscolhido, String tipoRelatorio) {
-//		if(tipoRelatorio.equals(Constantes.TIPO_RELATORIO_XLS)){
-//			vacinaBO.gerarPlanilhaVacinaTotalPorEstagioDePesquisaPorPeriodo(vacinas, caminhoEscolhido);
-//		}
-//	}
 
 }

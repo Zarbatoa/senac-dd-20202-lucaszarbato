@@ -4,23 +4,15 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import com.github.lgooddatepicker.components.DatePicker;
@@ -29,13 +21,22 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import br.sc.senac.controller.ControllerRelatorio;
 import br.sc.senac.controller.ControllerVacina;
 import br.sc.senac.model.dto.VacinaNotaPessoaDTO;
+import br.sc.senac.model.dto.informacaoRelatorio.AbstractInfoRelatorio;
+import br.sc.senac.model.dto.informacaoRelatorio.InfoMediaAvaliacoesPorVacina;
+import br.sc.senac.model.dto.informacaoRelatorio.InfoModeloPadraoRelatorio;
+import br.sc.senac.model.dto.informacaoRelatorio.InfoNumeroAvaliacoesPorVacina;
+import br.sc.senac.model.dto.informacaoRelatorio.InfoRelatorioFaixasDeIdadeVacina;
+import br.sc.senac.model.dto.informacaoRelatorio.InfoTotalPessoasPorTipo;
+import br.sc.senac.model.dto.informacaoRelatorio.InfoTotalVacinasPorEstagioPesquisa;
+import br.sc.senac.model.dto.informacaoRelatorio.InfoTotalVacinasPorPaisOrigem;
+import br.sc.senac.model.dto.informacaoRelatorio.InfoTotalVacinasPorPesquisador;
 import br.sc.senac.model.seletor.RelatorioSeletor;
 import br.sc.senac.model.utilidades.Constantes;
 import br.sc.senac.model.vo.Vacina;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked"})
-public class TelaRelatorios extends JPanel {
+public class TelaRelatorios extends PanelComDados {
 
 	private JComboBox cbRelatorios;
 	private JTable tableResultados;
@@ -47,6 +48,8 @@ public class TelaRelatorios extends JPanel {
 	
 	private RelatorioSeletor ultimoSeletorUsado;
 	private int paginaAtual = 1;
+	
+	private AbstractInfoRelatorio ultimoRelatorioConsultado;
 	
 	/**
 	 * Launch the application.
@@ -69,6 +72,7 @@ public class TelaRelatorios extends JPanel {
 	 * @throws ParseException 
 	 */
 	public TelaRelatorios() throws ParseException {
+		ultimoRelatorioConsultado = new InfoModeloPadraoRelatorio();
 		ControllerVacina controllerVacina = new ControllerVacina();
 
 		setBounds(100, 100, 654, 452);
@@ -142,53 +146,6 @@ public class TelaRelatorios extends JPanel {
 		btnLimpar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		this.add(btnLimpar, "cell 4 6,alignx right");
 		
-		JButton btnGerarXls = new JButton("Gerar xls");
-		btnGerarXls.setIcon(new ImageIcon("icones/iconeExcelmenor.png"));
-		btnGerarXls.setFont(new Font("Tahoma", Font.BOLD, 11));
-		this.add(btnGerarXls, "cell 6 6");
-		
-		//método chamar xls no botão. Falta fazer o método de gerar relatório.
-		btnGerarXls.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ControllerRelatorio controller = new ControllerRelatorio();
-				FileFilter filter = new FileNameExtensionFilter("Exel 97-2003 (*.xls)","xls");
-				JFileChooser janelaArquivos = new JFileChooser();
-				janelaArquivos.setFileFilter(filter);
-				janelaArquivos.setSelectedFile(new File("relatoio_para_salvar.xls"));
-
-				int opcaoSelecionada = janelaArquivos.showSaveDialog(null);
-
-				if (opcaoSelecionada == JFileChooser.APPROVE_OPTION) {
-					//TODO em testes
-					File arquivoEscolhido = janelaArquivos.getSelectedFile();
-					String mensagemConfirmacao = "";
-					if (arquivoEscolhido.exists()) {
-						System.out.println("Existe");
-						mensagemConfirmacao = "Tens certeza que queres sobrescrever esse arquivo? \n" + arquivoEscolhido.getAbsolutePath();
-						
-					} else {
-						System.out.println("Não existe");
-						mensagemConfirmacao = "Tens certeza que queres criar esse arquivo? \n" + arquivoEscolhido.getAbsolutePath();
-					}
-					
-					String mensagemResposta = "";
-					int resultadoConfirm = JOptionPane.showConfirmDialog(null, mensagemConfirmacao,
-							"Tela de Confirmação", JOptionPane.OK_CANCEL_OPTION);
-					if (resultadoConfirm == JOptionPane.OK_OPTION) {
-						JOptionPane.showMessageDialog(null, "Confirmado");
-						//mensagemResposta = controller.gerarRelatorio(dtos?);
-					} else {
-						JOptionPane.showMessageDialog(null, "Ger");
-					}
-					
-					//TODO continuar implementacao proposta (onde esses argumentos serão declarados e instanciados?)
-					String mensagem = ""; //controller.gerarRelatorioTotalVacinaPorPesquisador(vacinas, caminhoEscolhido, tipoRelatorio); //aqui está ligado ao método gerar relatório, que equivale a uma consulta de vacina
-
-					//JOptionPane.showMessageDialog(null, caminho);
-				}
-			}
-		});
-		
 		tableResultados = new JTable();
 		tableResultados.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		definirModeloPadraoTabela();
@@ -245,7 +202,7 @@ public class TelaRelatorios extends JPanel {
 		List<VacinaNotaPessoaDTO> dtos = controlador.consultarRelatorio(seletor);
 		ultimoSeletorUsado = seletor;
 
-		atualizarTabelaDtos(dtos);
+		atualizarInfoRelatorio(dtos);
 
 	}
 
@@ -266,283 +223,62 @@ public class TelaRelatorios extends JPanel {
 			ultimoSeletorUsado.setLimite(Constantes.TAMANHO_PAGINA);
 			ControllerRelatorio controlador = new ControllerRelatorio();
 			List<VacinaNotaPessoaDTO> dtos = controlador.gerarUltimoRelatorio(ultimoSeletorUsado);
-			atualizarTabelaDtos(dtos);
+			atualizarInfoRelatorio(dtos);
 		}
 	}
 	
-	private void atualizarTabelaDtos(List<VacinaNotaPessoaDTO> dtos) {
+	private void atualizarInfoRelatorio(List<VacinaNotaPessoaDTO> dtos) {
 		String ultimoRelatorio = ultimoSeletorUsado.getTipoDeRelatorio();
 		if(ultimoRelatorio.equalsIgnoreCase(Constantes.TOTAL_VACINAS_POR_PESQUISADOR)) {
-			atualizarTabelaTotalVacinasPorPesquisador(dtos);
+			ultimoRelatorioConsultado = new InfoTotalVacinasPorPesquisador();
 		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.TOTAL_VACINAS_POR_PAIS_ORIGEM)) {
-			atualizarTabelaTotalVacinasPaisOrigem(dtos);
+			ultimoRelatorioConsultado = new InfoTotalVacinasPorPaisOrigem();
 		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.TOTAL_VACINAS_POR_ESTAGIO_PESQUISA)) {
-			atualizarTabelaTotalVacinasEstagioPesquisa(dtos);
+			ultimoRelatorioConsultado = new InfoTotalVacinasPorEstagioPesquisa();
 		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.NUMERO_DE_AVALIACOES_POR_VACINA)) {
-			atualizarTabelaNumeroAvaliacoesPorVacina(dtos);
+			ultimoRelatorioConsultado = new InfoNumeroAvaliacoesPorVacina();
 		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.MEDIA_DE_AVALIACOES_POR_VACINA)) {
-			atualizarTabelaMediaAvaliacoesPorVacina(dtos);
+			ultimoRelatorioConsultado = new InfoMediaAvaliacoesPorVacina();
 		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.TOTAL_DE_PESSOAS_POR_TIPO)) {
-			atualizarTabelaTotalPessoasPorTipo(dtos);
+			ultimoRelatorioConsultado = new InfoTotalPessoasPorTipo();
 		} else if(ultimoRelatorio.equalsIgnoreCase(Constantes.NUMERO_DE_PESSOAS_E_MEDIA_DA_NOTA_POR_IDADE_DE_UMA_VACINA)) {
-			atualizarTabelaFaixasDeIdadeVacina(dtos);
+			ultimoRelatorioConsultado = new InfoRelatorioFaixasDeIdadeVacina();
 		} else {
 			System.out.println("atualizarTabelaDtos(List<VacinaNotaPessoaDTO>) -> Tipo de relatório não encontrado");
 		}
+		
+		atualizarDadosTabela(dtos);
+	}
+
+	private void atualizarDadosTabela(List<VacinaNotaPessoaDTO> dtos) {
+		this.definirModeloTabela();
+		
+		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
+		
+		List<Object[]> dados = ultimoRelatorioConsultado.getDados(dtos);
+		
+		for(int i = 0; i < dtos.size(); i++) {
+			Object[] linhaAtual = dados.get(i);
+			for(int j = 0; j < linhaAtual.length; j++) {
+				Object valor = linhaAtual[j];
+				modelo.setValueAt(valor, i+1, j);
+			}
+		}
+		
 	}
 	
-	// INICIO TESTE
-//	private void atualizarTabelaRelatorio(AbstractInformacaoRelatorio info) {
-//		this.atualizarModeloTabela(info);
-//	}
-//	
-//	private void atualizarModeloTabela(AbstractInformacaoRelatorio info) {
-//		tableResultados.setModel(new DefaultTableModel(
-//				info.getDadosCampos(),
-//				info.getCampos()
-//			)  {
-//			@Override
-//		    public boolean isCellEditable(int row, int column) {
-//		       return false;
-//		    }
-//		});
-//	}
-	// FIM TESTE
-
-	private void atualizarTabelaFaixasDeIdadeVacina(List<VacinaNotaPessoaDTO> dtos) {
-		this.definirModeloFaixasDeIdadeVacina();
-		
-		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
-		
-		for (int i = 0; i < dtos.size(); i++) {
-			VacinaNotaPessoaDTO dto = dtos.get(i);			
-			modelo.setValueAt(dto.getFaixas(), i+1, 0);
-			modelo.setValueAt(dto.getTotal(), i+1, 1);
-			modelo.setValueAt(dto.getMedia_nota(), i+1, 2);
-		}
-	}
-
-	private void definirModeloFaixasDeIdadeVacina() {
+	private void definirModeloTabela() {
 		tableResultados.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"Faixas de Idade", "Número de Pessoas", "Média das Notas"},
-					{null, null, null},
-					{null, null, null},
-					{null, null, null},
-					{null, null, null},
-					{null, null, null},
-				},
-				new String[] {
-					"Faixas de Idade", "Número de Pessoas", "Média das Notas"
-				}
+				ultimoRelatorioConsultado.getDefaultDataComHeaders(),
+				ultimoRelatorioConsultado.getNomesColunas()
 			)  {
 			@Override
 		    public boolean isCellEditable(int row, int column) {
 		       return false;
 		    }
 		});
-	}
-
-	private void atualizarTabelaTotalPessoasPorTipo(List<VacinaNotaPessoaDTO> dtos) {
-		this.definirModeloTotalPessoasPorTipo();
-		
-		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
-		
-		for (int i = 0; i < dtos.size(); i++) {
-			VacinaNotaPessoaDTO dto = dtos.get(i);			
-			modelo.setValueAt(dto.getDescricaoTipoPessoa(), i+1, 0);
-			modelo.setValueAt(dto.getNumeroDePessoas(), i+1, 1);
-		}
-	}
-
-	private void definirModeloTotalPessoasPorTipo() {
-		tableResultados.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"Categoria Pessoa", "Número de Pessoas"},
-					{null, null},
-					{null, null},
-					{null, null},
-					{null, null},
-					{null, null},
-				},
-				new String[] {
-					"categoriaPessoa", "numeroPessoas"
-				}
-			)  {
-			@Override
-		    public boolean isCellEditable(int row, int column) {
-		       return false;
-		    }
-		});
-	}
-
-	private void atualizarTabelaMediaAvaliacoesPorVacina(List<VacinaNotaPessoaDTO> dtos) {
-		this.definirModeloMediaAvaliacoesPorVacina();
-		
-		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
-		
-		for (int i = 0; i < dtos.size(); i++) {
-			VacinaNotaPessoaDTO dto = dtos.get(i);			
-			modelo.setValueAt(dto.getNomeVacina(), i+1, 0);
-			modelo.setValueAt(dto.getMediaDeAvaliacoes(), i+1, 1);
-		}
-	}
-
-	private void definirModeloMediaAvaliacoesPorVacina() {
-		tableResultados.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"Nome Vacina", "Média de Avaliações"},
-					{null, null},
-					{null, null},
-					{null, null},
-					{null, null},
-					{null, null},
-				},
-				new String[] {
-					"nomeVacina", "Média de Avaliações"
-				}
-			)  {
-			@Override
-		    public boolean isCellEditable(int row, int column) {
-		       return false;
-		    }
-		});
-	}
-
-	private void atualizarTabelaNumeroAvaliacoesPorVacina(List<VacinaNotaPessoaDTO> dtos) {
-		this.definirModeloNumeroAvaliacoesPorVacina();
-		
-		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
-		
-		for (int i = 0; i < dtos.size(); i++) {
-			VacinaNotaPessoaDTO dto = dtos.get(i);			
-			modelo.setValueAt(dto.getNomeVacina(), i+1, 0);
-			modelo.setValueAt(dto.getNumeroDeAvaliacoes(), i+1, 1);
-		}
-	}
-
-	private void definirModeloNumeroAvaliacoesPorVacina() {
-		tableResultados.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"Nome Vacina", "Número de Avaliações"},
-					{null, null},
-					{null, null},
-					{null, null},
-					{null, null},
-					{null, null},
-				},
-				new String[] {
-					"nomeVacina", "Número de Avaliações"
-				}
-			)  {
-			@Override
-		    public boolean isCellEditable(int row, int column) {
-		       return false;
-		    }
-		});
-	}
-
-	private void atualizarTabelaTotalVacinasEstagioPesquisa(List<VacinaNotaPessoaDTO> dtos) {
-		this.definirModeloTotalVacinasEstagioPesquisa();
-		
-		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
-		
-		for (int i = 0; i < dtos.size(); i++) {
-			VacinaNotaPessoaDTO dto = dtos.get(i);			
-			modelo.setValueAt(Vacina.getStringEstagioDePesquisa(dto.getEstagioPesquisa()), i+1, 0);
-			modelo.setValueAt(dto.getNumeroDeVacinas(), i+1, 1);
-		}
-	}
-
-	private void definirModeloTotalVacinasEstagioPesquisa() {
-		tableResultados.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"Estágio Pesquisa", "Número de Vacinas"},
-					{null, null},
-					{null, null},
-					{null, null},
-					{null, null},
-					{null, null},
-				},
-				new String[] {
-					"EstagioPesquisa", "Número de Vacinas"
-				}
-			)  {
-			@Override
-		    public boolean isCellEditable(int row, int column) {
-		       return false;
-		    }
-		});
-	}
-
-	private void atualizarTabelaTotalVacinasPaisOrigem(List<VacinaNotaPessoaDTO> dtos) {
-		this.definirModeloTotalVacinasPaisOrigem();
-		
-		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
-		
-		for (int i = 0; i < dtos.size(); i++) {
-			VacinaNotaPessoaDTO dto = dtos.get(i);			
-			modelo.setValueAt(dto.getPaisOrigem(), i+1, 0);
-			modelo.setValueAt(dto.getNumeroDeVacinas(), i+1, 1);
-		}
 	}
 	
-	private void definirModeloTotalVacinasPaisOrigem() {
-		tableResultados.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"País Origem", "Número de Vacinas"},
-					{null, null},
-					{null, null},
-					{null, null},
-					{null, null},
-					{null, null},
-				},
-				new String[] {
-					"PaisOrigem", "Número de Vacinas"
-				}
-			)  {
-			@Override
-		    public boolean isCellEditable(int row, int column) {
-		       return false;
-		    }
-		});
-	}
-
-	private void atualizarTabelaTotalVacinasPorPesquisador(List<VacinaNotaPessoaDTO> dtos) {
-		this.definirModeloTotalVacinasPorPesquisadorTabela();
-		
-		DefaultTableModel modelo = (DefaultTableModel) tableResultados.getModel();
-		
-		for (int i = 0; i < dtos.size(); i++) {
-			VacinaNotaPessoaDTO dto = dtos.get(i);			
-			modelo.setValueAt(dto.getNomePesquisador(), i+1, 0);
-			modelo.setValueAt(dto.getSobrenomePesquisador(), i+1, 1);
-			modelo.setValueAt(dto.getNumeroDeVacinas(), i+1, 2);
-		}
-	}
-
-	private void definirModeloTotalVacinasPorPesquisadorTabela() {
-		// nome, sobrenome, numero de vacinas
-		tableResultados.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"Nome", "Sobrenome", "Número de Vacinas"},
-					{null, null, null},
-					{null, null, null},
-					{null, null, null},
-					{null, null, null},
-					{null, null, null},
-				},
-				new String[] {
-					"Nome", "Sobrenome", "Número de Vacinas"
-				}
-			)  {
-			@Override
-		    public boolean isCellEditable(int row, int column) {
-		       return false;
-		    }
-		});
-	}
-
 	private void definirModeloPadraoTabela() {
 		tableResultados.setModel(new DefaultTableModel(
 				new Object[][] {
@@ -554,7 +290,7 @@ public class TelaRelatorios extends JPanel {
 					{null},
 				},
 				new String[] {
-					"ColunaDescricao"
+					"Consulte um Retório para gerar a tabela"
 				}
 			)  {
 			@Override
@@ -562,6 +298,32 @@ public class TelaRelatorios extends JPanel {
 		       return false;
 		    }
 		});
+	}
+
+	@Override
+	public boolean hasDados() {
+		return (ultimoSeletorUsado != null);
+	}
+
+	@Override
+	public String[] getNomesColunas() {
+		// TODO Auto-generated method stub
+		// infoRelatorio.getNomesColunas
+		return null;
+	}
+
+	@Override
+	public List<String[]> getDadosVisiveis() {
+		// TODO Auto-generated method stub
+		// infoRelatorio.getUltimosDadosConsultadosVisiveis()
+		return null;
+	}
+
+	@Override
+	public List<String[]> getDadosCompletos() {
+		// TODO Auto-generated method stub
+		// infoRelatorio.getUltimosDadosConsultadosCompletos(seletor)
+		return null;
 	}
 	
 }
