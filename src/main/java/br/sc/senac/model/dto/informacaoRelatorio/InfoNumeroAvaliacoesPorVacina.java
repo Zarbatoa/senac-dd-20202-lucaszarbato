@@ -6,7 +6,6 @@ import java.util.List;
 import br.sc.senac.controller.ControllerRelatorio;
 import br.sc.senac.model.dto.VacinaNotaPessoaDTO;
 import br.sc.senac.model.seletor.RelatorioSeletor;
-import br.sc.senac.model.vo.Vacina;
 
 public class InfoNumeroAvaliacoesPorVacina extends AbstractInfoRelatorio {
 
