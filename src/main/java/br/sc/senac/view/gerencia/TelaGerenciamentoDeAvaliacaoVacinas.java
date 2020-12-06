@@ -297,7 +297,7 @@ public class TelaGerenciamentoDeAvaliacaoVacinas extends PanelComDados {
 		ultimoSeletorUsado.setPagina(ultimaPagUsada);
 		
 		for (int i = 0; i < listaCompleta.size(); i++) {
-			String[] dadoAtual = new String[8];
+			String[] dadoAtual = new String[4];
 			Nota nota = listaCompleta.get(i);
 			
 			dadoAtual[0] = nota.getId() + "";
