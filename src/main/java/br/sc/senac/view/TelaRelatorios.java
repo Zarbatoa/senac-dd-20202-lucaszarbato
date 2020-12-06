@@ -72,7 +72,6 @@ public class TelaRelatorios extends PanelComDados {
 	 * @throws ParseException 
 	 */
 	public TelaRelatorios() throws ParseException {
-		ultimoRelatorioConsultado = new InfoModeloPadraoRelatorio();
 		ControllerVacina controllerVacina = new ControllerVacina();
 
 		setBounds(100, 100, 654, 452);
@@ -280,18 +279,10 @@ public class TelaRelatorios extends PanelComDados {
 	}
 	
 	private void definirModeloPadraoTabela() {
+		ultimoRelatorioConsultado = new InfoModeloPadraoRelatorio();
 		tableResultados.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"Consulte um Retório para gerar a tabela"},
-					{null},
-					{null},
-					{null},
-					{null},
-					{null},
-				},
-				new String[] {
-					"Consulte um Retório para gerar a tabela"
-				}
+				ultimoRelatorioConsultado.getDefaultDataComHeaders(),
+				ultimoRelatorioConsultado.getNomesColunas()
 			)  {
 			@Override
 		    public boolean isCellEditable(int row, int column) {
@@ -302,7 +293,7 @@ public class TelaRelatorios extends PanelComDados {
 
 	@Override
 	public boolean hasDados() {
-		return (ultimoSeletorUsado != null || 
+		return (ultimoSeletorUsado != null &&
 				!(ultimoRelatorioConsultado instanceof InfoModeloPadraoRelatorio));
 	}
 

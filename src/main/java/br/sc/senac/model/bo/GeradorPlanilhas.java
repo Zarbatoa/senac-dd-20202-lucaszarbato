@@ -50,7 +50,11 @@ public class GeradorPlanilhas {
 		//5) Escreve o arquivo em disco, no caminho informado
 		FileOutputStream fileOut = null;
 		try {
-			fileOut = new FileOutputStream(selectedFilePath + ".xls");
+			if(selectedFilePath.endsWith(".xls")) {
+				fileOut = new FileOutputStream(selectedFilePath);
+			} else {
+				fileOut = new FileOutputStream(selectedFilePath + ".xls");
+			}
 			planilha.write(fileOut);
 			sucesso = true;
 		} catch (IOException e) {
