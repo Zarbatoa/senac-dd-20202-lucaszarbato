@@ -1,5 +1,6 @@
 package br.sc.senac.model.dto.informacaoRelatorio;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import br.sc.senac.model.seletor.RelatorioSeletor;
 
 public class InfoRelatorioFaixasDeIdadeVacina extends AbstractInfoRelatorio {
 
+	private DecimalFormat df = new DecimalFormat("0.00");
+	
 	@Override
 	public String[] getNomesColunas() {
 		return new String[] {
@@ -29,7 +32,7 @@ public class InfoRelatorioFaixasDeIdadeVacina extends AbstractInfoRelatorio {
 
 			dadoAtual[0] = dto.getFaixas();
 			dadoAtual[1] = dto.getTotal() + "";
-			dadoAtual[2] = dto.getMedia_nota() + "";
+			dadoAtual[2] = df.format(dto.getMedia_nota());
 			
 			dadosVisiveis.add(dadoAtual);
 		}
@@ -52,7 +55,7 @@ public class InfoRelatorioFaixasDeIdadeVacina extends AbstractInfoRelatorio {
 
 			dadoAtual[0] = dto.getFaixas();
 			dadoAtual[1] = dto.getTotal() + "";
-			dadoAtual[2] = dto.getMedia_nota() + "";
+			dadoAtual[2] = df.format(dto.getMedia_nota());
 			
 			dadosCompletos.add(dadoAtual);
 		}
@@ -80,7 +83,7 @@ public class InfoRelatorioFaixasDeIdadeVacina extends AbstractInfoRelatorio {
 			
 			dado[0] = dtoAtual.getFaixas();
 			dado[1] = dtoAtual.getTotal();
-			dado[2] = dtoAtual.getMedia_nota();
+			dado[2] = df.format(dtoAtual.getMedia_nota());
 			
 			dados.add(dado);
 		}

@@ -115,7 +115,7 @@ public class TelaGerenciamentoDePessoas extends PanelComDados {
 		this.add(tfSobrenome, "cell 6 2 2 1,growx");
 		tfSobrenome.setColumns(10);
 		
-		JLabel lblCpf = new JLabel("Cpf:");
+		JLabel lblCpf = new JLabel("CPF:");
 		lblCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		this.add(lblCpf, "cell 0 4,alignx trailing");
 		ftfCpf = new JFormattedTextField(mascaraCpf);
@@ -229,7 +229,7 @@ public class TelaGerenciamentoDePessoas extends PanelComDados {
 		this.add(btnEditar, "cell 6 8,alignx center");
 		
 		
-		btnPegarRegistro = new JButton("<html>Pegar Registro<br />para Edi\u00E7\u00E3o</html>");
+		btnPegarRegistro = new JButton("<html>Editar pessoa<br />selecionada</html>");
 		btnPegarRegistro.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnPegarRegistro.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
@@ -436,15 +436,22 @@ public class TelaGerenciamentoDePessoas extends PanelComDados {
 			if(tableResultados.getSelectedRow() == 0) {
 				mensagem = "A linha com as descrições dos campos não pode ser excluída. Nenhuma linha será excluída.";
 			} else {
-				ControllerPessoa controllerPessoa = new ControllerPessoa();
-				List<Integer> idsASeremExcluidos = new ArrayList<Integer>();
-				for(int row : tableResultados.getSelectedRows()) {
-					Integer idASerExcluido = (Integer) (tableResultados.getValueAt(row, 0));
-					if(idASerExcluido != null) {
-						idsASeremExcluidos.add(idASerExcluido);
+				int resultadoConfirm = JOptionPane.showConfirmDialog(null, "Tens certeza que queres excluir esse(s) registros?",
+						"Tela de Confirmação", JOptionPane.YES_NO_OPTION);
+				if(resultadoConfirm == JOptionPane.YES_OPTION) {
+					if(resultadoConfirm == JOptionPane.YES_OPTION);
+					ControllerPessoa controllerPessoa = new ControllerPessoa();
+					List<Integer> idsASeremExcluidos = new ArrayList<Integer>();
+					for(int row : tableResultados.getSelectedRows()) {
+						Integer idASerExcluido = (Integer) (tableResultados.getValueAt(row, 0));
+						if(idASerExcluido != null) {
+							idsASeremExcluidos.add(idASerExcluido);
+						}
 					}
+					mensagem = controllerPessoa.excluir(idsASeremExcluidos);
+				} else {
+					mensagem = "Operação de exclusão cancelada.";
 				}
-				mensagem = controllerPessoa.excluir(idsASeremExcluidos);
 			}
 		}
 		JOptionPane.showMessageDialog(null, mensagem);

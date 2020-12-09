@@ -89,7 +89,7 @@ public class TelaCadastroPessoa extends JPanel {
 		this.add(tfSobrenome, "cell 5 2 2 1,growx");
 		tfSobrenome.setColumns(10);
 		
-		JLabel lblCpf = new JLabel("Cpf:");
+		JLabel lblCpf = new JLabel("CPF:");
 		lblCpf.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		this.add(lblCpf, "cell 0 4,alignx trailing");
 		ftfCpf = new JFormattedTextField(mascaraCpf);

@@ -229,7 +229,7 @@ public class TelaGerenciamentoDeVacinas extends PanelComDados {
 		lblPagAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
 		this.add(lblPagAtual, "cell 4 11 2 1,alignx center");
 		
-		btnPegarRegistro = new JButton("<html>Pegar Registro<br />para Edi\u00E7\u00E3o</html>");
+		btnPegarRegistro = new JButton("<html>Editar pessoa<br />selecionada</html>");
 		btnPegarRegistro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				coletarRegistroParaEdicao();
@@ -410,15 +410,21 @@ public class TelaGerenciamentoDeVacinas extends PanelComDados {
 			if(tableResultados.getSelectedRow() == 0) {
 				mensagem = "A linha com as descrições dos campos não pode ser excluída. Nenhuma linha será excluída.";
 			} else {
-				ControllerVacina controllerVacina = new ControllerVacina();
-				List<Integer> idsASeremExcluidos = new ArrayList<Integer>();
-				for(int row : tableResultados.getSelectedRows()) {
-					Integer idASerExcluido = (Integer) (tableResultados.getValueAt(row, 0));
-					if(idASerExcluido != null) {
-						idsASeremExcluidos.add(idASerExcluido);
+				int resultadoConfirm = JOptionPane.showConfirmDialog(null, "Tens certeza que queres excluir esse(s) registros?",
+						"Tela de Confirmação", JOptionPane.YES_NO_OPTION);
+				if(resultadoConfirm == JOptionPane.YES_OPTION) {
+					ControllerVacina controllerVacina = new ControllerVacina();
+					List<Integer> idsASeremExcluidos = new ArrayList<Integer>();
+					for(int row : tableResultados.getSelectedRows()) {
+						Integer idASerExcluido = (Integer) (tableResultados.getValueAt(row, 0));
+						if(idASerExcluido != null) {
+							idsASeremExcluidos.add(idASerExcluido);
+						}
 					}
+					mensagem = controllerVacina.excluir(idsASeremExcluidos);
+				} else {
+					mensagem = "Operação de exclusão cancelada.";
 				}
-				mensagem = controllerVacina.excluir(idsASeremExcluidos);
 			}
 		}
 		JOptionPane.showMessageDialog(null, mensagem);
